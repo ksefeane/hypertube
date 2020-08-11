@@ -1,0 +1,22 @@
+{
+  "name": "hypertube",
+  "version": "1.0.0",
+  "description": "a video streaming webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksefeane/hypertube.git"
+  },
+  "author": "ksefeane tchewa enayimul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ksefeane/hypertube/issues"
+  },
+  "homepage": "https://github.com/ksefeane/hypertube#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

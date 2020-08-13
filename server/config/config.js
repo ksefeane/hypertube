@@ -1,4 +1,4 @@
-var config = {
+module.exports = config ={
 	logins: {
 		host: 'localhost',
 		user: 'root',
@@ -6,5 +6,3 @@ var config = {
 	},
 	db: 'hypertube'
 }
-
-module.exports = config

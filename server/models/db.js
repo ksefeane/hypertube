@@ -1,24 +1,24 @@
-const tables = require('../config/tables')
-const config = require('../config/config')
-const mysql = require('mysql')
+import tables from '../config/tables'
+import { logins, db } from '../config/config'
+import { createConnection } from 'mysql'
 
-const dbc = mysql.createConnection(config.logins, config.db)
+const dbc = createConnection(logins, db)
 dbc.connect((err) => {
 	if (err) throw err
 })
 
 class DB {
     constructor() {
-        this.name = config.db
+        this.name = db
     }
     static create() {
-        dbc.query(`CREATE DATABASE ${config.db}`, (err, res) => {
+        dbc.query(`CREATE DATABASE ${db}`, (err, res) => {
             if (err) {
-                console.log(`DB: ${config.db} -> (found)`)
+                console.log(`DB: ${db} -> (found)`)
                 return (0)
             }
             else {
-                console.log(`DB: ${config.db} -> (created)`)
+                console.log(`DB: ${db} -> (created)`)
                 return (1)
             }
         })
@@ -47,14 +47,14 @@ class DB {
         DB.tables()
     }
     static init() {
-        dbc.query(`USE ${config.db}`, (err, res) => {
+        dbc.query(`USE ${db}`, (err, res) => {
             if (err) {
-                console.log(`DB: ${config.db} -> (not found)`)
+                console.log(`DB: ${db} -> (not found)`)
                 DB.configure()
                 return (0)
             }
             else {
-                console.log(`DB: ${config.db} -> (connected)`)
+                console.log(`DB: ${db} -> (connected)`)
                 return (1)
             }
         })
@@ -77,4 +77,4 @@ class DB {
     }
 }
 
-module.exports = DB;
+export default DB

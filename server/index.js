@@ -1,19 +1,19 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+import express from 'express'
+import { json } from 'body-parser'
+import cors from 'cors'
 
 const app = express()
 const port = 5000
 
 //middleware
-app.use(bodyParser.json())
+app.use(json())
 app.use(cors())
 
 //initialize database
-const db = require('./models/db')
-db.init()
+import DB from './models/db'
+DB.init()
 
-const users = require('./routes/api/users')
+import users from './routes/api/users'
 app.use('/api/users', users)
 
 app.listen(port, () => 

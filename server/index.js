@@ -10,11 +10,11 @@ app.use(bodyParser.json())
 app.use(cors())
 
 //initialize database
-const db = require('./model/dbModel')
+const db = require('./models/db')
 db.init()
 
-const posts = require('./routes/api/posts')
-app.use('/api/posts', posts)
+const users = require('./routes/api/users')
+app.use('/api/users', users)
 
 app.listen(port, () => 
     console.log(`server listening on port ${port}...`))

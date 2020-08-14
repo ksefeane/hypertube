@@ -1,13 +1,12 @@
 import tables from '../config/tables'
 import { logins, db } from '../config/config'
 import { createConnection } from 'mysql'
+import { promisify } from 'util'
 
 const dbc = createConnection(logins, db)
-dbc.connect((err) => {
-	if (err) throw err
-})
+const query = promisify(dbc.query).bind(dbc)
 
-class DB {
+export default class DB {
     constructor() {
         this.name = db
     }
@@ -59,22 +58,10 @@ class DB {
             }
         })
     }
-    static insert(sql, values, callback) {
-        dbc.query(sql, values, (err, res) => {
-            if (err)
-                callback(err, null)
-            else
-                callback(null, res)
-        })
+    static async insert(sql, values) {
+        return (await query(sql, values))
     }
-    static fetch(sql, callback) {
-        var r = dbc.query(sql, (err, result, fields) => {
-            if (err)
-                callback(err, null)
-            else
-                callback(null, result)
-        })
+    static async fetch(sql) {
+        return (await query(sql))
     }
 }
-
-export default DB

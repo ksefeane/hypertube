@@ -1,20 +1,15 @@
 import DB from './db'
 
 class query {
-	constructor() { }
-	static insert(t_name, params, values, callback) {
+	constructor() {}
+	static async insert(t_name, params, values) {
 		var v = ''
 		for (let p in params)
 			v += '?, '
 		v = v.slice(0, -2)
 		var sql = "INSERT INTO " + t_name + " (" + params.join() + ") " +
 			"VALUES " + "(" + v + ")"
-		DB.insert(sql, values, (err, res) => {
-			if (err)
-				callback(err, null)
-			else
-				callback(null, res)
-		})
+		return (await DB.insert(sql, values))
 	}
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
@@ -37,6 +32,11 @@ class query {
 			else
 				callback(null, "updated")
 		})
+	}
+	static async getall(t_name) {
+		var sql = `SELECT * FROM ${t_name}`
+		var f = await DB.fetch(sql)
+		return (f)
 	}
 	static fetchall(t_name, callback) {
 		var sql = "SELECT * FROM " + t_name

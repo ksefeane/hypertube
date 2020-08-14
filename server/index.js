@@ -10,8 +10,8 @@ app.use(json())
 app.use(cors())
 
 //initialize database
-import DB from './models/db'
-DB.init()
+import db from './models/db'
+db.init()
 
 import users from './routes/api/users'
 app.use('/api/users', users)

@@ -11,6 +11,10 @@ class query {
 			"VALUES " + "(" + v + ")"
 		return (await DB.insert(sql, values))
 	}
+	static async fetchone(t_name, val, params, pval) {
+		var sql = `SELECT ${val} FROM ${t_name} WHERE ${params} =\'${pval}\'`
+		return (await DB.fetch(sql))	
+	}
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
 		DB.insert(sql, (err, res) => {
@@ -92,16 +96,7 @@ class query {
 				callback(null, res[0].total)
 		})
 	}
-	static fetchone(t_name, val, params, pval, callback) {
-		var sql = "SELECT " + val + " FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
-		DB.fetch(sql, (err, res) => {
-			if (err)
-				callback(err, null)
-			else {
-				callback(null, res)
-			}
-		})
-	}
+
 	static tableExists(t_name, callback) {
 		var sql = "SELECT COUNT(*) as total FROM information_schema.tables" +
 			" WHERE table_schema = 'matcha_db'" +

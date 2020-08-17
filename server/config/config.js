@@ -4,5 +4,11 @@ module.exports = config ={
 		user: 'root',
 		password: ''
 	},
-	db: 'hypertube'
+	db: 'hypertube',
+	keys: {
+		google : {
+			clientID : 'test',
+			secret : 'test'
+		}
+	}
 }

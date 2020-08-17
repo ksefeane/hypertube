@@ -1,5 +1,4 @@
-import { fetchUsers, insertUser } from '../models/userModel'
-import User from '../models/userModel'
+import { User, fetchUsers, signupUser, signinUser } from '../models/userModel'
 
 export async function listUsers(req, res) {
     var f = await fetchUsers()
@@ -8,6 +7,21 @@ export async function listUsers(req, res) {
 
 export async function registerUser(req, res, next) {
     var user = new User(req.body)
-    var f = await insertUser(user)
-    res.send(f)
+    var stat = await signupUser(user)
+    res.send(stat)
+}
+
+export async function loginUser(req, res, next) {
+    var user = new User(req.body)
+    var stat = await signinUser(user)
+    res.send(stat)
+}
+
+export function auth42(req, res, next) {
+    //handle with passport
+    res.redirect('/')
+}
+export function logoutUser(req, res) {
+    //handle with passport
+    res.send('logout')
 }

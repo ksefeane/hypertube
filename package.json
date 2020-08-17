@@ -18,11 +18,17 @@
   },
   "homepage": "https://github.com/ksefeane/hypertube#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-42": "^1.2.6",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-oauth2": "^1.5.0",
+    "passport-telegram": "^1.0.0",
     "util": "^0.12.3"
   },
   "devDependencies": {

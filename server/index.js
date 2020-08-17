@@ -13,6 +13,9 @@ app.use(cors())
 import db from './models/db'
 db.init()
 
+//setup passport
+import passportSetup from './config/passport-setup'
+
 import users from './routes/api/users'
 app.use('/api/users', users)
 

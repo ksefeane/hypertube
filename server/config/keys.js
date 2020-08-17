@@ -1,8 +1,8 @@
 module.exports = {
     keys: {
         wtc: {
-            clientID: '6073106bd163d9307a3b8fe743c1cdf0587dc3ce70c0f141d634e83e3b515a41',
-            clientsecret: '0418e612cadfa27a5b428faa897570b68726951a821aafecfe3da547116eec7c'
+            clientID: "c45308628135eb96e8e94f019ae7e745a7ef0d40f84403db88224c9774854dfb",
+            clientSecret: "d6eb2030e13564efc1c4ab0c6e8c570fe8f55d9950b2c3a83e8fa6a37b1b8ad4"
         }    
     }
     

@@ -1,19 +1,18 @@
 import passport from 'passport'
-import OAuth2Strategy from 'passport-oauth2'
+import Oauth2Strategy from 'passport-oauth2'
 import { keys } from './keys'
+import { User } from '../models/userModel'
 
 export default passport.use(
-    new OAuth2Strategy({
-        clientID: keys.wtc.clientID,
-        clientSecret: keys.wtc.clientSecret,
+    new Oauth2Strategy ({
         authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
         tokenURL: 'https://api.intra.42.fr/oauth/token',
-        callbackURL: 'http://localhost:5000/api/users/auth/42/redirect'
-        },
-        function(accessToken, refreshToken, profile, cb) {
-            User.findOrCreate({ exampleId: profile.id }, function (err, user) {
-                return cb(err, user);
-            });        
-        }
-    )
+        clientID: keys.wtc.clientID,
+        clientSecret: keys.wtc.clientSecret,
+        callbackURL: '/api/users/auth/42/redirect',
+    }, (token, refreshToken, profile, cb) => {
+        console.log(token)
+        console.log(profile)
+        cb(null, profile)
+    })
 )

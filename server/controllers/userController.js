@@ -19,7 +19,7 @@ export async function loginUser(req, res, next) {
 
 export function auth42(req, res, next) {
     //handle with passport
-    res.redirect('/')
+    res.redirect('/api/users')
 }
 export function logoutUser(req, res) {
     //handle with passport

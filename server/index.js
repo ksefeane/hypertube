@@ -15,6 +15,8 @@ db.init()
 
 //setup passport
 import passportSetup from './config/passport-setup'
+app.use(passportSetup.initialize())
+app.use(passportSetup.session())
 
 import users from './routes/api/users'
 app.use('/api/users', users)

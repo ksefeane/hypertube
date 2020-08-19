@@ -1,7 +1,7 @@
 import passport from 'passport'
 import Oauth2Strategy from 'passport-oauth2'
 import { keys } from './keys'
-import { User } from '../models/userModel'
+import { findOrCreate } from '../models/userModel'
 
 let client = new Oauth2Strategy ({
         authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
@@ -10,7 +10,9 @@ let client = new Oauth2Strategy ({
         clientSecret: keys.wtc.clientSecret,
         callbackURL: '/api/users/auth/42/redirect',
         scope: 'profile'
-    }, (token, refreshToken, params, profile, callback) => {
+    }, async (token, refreshToken, params, profile, callback) => {
+        var found = await findOrCreate(profile.email)
+        console.log(found)
         callback(null, profile)
 })
 

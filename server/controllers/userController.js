@@ -1,6 +1,4 @@
 import { User, fetchUsers, signupUser, signinUser } from '../models/userModel'
-import passport from 'passport'
-import axios from 'axios'
 
 export async function listUsers(req, res) {
     var f = await fetchUsers()
@@ -22,13 +20,6 @@ export async function loginUser(req, res, next) {
 export function auth42(req, res, next) {
     //handle with passport
     res.redirect('/api/users')
-}
-
-export function info(req, res) {
-    axios.get('https://api.intra.42.fr/v2/me')
-    .then(res => {console.log(res.data)})
-    .catch(err => {console.log(err)})
-    res.send(res.data)
 }
 
 export function logoutUser(req, res) {

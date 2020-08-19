@@ -11,9 +11,7 @@ let client = new Oauth2Strategy ({
         callbackURL: '/api/users/auth/42/redirect',
         scope: 'profile'
     }, async (token, refreshToken, params, profile, callback) => {
-        var found = await findOrCreate(profile.email)
-        console.log(found)
-        callback(null, profile)
+        callback(null, await findOrCreate(profile))
 })
 
 client.userProfile = function (accesstoken, done) {
@@ -27,7 +25,7 @@ client.userProfile = function (accesstoken, done) {
         return done(e);
       }
       done(null, data);
-    });
-  };
+    })
+  }
 
 export default passport.use(client)

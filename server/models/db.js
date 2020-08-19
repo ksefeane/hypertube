@@ -5,8 +5,7 @@ import { promisify } from 'util'
 
 const dbc = createConnection(logins, db)
 dbc.connect((err) => {
-    if (err)
-        console.log(err)    
+    if (err) throw err
 })
 const query = promisify(dbc.query).bind(dbc)
 

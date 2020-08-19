@@ -48,3 +48,7 @@ export async function fetchUsers() {
 export async function signinUser(user) {
     return ('soon')
 }
+export async function findOrCreate(profile) {
+    var local = await q.fetchone('users', 'email', 'email', profile.email)
+    return (local)
+}

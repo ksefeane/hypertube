@@ -10,7 +10,7 @@ export default router
 .get('/auth/42/redirect', passport.authenticate('oauth2', 
     {session: false, failureRedirect: '/api/users/signup'}), auth42)
 .get('/logout', )
-.get('/info', passport.authenticate('oauth2', {scope: 'public'}), info)
+.get('/info', info)
 //add
 .post('/signup', registerUser)
 .post('/signin', loginUser)

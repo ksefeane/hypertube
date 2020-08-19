@@ -1,6 +1,7 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
 import { validString, securePassword, validEmail } from './securityModel'
+
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
 export class User {
@@ -49,6 +50,12 @@ export async function signinUser(user) {
     return ('soon')
 }
 export async function findOrCreate(profile) {
-    var local = await q.fetchone('users', 'email', 'email', profile.email)
-    return (local)
+    var user = await q.fetchone('users', params, 'email', profile.email)
+    if (user.length == 0) {
+        var user = new User(profile)
+        user.username = profile.login        
+        user.password = await hash(Math.random.toString(36).substring(8), 10)
+        insertUser(user)
+    }
+    return (user)
 }

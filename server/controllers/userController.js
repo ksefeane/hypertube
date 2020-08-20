@@ -17,8 +17,9 @@ export async function loginUser(req, res, next) {
     res.send(stat)
 }
 
-export function auth42(req, res, next) {
+export function oauthLogin(req, res, next) {
     //handle with passport
+    console.log(req.user)
     res.redirect('/api/users')
 }
 

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = Router()
-import { listUsers, registerUser, loginUser, auth42 } from '../../controllers/userController'
+import { listUsers, registerUser, loginUser, oauthLogin, logoutUser } from '../../controllers/userController'
 import passport from 'passport'
 
 export default router
@@ -8,9 +8,10 @@ export default router
 //get
 .get('/', listUsers)
 .get('/auth/42', passport.authenticate('oauth2', {scope: 'public'}))
-.get('/auth/42/redirect', passport.authenticate('oauth2', 
-    {session: false, failureRedirect: '/api/users/signup'}), auth42)
-.get('/logout', )
+.get('/auth/github', passport.authenticate('oauth2', {scope: 'user'}))
+.get('/auth/redirect', passport.authenticate('oauth2', 
+    {session: false, failureRedirect: '/api/users/signup'}), oauthLogin)
+.get('/logout', logoutUser)
 
 //add
 .post('/signup', registerUser)

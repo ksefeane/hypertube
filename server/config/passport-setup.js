@@ -26,6 +26,6 @@ client.userProfile = function (accesstoken, done) {
       }
       done(null, data);
     })
-  }
+}
 
 export default passport.use(client)

@@ -19,14 +19,16 @@ let gitClient = new Oauth2Strategy({
   tokenURL: 'https://github.com/login/oauth/access_token',
   clientID: keys.git.clientID,
   clientSecret: keys.git.clientSecret,
-  callbackURL: '/api/users/auth/redirect'
+  callbackURL: '/api/users/auth/redirect2'
 }, async (token, refreshToken, profile, callback) => {
     profile.first_name = profile.name
     profile.last_name = ''
     if (profile.email == null)
       callback({'error': 'email not found'}, null)
     callback(null, await findOrCreate(profile))
-})
+  }
+)
+
 
 ftClient.userProfile = function (accesstoken, done) {
     // choose your own adventure, or use the Strategy's oauth client
@@ -42,6 +44,8 @@ ftClient.userProfile = function (accesstoken, done) {
     })
 }
 
+
+
 gitClient.userProfile = function (accesstoken, done) {
   this._oauth2._request("GET", "https://api.github.com/user", null, null, accesstoken, (err, data) => {
     if (err) { return done(err); }
@@ -55,7 +59,9 @@ gitClient.userProfile = function (accesstoken, done) {
   })
 }
 
-passport.use(ftClient)
-passport.use(gitClient)
+
+
+passport.use('42', ftClient)
+passport.use('github', gitClient)
 
 export default passport

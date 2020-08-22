@@ -17,8 +17,15 @@ export async function loginUser(req, res, next) {
     res.send(stat)
 }
 
-export function auth42(req, res, next) {
+export function ftLogin(req, res, next) {
     //handle with passport
+    
+    res.redirect('/api/users')
+}
+
+export function gitLogin(req, res) {
+    console.log(req.user)
+    req.user = null
     res.redirect('/api/users')
 }
 

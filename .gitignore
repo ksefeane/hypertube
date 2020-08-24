@@ -1,2 +1,8 @@
 node_modules
+<<<<<<< HEAD
 /server/config/keys.js
+=======
+server/config/keys.js
+client/node_modules
+file
+>>>>>>> b0fc21b16f10ab57d2f64e027576355d9ae5aa5b

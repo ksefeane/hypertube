@@ -5,6 +5,10 @@ import cors from 'cors'
 const app = express()
 const port = 5000
 
+//setup path
+import path from 'path'
+app.use(express.static(path.join(__dirname, 'public')))
+
 //middleware
 app.use(json())
 app.use(cors())

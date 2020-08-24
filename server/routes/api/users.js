@@ -1,6 +1,9 @@
 import { Router } from 'express'
 const router = Router()
-import { listUsers, registerUser, loginUser, ftLogin, gitLogin, logoutUser } from '../../controllers/userController'
+import { 
+    listUsers, registerUser, loginUser, ftLogin, gitLogin, logoutUser, uploadPhoto
+} from '../../controllers/userController'
+import upload from '../../models/imageModel'
 import passport from 'passport'
 
 export default router
@@ -16,5 +19,6 @@ export default router
 //add
 .post('/signup', registerUser)
 .post('/signin', loginUser)
+.post('/upload', upload.single('photo'), uploadPhoto)
 
 //delete

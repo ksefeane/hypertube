@@ -1,4 +1,4 @@
-import { User, fetchUsers, signupUser, signinUser } from '../models/userModel'
+import { User, fetchUsers, signupUser, signinUser, uploadImage } from '../models/userModel'
 
 export async function listUsers(req, res) {
     var f = await fetchUsers()
@@ -35,5 +35,16 @@ export function logoutUser(req, res) {
 }
 
 export async function passwordReset(req, res) {
-    req.body = 'username'
+    res.send(req.body)
+}
+
+export async function uploadPhoto(req, res) {
+    var file = req.file
+    if (!file) {
+        res.send('error please upload a valid picture')
+        var stat = await uploadImage(req.user)
+    } else {
+        var stat = await uploadImage(req.user)
+        res.send(stat)
+    }
 }

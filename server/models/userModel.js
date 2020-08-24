@@ -59,3 +59,8 @@ export async function findOrCreate(profile) {
     }
     return (user)
 }
+
+export async function uploadImage(user) {
+    console.log(user)
+    return ('soon')
+}

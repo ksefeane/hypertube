@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
-import keys from '../config/keys'
+import { email } from '../config/keys'
 
-const email = nodemailer.createTransport(keys.email)
-
-export default email
+export async function sendEmail(info) {
+    return (await nodemailer.createTransport(email).sendMail(info).catch(error => {return (error)}))
+}

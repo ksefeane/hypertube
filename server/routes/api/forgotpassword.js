@@ -4,4 +4,4 @@ const router = Router()
 
 export default router
 
-.get('/', passwordReset)
+.post('/', passwordReset)

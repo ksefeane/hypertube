@@ -1,4 +1,4 @@
-import { User, fetchUsers, signupUser, signinUser, uploadImage } from '../models/userModel'
+import { User, fetchUsers, signupUser, signinUser, uploadImage, emailLink } from '../models/userModel'
 
 export async function listUsers(req, res) {
     var f = await fetchUsers()
@@ -35,7 +35,9 @@ export function logoutUser(req, res) {
 }
 
 export async function passwordReset(req, res) {
-    res.send(req.body)
+    var address = req.body.email
+    var stat = await emailLink(address)
+    res.send(stat)
 }
 
 export async function uploadPhoto(req, res) {

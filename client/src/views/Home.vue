@@ -1,0 +1,23 @@
+<template>
+  <div>
+    {{ msg }}
+    <router-link to="/register">Register</router-link> 
+  </div>
+</template>
+
+<script>
+// @ is an alias to /src
+
+
+export default {
+  // name: 'Home',
+  // components: {
+  //   HelloWorld
+  // }
+  data() {
+    return {
+      msg: 'Welcome to Hypertube!!'
+    }
+  }
+}
+</script>

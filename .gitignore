@@ -1,2 +1,4 @@
 node_modules
-/config/keys.js
+server/config/keys.js
+client/node_modules
+file

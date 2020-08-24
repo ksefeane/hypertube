@@ -1,6 +1,7 @@
 import express from 'express'
 import { json } from 'body-parser'
 import cors from 'cors'
+import db from './models/db'
 
 const app = express()
 const port = 5000
@@ -10,7 +11,7 @@ app.use(json())
 app.use(cors())
 
 //initialize database
-import db from './models/db'
+//import db from './models/db'
 db.init()
 
 //setup passport

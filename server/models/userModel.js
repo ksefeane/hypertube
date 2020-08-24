@@ -1,7 +1,7 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
 import { validString, securePassword, validEmail } from './securityModel'
-import { sendMail } from './emailModel' 
+import { sendEmail } from './emailModel' 
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
@@ -60,13 +60,12 @@ export async function findOrCreate(profile) {
     }
     return (user)
 }
-
 export async function uploadImage(user) {
     console.log(user)
     return ('soon')
 }
-
 export async function emailLink(address) {
-    var mail = await sendMail({from: 'hypertube', to: address, subject: 'verifification', text: 'link goes here?'})
-    return ('email sent!')
+    var stat = await sendEmail({from: 'hypertube@hypertube.com', to: address, subject: 'verifification', text: 'link goes here?'})
+    .catch(error => {return (error)})
+    return (stat)
 }

@@ -1,7 +1,7 @@
 export async function validString(field, str) {
 	return (str.length < 3 ? 
 		{'error':`${field} too short`} : !str.match(/^[a-zA-Z0-9_]+$/) ? 
-		{'error':`${field} may only contain alphabets, numbers & an underscore`} :
+		{'error':`${field} may only contain alphabest, numbers & an underscore`} :
 		{'success':`${field} good`})
 }
 export async function securePassword(pass) {

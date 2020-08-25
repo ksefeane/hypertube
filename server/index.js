@@ -19,9 +19,7 @@ app.use(passportSetup.initialize())
 app.use(passportSetup.session())
 
 import users from './routes/api/users'
-import forgotpassword from './routes/api/forgotpassword'
 app.use('/api/users', users)
-app.use('/api/forgotpassword', forgotpassword)
 
 app.listen(port, () => 
     console.log(`server listening on port ${port}...`))

@@ -1,6 +1,6 @@
 import passport from 'passport'
 import Oauth2Strategy from 'passport-oauth2'
-import { keys } from './keys'
+import { keys } from '../../client/src/keys'
 import { findOrCreate } from '../models/userModel'
 
 let ftClient = new Oauth2Strategy ({
@@ -29,6 +29,7 @@ let gitClient = new Oauth2Strategy({
   }
 )
 
+
 ftClient.userProfile = function (accesstoken, done) {
     // choose your own adventure, or use the Strategy's oauth client
     this._oauth2._request("GET", "https://api.intra.42.fr/v2/me", null, null, accesstoken, (err, data) => {
@@ -43,6 +44,8 @@ ftClient.userProfile = function (accesstoken, done) {
     })
 }
 
+
+
 gitClient.userProfile = function (accesstoken, done) {
   this._oauth2._request("GET", "https://api.github.com/user", null, null, accesstoken, (err, data) => {
     if (err) { return done(err); }
@@ -55,6 +58,8 @@ gitClient.userProfile = function (accesstoken, done) {
     done(null, data);
   })
 }
+
+
 
 passport.use('42', ftClient)
 passport.use('github', gitClient)

@@ -33,7 +33,3 @@ export function logoutUser(req, res) {
     //handle with passport
     res.send('logout')
 }
-
-export async function passwordReset(req, res) {
-    req.body = 'username'
-}

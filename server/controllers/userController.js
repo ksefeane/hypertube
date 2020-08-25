@@ -17,21 +17,15 @@ export async function loginUser(req, res, next) {
     res.send(stat)
 }
 
-export function ftLogin(req, res, next) {
+export function authLogin(req, res, next) {
     //handle with passport
-    
     res.redirect('/api/users')
 }
 
-export function gitLogin(req, res) {
-    console.log(req.user)
-    req.user = null
-    res.redirect('/api/users')
-}
 
 export function logoutUser(req, res) {
     //handle with passport
-    res.send('logout')
+    res.send(req.user)
 }
 
 export async function passwordReset(req, res) {

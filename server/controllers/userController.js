@@ -1,8 +1,12 @@
 import { User, fetchUsers, signupUser, signinUser, uploadImage, emailLink } from '../models/userModel'
 
+export function auth(req, res, next) {
+    req.isAuthenticated() ? next() : res.redirect('/api/users/auth/42')
+}
+
 export async function listUsers(req, res) {
     var f = await fetchUsers()
-    res.send(f)
+    res.send(req.user)
 }
 
 export async function registerUser(req, res, next) {
@@ -24,8 +28,9 @@ export function authLogin(req, res, next) {
 
 
 export function logoutUser(req, res) {
+    req.logout()
     //handle with passport
-    res.send(req.user)
+    res.redirect('/api/users/auth/42')
 }
 
 export async function passwordReset(req, res) {

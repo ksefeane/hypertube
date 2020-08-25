@@ -64,7 +64,7 @@ export async function findOrCreate(profile) {
     return (new User(user[0]))
 }
 export async function fetchUser(uid) {
-    var user = await q.fetchone('users', ['id', 'username', 'email'], 'id', uid)
+    var user = await q.fetchone('users', ['id', 'username'], 'id', uid)
     return (user[0])
 }
 export async function uploadImage(user) {

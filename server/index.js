@@ -17,6 +17,11 @@ app.use(cors())
 import db from './models/db'
 db.init()
 
+//setup cookies
+import session from 'express-session'
+import { sessionkeys } from './config/keys'
+app.use(session(sessionkeys))
+
 //setup passport
 import passportSetup from './config/passport-setup'
 app.use(passportSetup.initialize())

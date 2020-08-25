@@ -7,11 +7,12 @@ const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
 export class User {
     constructor(user) {
-        this.username = user.username
-        this.first_name = user.first_name
-        this.last_name = user.last_name
-        this.email = user.email
-        this.password = user.password
+        this.id = user.id ? user.id : null
+        this.username = user.username ? user.username : ''
+        this.first_name = user.first_name ? user.first_name : ''
+        this.last_name = user.last_name ? user.last_name : ''
+        this.email = user.email ? user.email : ''
+        this.password = user.password ? user.password : ''
     }   
 }
 export async function signupUser(user) {
@@ -51,14 +52,20 @@ export async function signinUser(user) {
     return ('soon')
 }
 export async function findOrCreate(profile) {
-    var user = await q.fetchone('users', params, 'email', profile.email)
+    var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)
     if (user.length == 0) {
-        var user = new User(profile)
-        user.username = profile.login        
-        user.password = await hash(Math.random.toString(36).substring(8), 10)
-        insertUser(user)
+        var newuser = new User(profile)
+        newuser.username = profile.login
+        newuser.password = await hash(Math.random.toString(36).substring(8), 10)
+        var id = await insertUser(newuser)
+        newuser.id = id.insertId
+        return (newuser)
     }
-    return (user)
+    return (new User(user[0]))
+}
+export async function fetchUser(uid) {
+    var user = await q.fetchone('users', ['id', 'username', 'email'], 'id', uid)
+    return (user[0])
 }
 export async function uploadImage(user) {
     console.log(user)

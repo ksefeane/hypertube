@@ -1,7 +1,7 @@
 import passport from 'passport'
 import Oauth2Strategy from 'passport-oauth2'
 import { keys } from './keys'
-import { findOrCreate } from '../models/userModel'
+import { findOrCreate, fetchUser } from '../models/userModel'
 
 let ftClient = new Oauth2Strategy ({
   authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
@@ -22,7 +22,7 @@ let gitClient = new Oauth2Strategy({
   callbackURL: '/api/users/auth/redirect2'
 }, async (token, refreshToken, profile, callback) => {
     profile.first_name = profile.name
-    profile.last_name = ''
+    
     if (profile.email == null)
       callback({'error': 'email not found'}, null)
     callback(null, await findOrCreate(profile))
@@ -56,7 +56,17 @@ gitClient.userProfile = function (accesstoken, done) {
   })
 }
 
+
+
 passport.use('42', ftClient)
 passport.use('github', gitClient)
+
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+
+passport.deserializeUser(async (uid, done) => {
+  done(null, await fetchUser(uid))
+})
 
 export default passport

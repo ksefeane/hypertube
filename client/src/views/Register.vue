@@ -14,14 +14,14 @@
                 <p>{{ error }}</p>
               </div>
               <div class="social-login">
-                <a id="github-button" class="btn btn-block btn-social btn-github">
-                  <i class="fa fa-github"></i> Sign in with Github
+                <a @click="gitsignup" id="github-button" class="btn btn-block btn-social btn-github">
+                  <i class="fa fa-github"></i> Sign up with Github
                 </a>
-                <button class="btn google-btn social-btn" type="button">
+                <a @click="wtcsignup" id="wtc-button" class="btn google-btn social-btn" type="button">
                   <span>
                     <i class="fab fa-google-plus-g"></i> Sign up with Google+
                   </span>
-                </button>
+                </a>
                 <br />
                 <br />
               </div>
@@ -141,6 +141,57 @@ export default {
         this.register();
       }
     },
+    gitsignup() {
+      // Initializes OAuth.io with API key
+      // Sign-up an account to get one
+      window.OAuth.initialize('BTfcjv51Sd9sJJrfLVp8QyIBZUM');
+
+      // Popup facebook and ask for authorization
+      window.OAuth.popup('github').then((github) => {
+        console.log('github:', github);
+        // Prompts 'welcome' message with User's name on successful login
+        // #me() is a convenient method to retrieve user data without requiring you
+        // to know which OAuth provider url to call
+        github.me().then((data) => {
+          console.log("data: ", data);
+          alert("Your Github email: " + data.email + ".\nCheck console logs for more info.");
+        });
+
+        // You can also call Github's API using #.get()
+        github.get('/user').then(data => {
+          console.log('self data:', data);
+        });
+      });
+    },
+    props: {
+      name: String,
+    },
+    wtcsignup() {
+      // Initializes OAuth.io with API key
+      // Sign-up an account to get one
+      window.OAuth.initialize('c45308628135eb96e8e94f019ae7e745a7ef0d40f84403db88224c9774854dfb');
+
+      // Popup facebook and ask for authorization
+      window.OAuth.popup('wtc').then((wtc) => {
+        console.log('wtc:', wtc);
+        // Prompts 'welcome' message with User's name on successful login
+        // #me() is a convenient method to retrieve user data without requiring you
+        // to know which OAuth provider url to call
+        wtc.me().then((data) => {
+          console.log("data: ", data);
+          alert("Your We think code_ email: " + data.email + ".\nCheck console logs for more info.");
+        });
+
+        // You can also call Github's API using #.get()
+        wtc.get('/user').then(data => {
+          console.log('self data:', data);
+        });
+      });
+    },
+    // // props: {
+    // //   name: String,
+    // },
+
     register: function () {
       // var data_pack = {
       //     'first_name': this.first_name,

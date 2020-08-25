@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <app-navbar></app-navbar>
     <app-header></app-header>
     <app-navbar></app-navbar>
     <GithubLogin name="Github"></GithubLogin>
+    <!-- <dashnav></dashnav> -->
     
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
-    
+    <app-movie></app-movie>
     <router-view/>
     <app-footer></app-footer>
     
@@ -20,14 +20,22 @@
 
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/Navbar.vue';
+import GithubLogin from './components/GithubLogin.vue';
+import Movie from './components/Movie.vue';
+// import Dashnav from './components/Dashnav.vue';
+// import Dashboard  from './components/Dashboard.vue';
 
 
 export default {
   components: {
     'app-header': Header,
     'app-footer': Footer,
-    'app-navbar': Navbar
+    'app-navbar': Navbar,
+    'app-movie' : Movie,
+    // 'dashnav': Dashnav,
+    // Dashboard,
+    GithubLogin
   }
 }
 </script>

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 const routes = [
   {
@@ -25,6 +26,22 @@ const routes = [
     component: Login
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
+  {
+  //   path: '/movies',
+  //   name: 'movies',
+  //   component: app-movies
+  // },
+  // {
+  //   path: '/top movies',
+  //   name: 'top movies',
+  //   component: top-movies
+  // },
+
+  
     path: '/about',
     name: 'About',
     // route level code-splitting
@@ -39,5 +56,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 export default router

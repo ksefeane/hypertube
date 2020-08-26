@@ -13,8 +13,18 @@ class query {
 	}
 	static async fetchone(t_name, val, params, pval) {
 		var sql = `SELECT ${val} FROM ${t_name} WHERE ${params} =\'${pval}\'`
-		return (await DB.fetch(sql))	
+		var res = await DB.fetch(sql)
+		return (res.length > 0 ? res : null)	
 	}
+	static async update(t_name, sets, vals, param, pval) {
+		var z = ''
+		for (let s in sets)
+			z += sets[s] + "=?, "
+		z = z.slice(0, -2)
+		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
+		return(await DB.insert(sql, vals))
+	}
+
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
 		DB.insert(sql, (err, res) => {
@@ -24,19 +34,7 @@ class query {
 				callback(null, res)
 		})
 	}
-	static update(t_name, sets, values, param, pval, callback) {
-		var z = ''
-		for (let s in sets)
-			z += sets[s] + "=?, "
-		z = z.slice(0, -2)
-		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
-		DB.insert(sql, values, (err, res) => {
-			if (err)
-				callback("failed to update", null)
-			else
-				callback(null, "updated")
-		})
-	}
+	
 	static async getall(t_name) {
 		var sql = `SELECT * FROM ${t_name}`
 		var f = await DB.fetch(sql)

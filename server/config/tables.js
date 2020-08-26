@@ -14,6 +14,15 @@ var tables = {
 		" `admin` int (1) NOT NULL DEFAULT 0," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
+	),
+	tokens : (
+		"CREATE TABLE `tokens` (" +
+		" `id` int(11) NOT NULL AUTO_INCREMENT," +
+		" `username` varchar(20) NOT NULL," +
+		" `token` varchar(100) NOT NULL," +
+		" `type` varchar(100)," +
+		" PRIMARY KEY (`id`)" +
+		") ENGINE=InnoDB"
 	)
 }	
 module.exports = tables;

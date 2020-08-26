@@ -1,7 +1,7 @@
 <template>
     <div>
         {{ msg }}
-        <div>
+        <div class="form-field">
             <form>
                 <label for="username">Username: </label>
                 <input type="text" name="username" id=""> <br>
@@ -27,5 +27,9 @@ export default {
 </script>
 
 <style scoped>
-
+.form-field {
+    /* border-style: double; */
+    margin: auto;
+    width: 40%;
+}
 </style>

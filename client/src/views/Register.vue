@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <router-link to="/">Home</router-link>  -->
-        <div>
+        <div class="form-field">
             <form>
                 <div id="err" v-for="error in errors" v-bind:key="error">
                     <p>{{ error }}</p>
@@ -18,8 +18,8 @@
                 <input type="password" name="password" v-model="password"> <br>
                 <label for="confirm_password">Confirm Password: </label>
                 <input type="password" name="confirm_password" v-model="confirm_password"> <br>
-                <button v-on:click="validate">Submit</button>
             </form>
+            <button v-on:click="validate">Submit</button>
             <hr>
             <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
         </div>
@@ -94,3 +94,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.form-field {
+    margin: auto;
+    width: 40%;
+    /* border-style: solid;
+    border-width: 1px; */
+}
+</style>

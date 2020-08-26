@@ -1,7 +1,7 @@
 import passport from 'passport'
 import Oauth2Strategy from 'passport-oauth2'
 import { keys } from './keys'
-import { findOrCreate, fetchUser } from '../models/userModel'
+import { findOrCreate, fetchUser, User } from '../models/userModel'
 
 let ftClient = new Oauth2Strategy ({
   authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
@@ -26,8 +26,7 @@ let gitClient = new Oauth2Strategy({
     if (profile.email == null)
       callback({'error': 'email not found'}, null)
     callback(null, await findOrCreate(profile))
-  }
-)
+})
 
 ftClient.userProfile = function (accesstoken, done) {
     // choose your own adventure, or use the Strategy's oauth client
@@ -55,8 +54,6 @@ gitClient.userProfile = function (accesstoken, done) {
     done(null, data);
   })
 }
-
-
 
 passport.use('42', ftClient)
 passport.use('github', gitClient)

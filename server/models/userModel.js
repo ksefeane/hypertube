@@ -71,8 +71,29 @@ export async function uploadImage(user) {
     console.log(user)
     return ('soon')
 }
-export async function emailLink(address) {
-    var stat = await sendEmail({from: 'hypertube@hypertube.com', to: address, subject: 'verifification', text: 'link goes here?'})
-    .catch(error => {return (error)})
+export async function sendEmailLink(username) {
+    var token = await hash(Math.random.toString(36).substring(8), 10)
+    var email = await q.fetchone('users', ['email'], 'username', username)
+    var link = `<p>hello ${username}</p><br>
+        <a href='http://localhost:5000/api/forgotpassword/${token}'>
+        click here to reset password</a>`
+    var stat = email ? await sendEmail({from: 'hypertube@hypertube.com', to: email[0].email, 
+        subject: 'reset password', text: link}) : {'error': 'email not found'}
+    email ? q.insert('tokens', ['username', 'token', 'type'], [username, token, 'resetpassword']) : 0
     return (stat)
+}
+export async function checkEmailLink(token) {
+    var user = await q.fetchone('tokens', ['username'], 'token', token)
+    //destroy token in db
+    return (user ? user : null)
+}
+export async function setPassword(token, password) {
+    var vpass = await securePassword(password)
+    if (Object.keys(vpass)[0] === 'error')
+        return (vpass)
+    var newpass = hash(password, 10)
+    var user = checkEmailLink(token)
+    var change = await Promise.all([newpass, user])
+    q.update('users', ['password'], change[0], 'username', change[1][0].username)
+    return (user ? {'success': 'password changed successfully'} : {'error': 'password change failed'})
 }

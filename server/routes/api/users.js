@@ -18,7 +18,7 @@ export default router
 .get('/logout', logoutUser)
 .get('/', auth, listUsers)
 
-//add
+//post
 .post('/signup', registerUser)
 .post('/signin', loginUser)
 .post('/upload', auth, upload.single('photo'), uploadPhoto)

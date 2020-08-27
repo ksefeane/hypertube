@@ -13,10 +13,10 @@ const storage = multer.diskStorage({
 			fs.mkdirSync(path.join(tempPath, 'temp'))
 		}
 		var dest = 'uploads/temp'
-		callback(null, 'public/'+dest)
+		callback(null, tempPath+'/temp')
 	},
 	filename: (req, file, callback) => {
-		var save = `${req.user}`
+		var save = `${req.user.username}`
 		callback(null, save)
 	}
 })

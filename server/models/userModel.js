@@ -74,6 +74,7 @@ export async function uploadImage(user) {
 export async function sendEmailLink(username) {
     var token = await hash(Math.random.toString(36).substring(8), 10)
     var email = await q.fetchone('users', ['email'], 'username', username)
+    console.log(email)
     var link = `<p>hello ${username}</p><br>
         <a href='http://localhost:5000/api/forgotpassword/${token}'>
         click here to reset password</a>`

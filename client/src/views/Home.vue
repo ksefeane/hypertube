@@ -2,7 +2,8 @@
   <div>
     {{ msg }}
     <router-link to="/register">Register</router-link> | 
-    <router-link to="/login">Log in</router-link> 
+    <router-link to="/login">Log in</router-link> |
+    <router-link to="/profile">Profile</router-link> 
   </div>
 </template>
 

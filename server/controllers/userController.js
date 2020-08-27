@@ -26,14 +26,13 @@ export async function loginUser(req, res, next) {
 }
 
 export function authLogin(req, res, next) {
-    res.redirect('/api/users')
+    res.redirect('/api/users/photo')
 }
 
 export function logoutUser(req, res) {
     req.logout()
     res.redirect('/api/users/auth/42')
 }
-
 export async function passwordReset(req, res) {
     var username = req.body.username
     var stat = await sendEmailLink(username).catch(e => {console.log(e)})
@@ -52,11 +51,11 @@ export async function changePassword(req, res) {
 }
 
 export async function uploadPhoto(req, res) {
-    var file = req.file
-    if (!file) {
+    if (!req.file) {
         res.send('error please upload a valid picture')
         var stat = await uploadImage(req.user)
     } else {
+        console.log('image uploaded')
         var stat = await uploadImage(req.user)
         res.send(stat)
     }

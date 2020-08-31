@@ -75,7 +75,7 @@ export default {
             //     'password': this.password,
             //     'password_repeat': this.password_repeat
             // }
-            var path = 'http://localhost:5000/api/users/signup/'
+            const path = 'http://localhost:5000/api/users/signup/'
             axios.post(path, {
                 'first_name': this.first_name,
                 'last_name': this.last_name,

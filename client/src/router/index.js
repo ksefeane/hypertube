@@ -4,6 +4,8 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Profile from '../views/Profile.vue'
 import Play from '../views/PlayMovie.vue'
+import UpdatePassword from '../views/UpdatePassword.vue'
+
 
 const routes = [
   {
@@ -27,9 +29,14 @@ const routes = [
     component: Play
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/update_password',
+    name: 'UpdatePassword',
+    component: UpdatePassword
   },
   // {
   //   path: '/about',

@@ -1,5 +1,5 @@
 import express from 'express'
-import { json, urlencoded } from 'body-parser'
+import { json } from 'body-parser'
 import cors from 'cors'
 
 const app = express()
@@ -11,7 +11,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //middleware
 app.use(json())
-app.use(urlencoded({ extended: true }))
 app.use(cors())
 
 //initialize database

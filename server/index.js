@@ -31,9 +31,12 @@ app.use(passportSetup.session())
 import users from './routes/api/users'
 import forgotpassword from './routes/api/forgotpassword'
 import video from './routes/api/video'
+import library from './routes/api/library'
+
 app.use('/api/users', users)
 app.use('/api/forgotpassword', forgotpassword)
 app.use('/api/video', video)
+app.use('/api/library', library)
 
 app.listen(port, () => 
     console.log(`server listening on port ${port}...`))

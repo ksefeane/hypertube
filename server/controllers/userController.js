@@ -16,7 +16,7 @@ export async function registerUser(req, res, next) {
     var user = new User(req.body)
     req.user = user.username
     var stat = await signupUser(user)
-    res.send(stat )
+    res.send(stat)
 }
 
 export async function loginUser(req, res, next) {

@@ -28,14 +28,14 @@ export default {
             this.$router.push('/')
         }
     },
-    computed: {
-        checkUid() {
-            return this.uid = localStorage.getItem('user')
-        }
-    },
-    beforeMount() {
-        this.checkUid
-    }
+    // computed: {
+    //     checkUid() {
+    //         return this.uid = localStorage.getItem('user')
+    //     }
+    // },
+    // beforeMount() {
+    //     this.checkUid
+    // }
 }
 </script>
 

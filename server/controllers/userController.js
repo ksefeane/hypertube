@@ -1,7 +1,10 @@
-import { User, fetchUsers, signupUser, signinUser, uploadImage, emailLink } from '../models/userModel'
+import { 
+    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword
+} from '../models/userModel'
 
 export function auth(req, res, next) {
-    req.isAuthenticated() ? next() : res.redirect('/api/users/auth/42')
+    req.isAuthenticated() ? next() : 
+        req.user ? next() : res.redirect('/api/users/auth/42')
 }
 
 export async function listUsers(req, res) {
@@ -11,6 +14,7 @@ export async function listUsers(req, res) {
 
 export async function registerUser(req, res, next) {
     var user = new User(req.body)
+    req.user = user.username
     var stat = await signupUser(user)
     res.send(stat)
 }
@@ -22,29 +26,36 @@ export async function loginUser(req, res, next) {
 }
 
 export function authLogin(req, res, next) {
-    //handle with passport
     res.redirect('/api/users')
 }
 
-
 export function logoutUser(req, res) {
     req.logout()
-    //handle with passport
     res.redirect('/api/users/auth/42')
 }
-
 export async function passwordReset(req, res) {
-    var address = req.body.email
-    var stat = await emailLink(address)
+    var username = req.body.username
+    var stat = await sendEmailLink(username).catch(e => {console.log(e)})
+    res.send(stat)
+}
+
+export async function checkLink(req, res, next) {
+    var stat = await checkEmailLink(req.params.reset)
+    stat ? next() : res.send({'error': 'invalid token'})
+}
+
+export async function changePassword(req, res) {
+    var stat = req.body.password.length > 0 ? 
+    await setPassword(req.params.reset, req.body.password) : {'success': 'token valid, please enter password'}
     res.send(stat)
 }
 
 export async function uploadPhoto(req, res) {
-    var file = req.file
-    if (!file) {
+    if (!req.file) {
         res.send('error please upload a valid picture')
         var stat = await uploadImage(req.user)
     } else {
+        console.log('image uploaded')
         var stat = await uploadImage(req.user)
         res.send(stat)
     }

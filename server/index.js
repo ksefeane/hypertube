@@ -1,5 +1,5 @@
 import express from 'express'
-import { json } from 'body-parser'
+import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
 
 const app = express()
@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //middleware
 app.use(json())
+app.use(urlencoded({ extended: true }))
 app.use(cors())
 
 //initialize database
@@ -29,8 +30,13 @@ app.use(passportSetup.session())
 
 import users from './routes/api/users'
 import forgotpassword from './routes/api/forgotpassword'
+import video from './routes/api/video'
+import library from './routes/api/library'
+
 app.use('/api/users', users)
 app.use('/api/forgotpassword', forgotpassword)
+app.use('/api/video', video)
+app.use('/api/library', library)
 
 app.listen(port, () => 
     console.log(`server listening on port ${port}...`))

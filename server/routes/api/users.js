@@ -5,6 +5,7 @@ import {
 } from '../../controllers/userController'
 import upload from '../../models/imageModel'
 import passport from 'passport'
+import path from 'path'
 
 export default router
 
@@ -17,8 +18,7 @@ export default router
 //get
 .get('/logout', logoutUser)
 .get('/', auth, listUsers)
-
-//add
+//post
 .post('/signup', registerUser)
 .post('/signin', loginUser)
 .post('/upload', auth, upload.single('photo'), uploadPhoto)

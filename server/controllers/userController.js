@@ -26,7 +26,7 @@ export async function loginUser(req, res, next) {
 }
 
 export function authLogin(req, res, next) {
-    res.redirect('/api/users/photo')
+    res.redirect('/api/users')
 }
 
 export function logoutUser(req, res) {

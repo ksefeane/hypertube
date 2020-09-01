@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Profile from '../views/Profile.vue'
 import Play from '../views/PlayMovie.vue'
 import UpdatePassword from '../views/UpdatePassword.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
 
 
 const routes = [
@@ -22,6 +23,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword
   },
   {
     path: '/play',

@@ -6,6 +6,7 @@ import Profile from '../views/Profile.vue'
 import Play from '../views/PlayMovie.vue'
 import UpdatePassword from '../views/UpdatePassword.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
+import ResetPassword from '../views/ResetPassword.vue'
 
 
 const routes = [
@@ -18,6 +19,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/reset/:id',
+    name: 'ResetPassword',
+    component: ResetPassword
   },
   {
     path: '/login',

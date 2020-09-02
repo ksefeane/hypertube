@@ -6,6 +6,9 @@
             <div id="err" v-for="error in err" v-bind:key="error">
                 <p>{{ error }}</p>
             </div>
+            <div v-if="succ">
+                <p>{{ succ }}</p>
+            </div>
             <input type="text" placeholder="Enter your username" v-model="username">
         </form>
         <button @click="validate">Submit Username</button>
@@ -23,7 +26,8 @@ export default {
             title: 'Forgot Password',
             text: 'Enter your username and you will recieve an email with instructions to reset your password',
             username: '',
-            err: []
+            err: [],
+            succ: null
         }
     },
     methods: {
@@ -36,11 +40,16 @@ export default {
             }
         },
         forgot_pass() {
-            const path = 'http://localhost:5000/api/users/forgot/'
+            const path = 'http://localhost:5000/api/forgotpassword/'
             axios.post(path, {
                 'username': this.username
             }).then((result) => {
                 console.log(result)
+                if (result.data.error) {
+                    this.err = result.data.err
+                } else if (result.data.accepted) {
+                    this.succ = "An email was sent to you!"
+                }
             }).catch((error) => {
                 console.log(error)
             })

@@ -75,7 +75,7 @@ export default {
             //     'password': this.password,
             //     'password_repeat': this.password_repeat
             // }
-            const path = 'http://localhost:5000/api/users/signup/'
+            const path = 'http://localhost:5000/api/users/signup'
             axios.post(path, {
                 'first_name': this.first_name,
                 'last_name': this.last_name,
@@ -86,7 +86,15 @@ export default {
             }
             ).then((results) => {
                 console.log(results.data)
+                if (results.data.error) {
+                    console.log("error")
+                    this.errors = results.data.error
+                } else if (results.data.success) {
+                    console.log('success')
+                    this.$router.push('/login')
+                }
             }).catch((err) => {
+                console.log('in catch')
                 console.log(err)
             })
 

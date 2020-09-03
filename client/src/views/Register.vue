@@ -6,6 +6,9 @@
                 <div id="err" v-for="error in errors" v-bind:key="error">
                     <p>{{ error }}</p>
                 </div>
+                <div id="succ" v-for="succ in success" v-bind:key="succ">
+                    <p>{{ succ }}</p>
+                </div>
                 <label for="first_name">First Name: </label>
                 <input type="text" name="first_name" v-model="first_name"> <br>
                 <label for="username">Last Name: </label>
@@ -47,7 +50,8 @@ export default {
             password: '',
             confirm_password: '',
             submit: true,
-            errors:[]
+            errors:[],
+            success:[]
         }
     },
     methods: {
@@ -67,14 +71,6 @@ export default {
             }
         },
         register: function() {
-            // var data_pack = {
-            //     'first_name': this.first_name,
-            //     'last_name': this.last_name,
-            //     'username': this.username,
-            //     'email': this.email,
-            //     'password': this.password,
-            //     'password_repeat': this.password_repeat
-            // }
             const path = 'http://localhost:5000/api/users/signup'
             axios.post(path, {
                 'first_name': this.first_name,
@@ -83,21 +79,32 @@ export default {
                 'email': this.email,
                 'password': this.password,
                 'password_repeat': this.password_repeat
-            }
-            ).then((results) => {
-                console.log(results.data)
+            }).then((results) => {
+                // console.log(results.data)
                 if (results.data.error) {
                     console.log("error")
                     this.errors = results.data.error
                 } else if (results.data.success) {
                     console.log('success')
-                    this.$router.push('/login')
+                    this.success.push("Registration successful! You can now log in")
+                    this.clean_input()
+                    // this.$router.push('/login') 
                 }
             }).catch((err) => {
-                console.log('in catch')
-                console.log(err)
+                // console.log('in catch')
+                // console.log(err)
+                this.errors.push("" + err)
             })
 
+        },
+        clean_input() {
+            this.first_name = ''
+            this.last_name =  ''
+            this.username =  ''
+            this.email =  ''
+            this.password =  ''
+            this.confirm_password = ''
+            this.errors = []
         }
     }
 }

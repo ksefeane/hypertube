@@ -46,7 +46,8 @@ export default {
             }).then((result) => {
                 console.log(result)
                 if (result.data.error) {
-                    this.err = result.data.err
+                    console.log(result.data.error)
+                    this.err.push(result.data.error)
                 } else if (result.data.accepted) {
                     this.succ = "An email was sent to you!"
                 }

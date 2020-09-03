@@ -1,14 +1,19 @@
 <template>
     <div>
-        <div id="err" v-for="error in err" v-bind:key="error">
+        <div id="err" v-for="error in errors" v-bind:key="error">
             <small>{{ error }}</small>
+        </div>
+        <div id="succ" v-for="suc in succ" v-bind:key="suc">
+            <small>{{ suc }}</small>
         </div>
         <form>
             <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
             <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
         </form>
-        <button @click="validate_pass">Update Password</button>
+        <button @click="validate">Update Password</button>
+        <hr>
         <br>
+        <hr>
     </div>
 </template>
 
@@ -21,6 +26,7 @@ export default {
             new_pass: '',
             confirm_pass: '',
             errors: [],
+            succ: [],
             token: this.$route.params.id,
         }
     },
@@ -43,6 +49,12 @@ export default {
                 'password': this.new_pass
             }).then((result) => {
                 console.log(result)
+                if (result.data.error) {
+                    this.errors.push("Invalid token")
+                } else if (result.data.success) {
+                    this.succ.push("Password changed successfully! You will be redirected to login")
+                    setTimeout(() => {this.$router.push('/login')}, 6000)
+                }
             }).catch((error) => {
                 console.log(error)
             })

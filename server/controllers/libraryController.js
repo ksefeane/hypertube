@@ -22,3 +22,15 @@ export async function movieLibrary(req, res) {
     }
       
 }
+
+//searches yts directory if the name of the movie is provided
+export async function movieSearchLibrary(req, res) {
+    var search = req.body.search
+    try {
+        const response = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search)
+        console.log(response.data.data.movies);
+        res.send(response.data.data);
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -3,7 +3,7 @@
         <h1>{{ title }}</h1>
         <p>{{ text }}</p>
         <form>
-            <div id="err" v-for="error in err" v-bind:key="error">
+            <div id="err" v-for="error in errors" v-bind:key="error">
                 <p>{{ error }}</p>
             </div>
             <div v-if="succ">
@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import { axios_post } from "../functions/functions";
 
 export default {
     data() {
@@ -26,34 +27,46 @@ export default {
             title: 'Forgot Password',
             text: 'Enter your username and you will recieve an email with instructions to reset your password',
             username: '',
-            err: [],
+            errors: [],
             succ: null
         }
     },
     methods: {
         validate() {
             this.err = []
-            if (this.username.length == 0) {
-                this.err.push('Please enter your username')
+            if (this.username.length < 4) {
+                this.errors.push('Username must have at least 4 characters')
             } else {
                 this.forgot_pass()
             }
         },
-        forgot_pass() {
-            const path = 'http://localhost:5000/api/forgotpassword/'
-            axios.post(path, {
-                'username': this.username
-            }).then((result) => {
-                console.log(result)
-                if (result.data.error) {
-                    console.log(result.data.error)
-                    this.err.push(result.data.error)
-                } else if (result.data.accepted) {
+        async forgot_pass() {
+            const data = {'username': this.username}
+            var results = await axios_post('/api/forgotpassword/', data)
+            if (results !== "Oops!") {
+                if (results.data.error) {
+                    this.errors.push(results.data.error)
+                } else if (results.data.accepted) {
                     this.succ = "An email was sent to you!"
+                    this.username = ""
                 }
-            }).catch((error) => {
-                console.log(error)
-            })
+            } else {
+                this.errors.push("An unexpected error happened")
+            }
+            // const path = 'http://localhost:5000/api/forgotpassword/'
+            // axios.post(path, {
+            //     'username': this.username
+            // }).then((result) => {
+            //     console.log(result)
+            //     if (result.data.error) {
+            //         console.log(result.data.error)
+            //         this.err.push(result.data.error)
+            //     } else if (result.data.accepted) {
+            //         this.succ = "An email was sent to you!"
+            //     }
+            // }).catch((error) => {
+            //     console.log(error)
+            // })
         }
     }
 }

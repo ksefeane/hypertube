@@ -38,7 +38,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import { secure_password, axios_post } from "../functions/functions";
 
 export default {
     data() {
@@ -57,45 +58,44 @@ export default {
     methods: {
         validate: function() {
             this.errors = []
-            if (this.username == '') {
-                this.errors.push('Enter username')
+            if (this.username.length < 4) {
+                this.errors.push('Username must have at least 4 characters')
+                return
             }
-            if (this.password.length < 5) {
-                this.errors.push('Password short')
+            let check = secure_password(this.password)
+            if (check !== 'good') {
+                this.errors.push(check)
+                return
             }
             if (this.password != this.confirm_password) {
                 this.errors.push('Passwords do not match')
+                return
             }
             if (this.errors.length == 0) {
                 this.register()
             }
         },
-        register: function() {
-            const path = 'http://localhost:5000/api/users/signup'
-            axios.post(path, {
+        register: async function() {
+            // this.errors = []
+            const data = {
                 'first_name': this.first_name,
                 'last_name': this.last_name,
                 'username': this.username,
                 'email': this.email,
                 'password': this.password,
                 'password_repeat': this.password_repeat
-            }).then((results) => {
-                // console.log(results.data)
+            }
+            var results = await axios_post('/api/users/signup', data)
+            if (results !== "Oops!") {
                 if (results.data.error) {
-                    console.log("error")
                     this.errors = results.data.error
                 } else if (results.data.success) {
-                    console.log('success')
                     this.success.push("Registration successful! You can now log in")
                     this.clean_input()
-                    // this.$router.push('/login') 
                 }
-            }).catch((err) => {
-                // console.log('in catch')
-                // console.log(err)
-                this.errors.push("" + err)
-            })
-
+            } else {
+                this.errors.push("An unexpected error happened")
+            }
         },
         clean_input() {
             this.first_name = ''

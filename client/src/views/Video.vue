@@ -1,8 +1,7 @@
 <template>
     <div class="container">
         <div class="c-video">
-            <video controls>
-                <source src="http://localhost:5000/api/video/stream/zero.mp4" type="video/mp4" controls> 
+            <video src="http://localhost:5000/api/video/stream/[HorribleSubs] Peter Grill to Kenja no Jikan - 01 [1080p].mkv" controls>
                 sorry, doesn't support
             </video>
         </div>

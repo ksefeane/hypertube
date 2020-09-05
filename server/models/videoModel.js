@@ -5,8 +5,8 @@ export function getExt(string) {
     return extension[1].toLowerCase();
 }
 
-export function convertMkv(path, file, dest) {
-    var newfile = file.replace('mkv', 'mp4')
+export function convertMkv(path) {
+    var newfile = path.replace('mkv', 'mp4')
     try {
         ffmpeg(path)
             .toFormat('mp4')
@@ -19,22 +19,7 @@ export function convertMkv(path, file, dest) {
             .on('end', () => {
                 console.log('conversion complete')
             })
-            .save(dest+newfile)
-    } catch (e) {
-        console.log(e)
-    }
-
-    //ffmpeg(track)
-    // .toFormat('wav')
-    // .on('error', (err) => {
-    // console.log('An error occurred: ' + err.message);
-    // }
-    // .on('progress', (progress) => {
-    //  // console.log(JSON.stringify(progress));
-    //  console.log('Processing: ' + progress.targetSize + ' KB converted');
-    // })
-    // .on('end', () => {
-    // console.log('Processing finished !');
-    // })
-    // .save('./hello.wav');//path where you want to save your file
+            .save(newfile)
+            return(newfile)
+    } catch (e) {console.log(e)}
 }

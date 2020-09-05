@@ -1,16 +1,10 @@
-import WebTorrent from 'webtorrent-hybrid'
+import WebTorrent from 'webtorrent'
 import fs from 'fs'
 import { convertMkv, getExt } from './videoModel'
 
 let client = new WebTorrent()
 const dest = 'server/public/videos/'
 const tpath = '/tmp/webtorrent/'
-
-let stats = {
-  progress: 0,
-  downloadSpeed: 0,
-  ratio: 0
-}
 
 let error_message = ""
 
@@ -19,11 +13,13 @@ client.on('error', (err) => {
 })
 
 client.on('download', (bytes) => {
-  stats = {
-		progress: client.progress * 100 * 100,
-		downloadSpeed: Number(client.downloadSpeed/1000).toFixed(1)+'kb/s',
-  }
-  process.stdout.write(stats.downloadSpeed+'\r')
+	let downloadSpeed = Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
+  process.stdout.write(downloadSpeed+'\r')
+})
+
+client.on('torrent', (tor) => {
+    let downloadSpeed = Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
+    process.stdout.write(downloadSpeed+'   '+tor.name+'\r')
 })
 
 export async function magnetUrl(param) {
@@ -31,27 +27,6 @@ export async function magnetUrl(param) {
   var con = Object.values(param)
   var magnet = con.join(',')
   return ('magnet:?xt='+magnet.replace(',',''))
-}
-
-
-export async function infoTorrent(magnet) {
-    var torrent = client.get(magnet)
-    var stat = {
-      torrentpath: tpath,
-      destination: '',
-      size: '',
-      downloaded: 0+' kb',
-      progress: 0+'%',
-      downloadSpeed: Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
-    }
-    torrent.files.forEach((data) => {
-      stat.torrentpath += torrent.infoHash
-      stat.destination = dest+data.name
-      stat.size = Number(data.length/100).toFixed(0)+' kb'
-      stat.downloaded = Number(data.downloaded/100).toFixed(0)+' kb'
-      stat.progress = Number((data.downloaded/data.length)*10).toFixed(2)+'%'
-    })
-    return (stat.destination.length > 0 ? stat : 'initializing torrent: '+torrent.infoHash)    
 }
 
 export async function deleteTorrent(magnet) {
@@ -74,16 +49,31 @@ export async function deleteTorrent(magnet) {
     return (torrent ? 'torrent destroyed' : 'torrent does not exist')
 }
 
+export async function infoTorrent(magnet) {
+    var torrent = client.get(magnet)
+    var stat = {
+      torrentpath: tpath,
+      destination: '',
+      size: '',
+      downloaded: 0+' kb',
+      progress: 0+'%',
+      downloadSpeed: Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
+    }
+    torrent.files.forEach((data) => {
+      stat.torrentpath += torrent.infoHash
+      stat.destination = dest+data.name
+      stat.size = Number(data.length/100).toFixed(0)+' kb'
+      stat.downloaded = Number(data.downloaded/100).toFixed(0)+' kb'
+      stat.progress = Number((data.downloaded/data.length)*10).toFixed(2)+'%'
+    })
+    return (stat.destination.length > 0 ? stat : 'initializing torrent: '+torrent.infoHash)    
+}
+
 export async function downloadTorrent(magnet) {
     client.add(magnet, (torrent) => {
         const files = torrent.files
         let len = files.length
       files.forEach((file) => {
-        var fname = getExt(file.name)
-        if (fname === 'mkv')
-            fname = convertMkv(tpath/file.name)
-        // Display the file by appending it to the DOM. Supports video, audio, images, and
-        // more. Specify a container element (CSS selector or reference to DOM node).
         const stream = file.createReadStream()
         const save = fs.createWriteStream(dest+file.name)
         stream.on('end', () => {
@@ -93,6 +83,7 @@ export async function downloadTorrent(magnet) {
               process.exit
             }
         }).pipe(save)
+        
       })
     })
 }

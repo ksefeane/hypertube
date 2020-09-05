@@ -3,8 +3,8 @@ import { downloadVideo, deleteVideo, getInfo, streamVideo } from '../../controll
 const router = Router()
 
 export default router
-.get('/delete/:magnet', deleteVideo)
-
 .get('/download/:magnet', downloadVideo)
+.get('/delete/:magnet', deleteVideo)
 .get('/info', getInfo)
-.get('/stream/', streamVideo)
+
+.get('/stream/:movie', streamVideo)

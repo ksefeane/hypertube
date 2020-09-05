@@ -1,5 +1,6 @@
 import WebTorrent from 'webtorrent-hybrid'
 import fs from 'fs'
+import { convertMkv, getExt } from './videoModel'
 
 let client = new WebTorrent()
 const dest = 'server/public/videos/'
@@ -21,7 +22,6 @@ client.on('download', (bytes) => {
   stats = {
 		progress: client.progress * 100 * 100,
 		downloadSpeed: Number(client.downloadSpeed/1000).toFixed(1)+'kb/s',
-		ratio: client.ratio
   }
   process.stdout.write(stats.downloadSpeed+'\r')
 })
@@ -56,10 +56,11 @@ export async function infoTorrent(magnet) {
 
 export async function deleteTorrent(magnet) {
     var torrent = client.get(magnet)
-    var dir = tpath+torrent.infoHash
-    if (!torrent)
+    
+    if (!torrent) 
       console.log('no torrent')
     else {
+      var dir = tpath+torrent.infoHash
       torrent.destroy(() => {
         fs.rmdir(dir, { recursive: true }, (err) => {
           if (err) {
@@ -70,7 +71,7 @@ export async function deleteTorrent(magnet) {
         console.log('killed torrent '+torrent.infoHash)
       })
     }
-    
+    return (torrent ? 'torrent destroyed' : 'torrent does not exist')
 }
 
 export async function downloadTorrent(magnet) {
@@ -78,7 +79,9 @@ export async function downloadTorrent(magnet) {
         const files = torrent.files
         let len = files.length
       files.forEach((file) => {
-        console.log('downloading: '+file.name)
+        var fname = getExt(file.name)
+        if (fname === 'mkv')
+            fname = convertMkv(tpath/file.name)
         // Display the file by appending it to the DOM. Supports video, audio, images, and
         // more. Specify a container element (CSS selector or reference to DOM node).
         const stream = file.createReadStream()

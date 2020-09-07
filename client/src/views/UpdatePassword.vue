@@ -1,5 +1,6 @@
 <template>
     <div>
+        <app-header></app-header>
         <router-link to="/profile">Back to profile</router-link>
             <div id="err" v-for="error in err" v-bind:key="error">
                 <small>{{ error }}</small>
@@ -11,11 +12,18 @@
             </form>
         <button @click="validate_pass">Update Password</button>
         <br>
+        <app-footer></app-footer>
     </div>
 </template>
 
 <script>
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 export default {
+    components: {
+        'app-header': Header,
+        'app-footer': Footer
+    },
     data() {
         return {
             current_pass: '',

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <app-header></app-header>
         {{ msg }}
         <div class="form-field">
             <form>
@@ -16,14 +17,21 @@
             <small>Don't have an account? <router-link to="/register">Register Here!</router-link> </small> |
             <small><router-link to="/forgot-password">Forgot password?</router-link></small>
         </div>
+        <app-footer></app-footer>
     </div>
 </template>
 
 <script>
 // import router from 'vue-router';
-import axios from 'axios'
+// import axios from 'axios'
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default {
+    components: {
+        'app-header': Header,
+        'app-footer': Footer
+    },
     data() {
         return {
             msg: 'Log in',
@@ -45,18 +53,20 @@ export default {
             }
         },
         login() {
-            const path = 'http://localhost:5000/api/users/signin/'
-            axios.post(path, {
-                'username': this.username,
-                'password': this.password
-            }).then((result) => {
-                console.log(result)
-                // localStorage.setItem('user', this.username)
-                // this.$router.push('/profile/' + this.username)
-            }).catch((error) => {
-                console.log('We have an error')
-                console.log(error)
-            })
+            // const path = 'http://localhost:5000/api/users/signin/'
+            // axios.post(path, {
+            //     'username': this.username,
+            //     'password': this.password
+            // }).then((result) => {
+            //     console.log(result)
+            //     // localStorage.setItem('user', this.username)
+            //     // this.$router.push('/profile/' + this.username)
+            // }).catch((error) => {
+            //     console.log('We have an error')
+            //     console.log(error)
+            // })
+            localStorage.setItem('user', this.username)
+            this.$router.push('/profile/te')
         }
     }
     

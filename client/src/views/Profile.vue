@@ -1,5 +1,6 @@
 <template>
     <div>
+        <app-header></app-header>
         <div>
             <h1>Hello {{ uid }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
@@ -26,13 +27,21 @@
             <router-link to="/update_password">Update Password</router-link>
         </div>
         <h1>{{ message }}</h1>
+        <app-footer></app-footer>
     </div>
 </template>
 
 <script>
 // import axios from 'axios'
-// import axios from 'axios'
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+import axios from 'axios'
 export default {
+    components: {
+        'app-header': Header,
+        'app-footer': Footer
+    },
     data() {
         return {
             id: this.$route.params.id,
@@ -56,16 +65,25 @@ export default {
             // console.log(event)
         },
         uploadImage() {
-            // console.log(this.selectedFile);
+            console.log(this.selectedFile);
+            console.log(this.id)
             let type = this.selectedFile.type
             // const url = ''
-            console.log('name: ' + this.selectedFile.name);
-            console.log('size: ' + this.selectedFile.size);
-            console.log('type: ' + this.selectedFile.type);
+            // console.log('name: ' + this.selectedFile.name);
+            // console.log('size: ' + this.selectedFile.size);
+            // console.log('type: ' + this.selectedFile.type);
             // console.log(typeof type);
-            var nn = type.split('/')
+            const path = 'http://localhost:5000/api/users/upload/' + this.id
+            let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("We've got an IMAGE!");
+                console.log("We've got an IMAGE!")
+                axios.post(path, {
+                    'image': this.selectedFile
+                }).then((result) => {
+                    console.log(result)
+                }).catch((error) => {
+                    console.log(error)
+                })
             } else if (nn[0] === 'video') {
                 console.log("We've got a VIDEO!");
             }

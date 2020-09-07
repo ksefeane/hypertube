@@ -24,16 +24,14 @@ export async function getInfo(req, res) {
     res.send(stat)
 }
 
-function streamMkv(stream, res) {
+function streamMkv(stream, res, size) {
     try {
             const converter = ffmpeg()
             .input(stream)
             .outputOption('-movflags frag_keyframe+empty_moov')
-            .outputFormat('mp4')
+            .outputOptions('-fs', size/8)
+            .outputFormat('-1280x720.mp4')
             .output(res)
-            .on('progress', (progress) => {
-                process.stdout.write(`      ${progress.targetSize} kb converted`+'\r')
-            })
             .on('error', (err, stdout, stderr) => { });
             converter.addOption('-vcodec')
             .run()
@@ -50,6 +48,7 @@ function streamMkv(stream, res) {
 export async function streamVideo(req, res) {
     let movie = req.params.movie
     let path = destination+movie
+    console.log(path)
     fs.stat(path, (err, stat) => {
         if (err && err.code === 'ENOENT') {
             res.sendStatus(404)
@@ -61,9 +60,8 @@ export async function streamVideo(req, res) {
                 let start = parseInt(parts[0], 10)
                 let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
                 let chunk = (end-start)+1
-                
                 let stream = fs.createReadStream(path, {start, end})
-                streamMkv(stream, res)
+   //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
                 stream.on('open', () => {
                     res.writeHead(206, { 
                         "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
@@ -71,12 +69,11 @@ export async function streamVideo(req, res) {
                         "Content-Length": chunk,
                         "Content-Type":"new/mp4"
                     })
-                    
                     stream.pipe(res);
                 });
             } else {
                 let stream = fs.createReadStream(path)
-                streamMkv(stream, res, 0)
+                getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
                 stream.on('open', () => {
                     res.writeHead(206, {
                         "Content-Length": fileSize,

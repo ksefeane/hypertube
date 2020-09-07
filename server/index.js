@@ -18,6 +18,10 @@ app.use(cors())
 import db from './models/db'
 db.init()
 
+//maintain video library
+import { maintainVideos } from './models/videoModel'
+maintainVideos('server/public/videos/')
+
 //setup cookies
 import session from 'express-session'
 import { sessionkeys } from './config/keys'

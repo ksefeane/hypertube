@@ -7,5 +7,5 @@ export default router
 
 .get('/movies', movieLibrary)
 .get('/search', movieSearchLibrary)
-.get('/anime', animeLibrary)
+.get('/topanime/:number', animeLibrary)
 .get('/anime/:search', animeSearch)

@@ -12,14 +12,14 @@ export async function animeSearch(req, res) {
     res.send(find)
 }
 
+//find top 20 seeded anime 
 export async function animeLibrary(req, res) {
-    let search = await si.search('*', 10, {sort: 'seeders'})
+    let search = await si.search('*', req.params.number, {sort: 'seeders'})
     let find = []
     for (let i in search) {
         find.push(search[i].name)
     }
-    console.log(find)
-    res.send('testing')
+    res.send(find)
 }
 
 //fetches all the movies from yts

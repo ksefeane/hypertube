@@ -39,7 +39,7 @@ export async function maintainVideos(path) {
     await sleep(100)
    // console.log(`\nscanning library...`)
     process.stdout.write('\nscanning library...\r')
-    await sleep(500)
+    await sleep(400)
     let len = 0
     fs.readdir(path, (err, files) => {
         if (files.length == 0)
@@ -52,6 +52,5 @@ export async function maintainVideos(path) {
         len = files.length
     })
     await sleep(100)
-    console.log(len+' movies found')
-    console.log()
+    console.log(len+' videos available\n')
 }

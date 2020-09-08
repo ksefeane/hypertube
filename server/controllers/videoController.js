@@ -15,8 +15,6 @@ export async function downloadSearch(req, res) {
     res.send(stat)
 }
 
-
-
 export async function downloadVideo(req, res, next) {
     var magnet = await magnetUrl(req.query)
     var torrent = await downloadTorrent(magnet)

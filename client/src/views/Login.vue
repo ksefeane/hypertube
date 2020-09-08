@@ -14,6 +14,8 @@
             </form>
             <button @click="validate">Log in</button>
             <hr>
+            <small>login using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
+            <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
             <small>Don't have an account? <router-link to="/register">Register Here!</router-link> </small> |
             <small><router-link to="/forgot-password">Forgot password?</router-link></small>
         </div>
@@ -67,6 +69,9 @@ export default {
             // })
             localStorage.setItem('user', this.username)
             this.$router.push('/profile/te')
+        },
+        auth() {
+          //      window.location.href = 'http://localhost:5000'
         }
     }
     

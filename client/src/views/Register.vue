@@ -25,6 +25,8 @@
             </form>
             <button v-on:click="validate">Submit</button>
             <hr>
+            <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
+            <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
             <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
         </div>
         <div v-if="submit">

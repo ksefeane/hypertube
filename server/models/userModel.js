@@ -35,8 +35,8 @@ async function findUser(username, email) {
     var fuser = q.fetchone('users', 'username', 'username', username)
     var femail = q.fetchone('users', 'email', 'email', email)
     var found = await Promise.all([fuser, femail])
-    return (found[0].length > 0 ? {'error': 'username is unavailable'} : 
-        found[1].length > 0 ? {'error': 'email is unavailable'} : 
+    return (found[0] ? {'error': 'username is unavailable'} : 
+        found[1] ? {'error': 'email is unavailable'} : 
         {'success': 'username & email available'})
 }
 export async function insertUser(user) {
@@ -53,7 +53,7 @@ export async function signinUser(user) {
 }
 export async function findOrCreate(profile) {
     var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)
-    if (user.length == 0) {
+    if (!user) {
         var newuser = new User(profile)
         newuser.username = profile.login
         newuser.password = await hash(Math.random.toString(36).substring(8), 10)
@@ -74,7 +74,6 @@ export async function uploadImage(user) {
 export async function sendEmailLink(username) {
     var token = await hash(Math.random.toString(36).substring(8), 10)
     var email = await q.fetchone('users', ['email'], 'username', username)
-    console.log(email)
     var link = `<p>hello ${username}</p><br>
         <a href='http://localhost:5000/api/forgotpassword/${token}'>
         click here to reset password</a>`

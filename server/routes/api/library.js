@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const axios = require('axios');
 const router = Router()
-import { sweepLibrary, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary } from '../../controllers/libraryController'
+import { movieSearch, sweepLibrary, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary } from '../../controllers/libraryController'
 
 export default router
 
@@ -12,7 +12,7 @@ export default router
 //search
 .get('/search', movieSearchLibrary)
 .get('/anime/:search', animeSearch)
-.get('movie/')
+.get('/movie/:search', movieSearch)
 
 //sweep test
 .get('/sweep', sweepLibrary)

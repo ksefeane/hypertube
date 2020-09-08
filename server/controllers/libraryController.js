@@ -31,8 +31,31 @@ export async function animeLibrary(req, res) {
     res.send(find)
 }
 
-async function ytsMagnet(str) {
-    return ('soon')
+async function createMagnet(hash, name) {
+    let url = encodeURI(name)
+    let trackers = ''
+    let track = ['udp://open.demonii.com:1337/announce', 'udp://tracker.openbittorrent.com:80', 'udp://tracker.coppersurfer.tk:6969', 'udp://glotorrents.pw:6969/announce']
+    for (let i in track) {
+        let uri = encodeURI(track[i])
+        trackers += `&tr=${uri}`
+    }
+    let magnet = `magnet:?xt=urn:btih:${hash}&dn=${url}${trackers}`
+    return (magnet)
+}
+
+export async function movieSearch(req, res) {
+    try {
+        let search = req.params.search
+        let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search)
+        let suc = stat.data.data.movies
+        let find = []
+        for (let i in suc) {
+            let hash = suc[i].torrents[0].hash
+            let name = suc[i].title_long
+            find.push({'name': name, 'magnet': await createMagnet(hash, name)})
+        }
+        res.send(find)
+    } catch (e) { console.log(e)}
 }
 
 //fetches all the movies from yts
@@ -55,7 +78,6 @@ export async function movieLibrary(req, res) {
     } catch (error) {
         console.log(error);
     }
-      
 }
 
 //searches yts directory if the name of the movie is provided

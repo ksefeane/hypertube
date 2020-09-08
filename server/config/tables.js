@@ -23,6 +23,15 @@ var tables = {
 		" `type` varchar(100)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
+    ),
+    movies : (
+		"CREATE TABLE `movies` (" +
+		" `id` int(11) NOT NULL AUTO_INCREMENT," +
+		" `name` varchar(100) NOT NULL," +
+        " `ext` varchar(20)," +
+        " `created` varchar(20)," +
+		" PRIMARY KEY (`id`)" +
+		") ENGINE=InnoDB"
 	)
 }	
 module.exports = tables;

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { downloadVideo, deleteVideo, getInfo, streamVideo } from '../../controllers/videoController'
+import { downloadSearch, nyaa, downloadVideo, deleteVideo, getInfo, streamVideo } from '../../controllers/videoController'
 const router = Router()
 
 export default router
@@ -8,3 +8,5 @@ export default router
 .get('/info', getInfo)
 
 .get('/stream/:movie', streamVideo)
+
+.get('/downloadSearch/:search', downloadSearch)

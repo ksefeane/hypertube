@@ -2,15 +2,35 @@ import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../model
 import fs from 'fs'
 import { getExt, convertMkv } from '../models/videoModel'
 import ffmpeg from 'fluent-ffmpeg'
+import { si } from 'nyaapi'
 
 const destination = 'server/public/videos/'
 
+export async function nyaa(req, res) {
+    let search = await si.search(req.params.search, 1, {sort: 'seeders'})
+    search = search[0]
+    let find = search ? {'name': search.name, 'file_size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
+        'torrent not found'
+    res.send(find)
+}
+
+export async function downloadSearch(req, res) {
+    let search = await si.search(req.params.search, 1, {sort: 'seeders'})
+    search = search[0]
+    let find = search ? {'name': search.name, 'file_size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} :
+        'torrent not found'
+    let torrent = search ? await downloadTorrent(find.magnet) : 'no torrent to download'
+    let stat = [find, torrent]
+    res.send(stat)
+}
+
 export async function downloadVideo(req, res, next) {
     var magnet = await magnetUrl(req.query)
-    downloadTorrent(magnet)
-    var stat = await infoTorrent(magnet)
-    console.log(stat)
-    res.send(stat)
+    var torrent = await downloadTorrent(magnet)
+  //  var stat = await infoTorrent(magnet)
+    console.log(torrent)
+ //   console.log(stat)
+    res.send(torrent)
 }
 
 export async function deleteVideo(req, res) {

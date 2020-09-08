@@ -36,16 +36,22 @@ function deleteVideo(file) {
 }
 
 export async function maintainVideos(path) {
-    await sleep(200)
-    console.log(`scanning library...`)
-    await sleep(1200)
+    await sleep(100)
+   // console.log(`\nscanning library...`)
+    process.stdout.write('\nscanning library...\r')
+    await sleep(500)
+    let len = 0
     fs.readdir(path, (err, files) => {
+        if (files.length == 0)
+            console.log('library empty\n')
         files.forEach(file => {
             fs.stat(path+file, (err, stat) => {
                 console.log(file)
             })
-    deleteVideo(path+file)
-
         })
+        len = files.length
     })
+    await sleep(100)
+    console.log(len+' movies found')
+    console.log()
 }

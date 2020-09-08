@@ -1,4 +1,26 @@
-const axios = require('axios');
+import { si } from 'nyaapi'
+import axios from 'axios'
+//const axios = require('axios')
+
+//fetches anime by top seeder from nyaa.si
+export async function animeSearch(req, res) {
+    let search = await si.search(req.params.search, 1, {sort: 'seeders'})
+    search = search[0]
+    console.log(search)
+    let find = search ? {'name': search.name, 'file_size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
+        'torrent not found'
+    res.send(find)
+}
+
+export async function animeLibrary(req, res) {
+    let search = await si.search('*', 10, {sort: 'seeders'})
+    let find = []
+    for (let i in search) {
+        find.push(search[i].name)
+    }
+    console.log(find)
+    res.send('testing')
+}
 
 //fetches all the movies from yts
 export async function movieLibrary(req, res) {

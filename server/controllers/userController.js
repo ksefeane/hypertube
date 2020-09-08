@@ -16,7 +16,7 @@ export async function registerUser(req, res, next) {
     var user = new User(req.body)
     req.user = user.username
     var stat = await signupUser(user)
-    res.send(stat )
+    res.send(stat)
 }
 
 export async function loginUser(req, res, next) {
@@ -26,7 +26,7 @@ export async function loginUser(req, res, next) {
 }
 
 export function authLogin(req, res, next) {
-    res.redirect('/api/users/photo')
+    res.redirect('/api/users')
 }
 
 export function logoutUser(req, res) {

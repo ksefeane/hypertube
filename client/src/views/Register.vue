@@ -1,10 +1,14 @@
 <template>
     <div>
+        <app-header></app-header>
         <!-- <router-link to="/">Home</router-link>  -->
-        <div>
+        <div class="form-field">
             <form>
                 <div id="err" v-for="error in errors" v-bind:key="error">
                     <p>{{ error }}</p>
+                </div>
+                <div id="succ" v-for="succ in success" v-bind:key="succ">
+                    <p>{{ succ }}</p>
                 </div>
                 <label for="first_name">First Name: </label>
                 <input type="text" name="first_name" v-model="first_name"> <br>
@@ -18,8 +22,8 @@
                 <input type="password" name="password" v-model="password"> <br>
                 <label for="confirm_password">Confirm Password: </label>
                 <input type="password" name="confirm_password" v-model="confirm_password"> <br>
-                <button v-on:click="validate">Submit</button>
             </form>
+            <button v-on:click="validate">Submit</button>
             <hr>
             <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
         </div>
@@ -31,13 +35,22 @@
             Password: {{ password}} <br>
             Repeat: {{ confirm_password }} <br>
         </div>
+        <app-footer></app-footer>
     </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+import { secure_password, axios_post } from "../functions/functions";
 
 export default {
+    components: {
+        'app-header': Header,
+        'app-footer': Footer
+    },
     data() {
         return {
             first_name:'',
@@ -47,36 +60,33 @@ export default {
             password: '',
             confirm_password: '',
             submit: true,
-            errors:[]
+            errors:[],
+            success:[]
         }
     },
     methods: {
         validate: function() {
             this.errors = []
-            if (this.username == '') {
-                this.errors.push('Enter username')
+            if (this.username.length < 4) {
+                this.errors.push('Username must have at least 4 characters')
+                return
             }
-            if (this.password.length < 5) {
-                this.errors.push('Password short')
+            let check = secure_password(this.password)
+            if (check !== 'good') {
+                this.errors.push(check)
+                return
             }
             if (this.password != this.confirm_password) {
                 this.errors.push('Passwords do not match')
+                return
             }
             if (this.errors.length == 0) {
                 this.register()
             }
         },
-        register: function() {
-            // var data_pack = {
-            //     'first_name': this.first_name,
-            //     'last_name': this.last_name,
-            //     'username': this.username,
-            //     'email': this.email,
-            //     'password': this.password,
-            //     'password_repeat': this.password_repeat
-            // }
-            var path = 'http://localhost:5000/api/users/signup/'
-            axios.post(path, {
+        register: async function() {
+            // this.errors = []
+            const data = {
                 'first_name': this.first_name,
                 'last_name': this.last_name,
                 'username': this.username,
@@ -84,13 +94,36 @@ export default {
                 'password': this.password,
                 'password_repeat': this.password_repeat
             }
-            ).then((results) => {
-                console.log(results.data)
-            }).catch((err) => {
-                console.log(err)
-            })
-
+            var results = await axios_post('/api/users/signup', data)
+            if (results !== "Oops!") {
+                if (results.data.error) {
+                    this.errors = results.data.error
+                } else if (results.data.success) {
+                    this.success.push("Registration successful! You can now log in")
+                    this.clean_input()
+                }
+            } else {
+                this.errors.push("An unexpected error happened")
+            }
+        },
+        clean_input() {
+            this.first_name = ''
+            this.last_name =  ''
+            this.username =  ''
+            this.email =  ''
+            this.password =  ''
+            this.confirm_password = ''
+            this.errors = []
         }
     }
 }
 </script>
+
+<style scoped>
+.form-field {
+    margin: auto;
+    width: 40%;
+    /* border-style: solid;
+    border-width: 1px; */
+}
+</style>

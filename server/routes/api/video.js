@@ -1,9 +1,12 @@
 import { Router } from 'express'
-import { downloadVideo } from '../../controllers/videoController'
+import { downloadSearch, nyaa, downloadVideo, deleteVideo, getInfo, streamVideo } from '../../controllers/videoController'
 const router = Router()
 
 export default router
+.get('/download/:magnet', downloadVideo)
+.get('/delete/:magnet', deleteVideo)
+.get('/info', getInfo)
 
-.post('/download', downloadVideo)
+.get('/stream/:movie', streamVideo)
 
-//download torrent
+.get('/downloadSearch/:search', downloadSearch)

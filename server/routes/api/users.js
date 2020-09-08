@@ -18,9 +18,6 @@ export default router
 //get
 .get('/logout', logoutUser)
 .get('/', auth, listUsers)
-.get('/photo', auth, (req, res) => {
-    res.sendFile(path.join(__dirname+'/form.html'))
-})
 //post
 .post('/signup', registerUser)
 .post('/signin', loginUser)

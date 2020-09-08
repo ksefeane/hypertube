@@ -3,7 +3,7 @@
         <app-header></app-header>
         <div>
             <div v-if="show">
-                <video controls src="../clips/clip.mp4">
+                <video controls src="">
                 No video support
                 </video>
             </div>

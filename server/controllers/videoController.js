@@ -68,7 +68,6 @@ function streamMkv(stream, res, size) {
 export async function streamVideo(req, res) {
     let movie = req.params.movie
     let path = destination+movie
-    console.log(path)
     fs.stat(path, (err, stat) => {
         if (err && err.code === 'ENOENT') {
             res.sendStatus(404)
@@ -93,7 +92,7 @@ export async function streamVideo(req, res) {
                 });
             } else {
                 let stream = fs.createReadStream(path)
-                getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
+     //           getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
                 stream.on('open', () => {
                     res.writeHead(206, {
                         "Content-Length": fileSize,

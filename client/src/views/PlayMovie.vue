@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <video controls src="../clips/clip.mp4">
+            <video controls src="http://localhost:5000/api/video/stream/[HorribleSubs] Kanojo, Okarishimasu - 09 [720p].mkv">
             No video support
             </video>
         </div>

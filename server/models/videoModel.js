@@ -1,5 +1,6 @@
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
+import q from './query'
 
 export function getExt(string) {
     let extension = string.match(/.*(\..+?)$/);
@@ -29,28 +30,37 @@ async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function deleteVideo(file) {
-    fs.unlink(file, () => {
-        console.log(`${file} deleted!`)
-    })
+async function checkExpiry(file, path) {
+    let today = new Date().getDate()
+    let loc = await q.fetchone('movies', 'created', 'name', file)
+    let range = loc ? loc[0].created - today : 0
+    if (range == 1 || range > 28 || range < -28 || !loc || range < 0) {
+        fs.unlink(path+file, () => {
+            console.log('schedule delete: '+file)
+         })
+    } else {
+        console.log(file+' '+loc[0].created)
+    }
+    
 }
 
 export async function maintainVideos(path) {
     await sleep(100)
-   // console.log(`\nscanning library...`)
-    process.stdout.write('\nscanning library...\r')
+ //   process.stdout.write('\nscanning library...\r')
+    console.log()
     await sleep(400)
     let len = 0
     fs.readdir(path, (err, files) => {
-        if (files.length == 0)
+        if (err) throw err
+        if (!files)
             console.log('library empty\n')
-        files.forEach(file => {
-            fs.stat(path+file, (err, stat) => {
-                console.log(file)
-            })
-        })
+        files.forEach(async file => {checkExpiry(file, path)})
+    })
+    await sleep(100)
+    fs.readdir(path, (err, files) => {
+        if (err) throw err
         len = files.length
     })
     await sleep(100)
-    console.log(len+' videos available\n')
+    console.log(len+' videos available  \n')
 }

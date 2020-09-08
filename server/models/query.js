@@ -24,7 +24,10 @@ class query {
 		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
 		return(await DB.insert(sql, vals))
 	}
-
+    static async fetchall(t_name) {
+        var sql = "SELECT * FROM " + t_name
+        return (await DB.fetch(sql))
+	}
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
 		DB.insert(sql, (err, res) => {
@@ -40,15 +43,7 @@ class query {
 		var f = await DB.fetch(sql)
 		return (f)
 	}
-	static fetchall(t_name, callback) {
-		var sql = "SELECT * FROM " + t_name
-		DB.fetch(sql, (err, res) => {
-			if (err)
-				callback(err, null)
-			else
-				callback(null, res)
-		})
-	}
+	
 	static fetchallOB(t_name, orderBy, callback) {
 		var sql = `SELECT * FROM ${t_name} ORDER BY ${orderBy}`
 		DB.fetch(sql, (err, res) => {

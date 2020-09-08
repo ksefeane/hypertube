@@ -3,5 +3,4 @@ node_modules
 server/config/keys.js
 client/node_modules
 file
-server/public/videos 
 server/public

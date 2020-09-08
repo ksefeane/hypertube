@@ -36,31 +36,37 @@ async function checkExpiry(file, path) {
     let range = loc ? loc[0].created - today : 0
     if (range == 1 || range > 28 || range < -28 || !loc || range < 0) {
         fs.unlink(path+file, () => {
-            console.log('schedule delete: '+file)
+   //         console.log('schedule delete: '+file)
+            return ('schedule delete'+file)
          })
     } else {
-        console.log(file+' '+loc[0].created)
+   //     console.log(file)
+        return (file)
     }
-    
 }
 
 export async function maintainVideos(path) {
+    let find = []
     await sleep(100)
  //   process.stdout.write('\nscanning library...\r')
-    console.log()
-    await sleep(400)
+ //   console.log()
+    await sleep(100)
     let len = 0
     fs.readdir(path, (err, files) => {
         if (err) throw err
-        if (!files)
+        if (!files) {
             console.log('library empty\n')
+            return ('library empty')
+        }
         files.forEach(async file => {checkExpiry(file, path)})
     })
     await sleep(100)
     fs.readdir(path, (err, files) => {
         if (err) throw err
+        find.push(files)
         len = files.length
     })
     await sleep(100)
-    console.log(len+' videos available  \n')
+//    console.log(len+' videos available  \n')
+    return (find[0])
 }

@@ -1,6 +1,15 @@
 import { si } from 'nyaapi'
 import axios from 'axios'
-//const axios = require('axios')
+import { maintainVideos } from '../models/videoModel'
+
+const destination = 'server/public/videos/'
+
+
+//sweep library for expired videos
+export async function sweepLibrary(req, res) {
+    let find = await maintainVideos(destination)
+    res.send(find)
+}
 
 //fetches anime by top seeder from nyaa.si
 export async function animeSearch(req, res) {
@@ -20,6 +29,10 @@ export async function animeLibrary(req, res) {
         find.push(search[i].name)
     }
     res.send(find)
+}
+
+async function ytsMagnet(str) {
+    return ('soon')
 }
 
 //fetches all the movies from yts

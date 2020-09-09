@@ -1,6 +1,6 @@
 import tables from '../config/tables'
 import { logins, db } from '../config/config'
-import { createConnection } from 'mysql'
+import { createConnection } from 'mysql';
 import { promisify } from 'util'
 
 const dbc = createConnection(logins, db)

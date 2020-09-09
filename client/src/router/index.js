@@ -9,6 +9,7 @@ import ForgotPassword from '../views/ForgotPassword.vue'
 import ResetPassword from '../views/ResetPassword.vue'
 import SearchMovie from '../views/SearchMovie.vue'
 import MovieDetails from '../views/MovieDetails.vue'
+import Library from '../views/Library.vue'
 
 
 export default [
@@ -43,6 +44,11 @@ export default [
     path: '/update_password',
     name: 'UpdatePassword',
     component: UpdatePassword
+  },
+  {
+    path: '/library',
+    name: 'Library',
+    component: Library
   },
   {
     path: '/search',

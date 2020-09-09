@@ -1,10 +1,11 @@
 import tables from '../config/tables'
 import { logins, db } from '../config/config'
-import { createConnection } from 'mysql'
+const mysql = require('mysql');
 import { promisify } from 'util'
 
-const dbc = createConnection(logins, db)
-dbc.connect((err) => {
+//added a connection pool node server keeps crashing in the background
+const dbc = mysql.createPool(logins, db)
+dbc.getConnection((err) => {
     if (err) throw err
 })
 const query = promisify(dbc.query).bind(dbc)

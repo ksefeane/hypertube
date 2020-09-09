@@ -15,8 +15,7 @@ export async function sweepLibrary(req, res) {
 export async function animeSearch(req, res) {
     let search = await si.search(req.params.search, 1, {sort: 'seeders'})
     search = search[0]
-    console.log(search)
-    let find = search ? {'name': search.name, 'file_size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
+    let find = search ? {'name': search.name, 'size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
         'torrent not found'
     res.send(find)
 }
@@ -43,17 +42,25 @@ async function createMagnet(hash, name) {
     return (magnet)
 }
 
+//fetches movie search name & magnet
 export async function movieSearch(req, res) {
     try {
         let search = req.params.search
         let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search)
         let suc = stat.data.data.movies
         let find = []
+        let torrents = []
         for (let i in suc) {
-            let hash = suc[i].torrents[0].hash
             let name = suc[i].title_long
-            find.push({'name': name, 'magnet': await createMagnet(hash, name)})
+            for (let j in suc[i].torrents) {
+                let magnet = await createMagnet(suc[i].torrents[j].hash, name)
+                let seeders = suc[i].torrents[j].seeds
+                let size = suc[i].torrents[j].size
+                torrents.push({'magnet': magnet, 'seeders': seeders, 'size': size})
+            }
+            find.push({'name': name, 'torrents': torrents})
         }
+        find = find.length ? find : 'no torrent found'
         res.send(find)
     } catch (e) { console.log(e)}
 }

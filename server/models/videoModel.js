@@ -32,7 +32,7 @@ async function sleep(ms) {
 
 async function checkExpiry(file, path) {
     let today = new Date().getDate()
-    let loc = await q.fetchone('movies', 'created', 'name', file)
+    let loc = await q.fetchone('videos', 'created', 'name', file)
     let range = loc ? loc[0].created - today : 0
     if (range == 1 || range > 28 || range < -28 || !loc || range < 0) {
         fs.unlink(path+file, () => {

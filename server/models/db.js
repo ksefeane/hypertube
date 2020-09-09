@@ -56,7 +56,7 @@ export default class DB {
                 return (0)
             }
             else {
-                console.log(`DB: ${db} -> (connected)`)
+                console.log(`DB: ${db} -> (connected)\n`)
                 return (1)
             }
         })

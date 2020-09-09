@@ -1,6 +1,6 @@
 import { si, pantsu } from 'nyaapi'
 import axios from 'axios'
-import { maintainVideos } from '../models/videoModel'
+import { maintainVideos, findVideo } from '../models/videoModel'
 import { createMagnet } from '../models/torrent'
 import keys from '../config/keys'
 
@@ -12,13 +12,59 @@ export async function sweepLibrary(req, res) {
     res.send(find)
 }
 
+export async function localSearch(req, res) {
+    let find = await findVideo(req.params.search)
+    find = find ? find : 'no videos found'
+    res.send(find)
+}
+
+export async function allSearch(req, res) {
+    try {
+        let name = req.params.search
+        let loc = findVideo(name)
+        let ani = si.search(name, 10, {sort: 'seeders'})
+        let mov = axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+name+'&sort_by=seeds')
+        let vid = await Promise.all([loc, ani, mov])
+        vid[2] = vid[2].data.data.movies
+        let find = []
+        let torrents = []
+        for (let i in vid[0]) {
+            find.push(vid[0][i])
+        }
+        for (let i in vid[1]) {
+            if (vid[1][i].seeders > 10) {
+                find.push({
+                    'name': vid[1][i].name, 
+                    'size': vid[1][i].filesize, 
+                    'seeders': vid[1][i].seeders, 
+                    'magnet': vid[1][i].magnet})
+            }
+        }
+        for (let i in vid[2]) {
+            let title = vid[2][i].title_long
+            for (let j in vid[2][i].torrents) {
+                let magnet = await createMagnet(vid[2][i].torrents[j].hash, title)
+                let seeders = vid[2][i].torrents[j].seeds
+                let size = vid[2][i].torrents[j].size
+                torrents.push({'magnet': magnet, 'seeders': seeders, 'size': size})
+            }
+            find.push({'name': title, 'torrents' : torrents})
+        }
+        find = find.length > 0 ? find : 'no videos found'
+        res.send(find)
+    } catch (e) {console.log(e)}
+    
+}
+
 //fetches anime by top seeder from nyaa.si
 export async function animeSearch(req, res) {
     try {
-        let search = await si.search(req.params.search, 1, {sort: 'seeders'})
-        search = search[0]
-        let find = search ? {'name': search.name, 'size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
-            'torrent not found'
+        let search = await si.search(req.params.search, 10, {sort: 'seeders'})
+        let find = []
+        for (let i in search) {
+            find.push({'name': search[i].name, 'size': search[i].filesize, 'seeders': search[i].seeders, 'magnet': search[i].magnet})
+        }
+        find = find.length > 0 ? find : 'no torrent found'
         res.send(find)
     } catch (e) {console.log(e)}
 }

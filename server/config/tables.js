@@ -29,7 +29,6 @@ var tables = {
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `name` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
-        " `type` varchar(20)," +
         " `created` varchar(20)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"

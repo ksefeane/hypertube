@@ -1,6 +1,6 @@
 import WebTorrent from 'webtorrent'
 import fs from 'fs'
-import { getExt } from './videoModel'
+import { getExt, insertVideo } from './videoModel'
 import q from './query'
 
 let client = new WebTorrent()
@@ -83,13 +83,7 @@ export async function infoTorrent(magnet) {
     return (stat.destination.length > 0 ? stat : '\ninitializing torrent: '+torrent.infoHash)    
 }
 
-async function insertMovie(name, ext) {
-    let params = ['name', 'ext', 'created']
-    let created = new Date().getDate()
-    let res = await q.fetchone('videos', ['name'], ['name'], name)
-    res ? 1 : q.insert('videos', params, [name, ext, created]) 
-    return (res ? 1 : 0)
-}
+
 
 export async function downloadTorrent(magnet) {
     let tor = await streamable(magnet)

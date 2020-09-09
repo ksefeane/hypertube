@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = Router()
-import { movieSearch, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary, animeInfo, movieInfo } from '../../controllers/libraryController'
+import { movieSearch, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary, animeInfo, movieInfo, localSearch, allSearch } from '../../controllers/libraryController'
 
 export default router
 
@@ -8,6 +8,8 @@ export default router
 //.get('/search', movieSearchLibrary)
 .get('/anime/:search', animeSearch)
 .get('/movie/:search', movieSearch)
+.get('/local/:search', localSearch)
+.get('/:search', allSearch)
 .get('/animeinfo/:search', animeInfo)
 .get('/movieinfo/:search', movieInfo)
 

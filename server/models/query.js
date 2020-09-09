@@ -16,17 +16,25 @@ class query {
 		var res = await DB.fetch(sql)
 		return (res.length > 0 ? res : null)	
 	}
-	static async update(t_name, sets, vals, param, pval) {
+    static async fetchall(t_name) {
+        var sql = "SELECT * FROM " + t_name
+        return (await DB.fetch(sql))
+    }
+    static async fetchregex(t_name, val, params, pval) {
+        try {
+            var sql = `SELECT (${val}) FROM (${t_name}) WHERE (${params}) LIKE \'%${pval}%\'`
+            var res = await DB.fetch(sql)
+            return (res.length > 0 ? res : null)
+        } catch (e) {console.log(e)}
+		
+	}
+    static async update(t_name, sets, vals, param, pval) {
 		var z = ''
 		for (let s in sets)
 			z += sets[s] + "=?, "
 		z = z.slice(0, -2)
 		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
 		return(await DB.insert(sql, vals))
-	}
-    static async fetchall(t_name) {
-        var sql = "SELECT * FROM " + t_name
-        return (await DB.fetch(sql))
 	}
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"

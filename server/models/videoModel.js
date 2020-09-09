@@ -36,7 +36,7 @@ async function checkExpiry(file, path) {
     let range = loc ? loc[0].created - today : 0
     if (range == 1 || range > 28 || range < -28 || !loc || range < 0) {
         fs.unlink(path+file, () => {
-   //         console.log('schedule delete: '+file)
+            console.log('schedule delete: '+file)
             return ('schedule delete'+file)
          })
     } else {
@@ -69,4 +69,17 @@ export async function maintainVideos(path) {
     await sleep(100)
 //    console.log(len+' videos available  \n')
     return (find[0])
+}
+
+export async function insertVideo(name, ext) {
+    let params = ['name', 'ext', 'type', 'created']
+    let created = new Date().getDate()
+    let res = await q.fetchone('videos', ['name'], ['name'], name)
+    res ? 1 : q.insert('videos', params, [name, ext, created]) 
+    return (res ? 1 : 0)
+}
+
+export async function findVideo(name) {
+    let find = await q.fetchregex('videos', 'name', 'name', name)
+    return (find)
 }

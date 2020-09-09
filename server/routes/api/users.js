@@ -5,7 +5,6 @@ import {
 } from '../../controllers/userController'
 import upload from '../../models/imageModel'
 import passport from 'passport'
-import path from 'path'
 
 export default router
 

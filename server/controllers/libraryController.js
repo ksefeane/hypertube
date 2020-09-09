@@ -1,4 +1,4 @@
-import { si } from 'nyaapi'
+import { si, pantsu } from 'nyaapi'
 import axios from 'axios'
 import { maintainVideos } from '../models/videoModel'
 import { createMagnet } from '../models/torrent'
@@ -17,12 +17,10 @@ export async function animeSearch(req, res) {
     try {
         let search = await si.search(req.params.search, 1, {sort: 'seeders'})
         search = search[0]
-        console.log(search)
         let find = search ? {'name': search.name, 'size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
             'torrent not found'
         res.send(find)
     } catch (e) {console.log(e)}
-    
 }
 
 //find top 20 seeded anime 
@@ -37,11 +35,25 @@ export async function animeLibrary(req, res) {
 
 export async function animeInfo(req, res) {
     try {
-        let search = await si.search(req.params.search, 1, {sort: 'seeders'})
+        let name = req.params.search
+        let search = await pantsu.search(name, 1, {sort: 'seeders'})
         search = search[0]
-        console.log(search)
-        let find = search ? {'name': search.name, 'size': search.filesize, 'seeders': search.seeders, 'magnet': search.magnet} : 
-            'torrent not found'
+        // name = search.title
+        let jikan = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${name}`)
+        jikan = jikan.data.results
+        //console.log(jikan[0])
+        let find = []
+        for (let i in jikan) {
+            let date = jikan[i].start_date ? jikan[i].start_date.substring(0, 10) : null
+            find.push({
+                "name": jikan[i].title,
+                "score": jikan[i].score,
+                "summary": jikan[i].synopsis,
+                "year": date ,
+                "img": jikan[i].image_url
+            })
+        }
+        find = find.length > 0 ? find[0] : 'no information available'
         res.send(find)
     } catch (e) {console.log(e)}
 }
@@ -88,7 +100,7 @@ export async function movieInfo(req, res) {
                 'img': info.Poster
             })
         }
-        find = find.length ? find : 'no torrent found'
+        find = find.length ? find[0] : 'no information available'
         res.send(find)
     } catch (e) { console.log(e)}
 }

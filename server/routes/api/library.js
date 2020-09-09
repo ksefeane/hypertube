@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = Router()
-import { movieSearch, sweepLibrary, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary, animeInfo, movieInfo } from '../../controllers/libraryController'
+import { movieSearch, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary, animeInfo, movieInfo } from '../../controllers/libraryController'
 
 export default router
 
@@ -14,6 +14,3 @@ export default router
 //return top results
 .get('/topmovies', movieLibrary)
 .get('/topanime/:number', animeLibrary)
-
-//sweep test
-.get('/sweep', sweepLibrary)

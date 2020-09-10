@@ -1,15 +1,15 @@
 import { Router } from 'express'
 const router = Router()
-import { movieSearch, animeLibrary, animeSearch, movieLibrary, movieSearchLibrary, animeInfo, movieInfo, localSearch, allSearch } from '../../controllers/libraryController'
+import { movieSearch, animeLibrary, animeSearch, movieLibrary, animeInfo, movieInfo, localSearch, allSearch, sweep } from '../../controllers/libraryController'
 
 export default router
 
 //search
 //.get('/search', movieSearchLibrary)
-.get('/anime/:search', animeSearch)
-.get('/movie/:search', movieSearch)
-.get('/local/:search', localSearch)
-.get('/:search', allSearch)
+.get('/anime/:search', sweep, animeSearch)
+.get('/movie/:search', sweep, movieSearch)
+.get('/local/:search', sweep, localSearch)
+.get('/:search', sweep, allSearch)
 .get('/animeinfo/:search', animeInfo)
 .get('/movieinfo/:search', movieInfo)
 

@@ -8,12 +8,12 @@ class query {
 			v += '?, '
 		v = v.slice(0, -2)
 		var sql = "INSERT INTO " + t_name + " (" + params.join() + ") " +
-			"VALUES " + "(" + v + ")"
+            "VALUES " + "(" + v + ")"
 		return (await DB.insert(sql, values))
 	}
 	static async fetchone(t_name, val, params, pval) {
 		var sql = `SELECT ${val} FROM ${t_name} WHERE ${params} =\'${pval}\'`
-		var res = await DB.fetch(sql)
+        var res = await DB.fetch(sql)
 		return (res.length > 0 ? res : null)	
 	}
     static async fetchall(t_name) {

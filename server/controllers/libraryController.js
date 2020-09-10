@@ -7,9 +7,9 @@ import keys from '../config/keys'
 const destination = 'server/public/videos/'
 
 //sweep library for expired videos
-export async function sweepLibrary(req, res) {
-    let find = await maintainVideos(destination)
-    res.send(find)
+export async function sweep(req, res, next) {
+    maintainVideos(destination)
+    next()
 }
 
 export async function localSearch(req, res) {
@@ -52,8 +52,10 @@ export async function allSearch(req, res) {
         }
         find = find.length > 0 ? find : 'no videos found'
         res.send(find)
-    } catch (e) {console.log(e)}
-    
+    } catch (e) {
+        e.code ? res.send({'movie error': e.code}) : 
+        res.send({'anime error':e.response})
+    }
 }
 
 //fetches anime by top seeder from nyaa.si
@@ -66,7 +68,7 @@ export async function animeSearch(req, res) {
         }
         find = find.length > 0 ? find : 'no torrent found'
         res.send(find)
-    } catch (e) {console.log(e)}
+    } catch (e) {console.log(e.message)}
 }
 
 //find top 20 seeded anime 
@@ -82,6 +84,7 @@ export async function animeLibrary(req, res) {
 export async function animeInfo(req, res) {
     try {
         let name = req.params.search
+        name = name.length > 20 ? name.substring(0, 20) : name
         let search = await pantsu.search(name, 1, {sort: 'seeders'})
         search = search[0]
         // name = search.title
@@ -101,7 +104,7 @@ export async function animeInfo(req, res) {
         }
         find = find.length > 0 ? find[0] : 'no information available'
         res.send(find)
-    } catch (e) {console.log(e)}
+    } catch (e) {console.log(e.response)}
 }
 
 //fetches movie search name & magnet
@@ -124,7 +127,7 @@ export async function movieSearch(req, res) {
         }
         find = find.length ? find : 'no torrent found'
         res.send(find)
-    } catch (e) { console.log(e)}
+    } catch (e) { console.log(e.code)}
 }
 
 export async function movieInfo(req, res) {

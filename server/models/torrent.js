@@ -15,14 +15,15 @@ client.on('error', (err) => {
 
 client.on('download', (bytes) => {
 	let downloadSpeed = Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
-  process.stdout.write(downloadSpeed+'\r')
+//  process.stdout.write(downloadSpeed+'\r')
 })
 
 client.on('torrent', (tor) => {
     let progress = Number(tor.downloaded/1000000).toFixed(0)+'/'
         +Number(tor.length/1000000).toFixed(0)+' mb'
     let downloadSpeed = Number(client.downloadSpeed/1000).toFixed(1)+'kb/s'
-    process.stdout.write(downloadSpeed+'  '+tor.name+'\r')
+    console.log('downloading '+tor.name)
+//   process.stdout.write(downloadSpeed+'  '+tor.name+'\r')
 })
 
 export async function magnetUrl(param) {
@@ -96,7 +97,7 @@ export async function downloadTorrent(magnet) {
             files.forEach(async (file) => {
                 let ext = getExt(file.name)
                 if (ext == '.mkv' || ext == '.mp4' || ext == 'avi') {
-                    let db = await insertMovie(file.name, ext)
+                    let db = await insertVideo(file.name, ext)
                     if (db == 0) {
                         const stream = file.createReadStream()
                         const save = fs.createWriteStream(dest+file.name)

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <video controls src="http://localhost:5000/api/video/stream/[HorribleSubs] Enen no Shouboutai S2 - 10 [1080p].mkv">
+            <video controls src="http://localhost:5000/api/video/stream/Anaconda.1997.1080p.BrRip.x264.YIFY.mp4">
             No video support
             
             </video>

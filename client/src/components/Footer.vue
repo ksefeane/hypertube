@@ -1,7 +1,7 @@
 <template>
   <div>
       <footer>
-          <h1>{{ title }}</h1>
+          <small>&#169; {{ title }}</small>
       </footer>
   </div>
 </template>
@@ -10,7 +10,7 @@
 export default {
     data() {
         return {
-            title: 'This is the footer'
+            title: 'children of thanos'
         }
     }
 }

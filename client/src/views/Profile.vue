@@ -2,11 +2,9 @@
     <div>
         <app-header></app-header>
         <div>
-            <h1>Hello {{ uid }}</h1>
+            <h1>profile {{ uid }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
-            <input type="file" name="" id="" @change="onFileSelected"> <br>
-            <button @click="uploadImage">Upload</button>
-            <br>
+            
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
@@ -25,6 +23,9 @@
             <input type="submit" value="Update Email" @click="update_email">
             <br>
             <router-link to="/update_password">Update Password</router-link>
+            <input type="file" name="" id="" @change="onFileSelected">
+            <button @click="uploadImage">Upload</button>
+            <br>
         </div>
         <h1>{{ message }}</h1>
         <app-footer></app-footer>

@@ -48,11 +48,11 @@ export default {
     },
     methods:{
         getTodayMovieList: function() {
-        return axios.get('https://yts.mx/api/v2/list_movies.json')
-        .then((response) => { 
-            this.movies = response.data.data.movies;
-            this.no_of_movies = this.movies.length
-            console.log(this.movies)
+            return axios.get('https://yts.mx/api/v2/list_movies.json')
+            .then((response) => { 
+                this.movies = response.data.data.movies;
+                this.no_of_movies = this.movies.length
+                console.log(this.movies)
             })
             .catch((error) => {
                 throw error.response.data;

@@ -13,54 +13,59 @@ import Library from '../views/Library.vue'
 
 
 export default [
-  { path: '/', component: Home },
-  { path: '/register', component: Register},
-  {
-    path: '/reset/:id',
-    name: 'ResetPassword',
-    component: ResetPassword
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/forgot-password',
-    name: 'ForgotPassword',
-    component: ForgotPassword
-  },
-  {
-    path: '/play',
-    name: 'play',
-    component: Play
-  },
-  {
-    path: '/profile/:id',
-    name: 'Profile',
-    component: Profile
-  },
-  {
-    path: '/update_password',
-    name: 'UpdatePassword',
-    component: UpdatePassword
-  },
-  {
-    path: '/library',
-    name: 'Library',
-    component: Library
-  },
-  {
-    path: '/search',
-    name: 'SearchMovie',
-    component: SearchMovie
-  },
-  {
-    path: '/info/:id',
-    name: 'MovieDetails',
-    component: MovieDetails
-  }
-
+    {   
+        path: '/', 
+        component: Home 
+    },
+    { 
+        path: '/register', 
+        component: Register
+    },
+    {
+        path: '/reset/:id',
+        name: 'ResetPassword',
+        component: ResetPassword
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword
+    },
+    {
+        path: '/play',
+        name: 'play',
+        component: Play
+    },
+    {
+        path: '/profile/:id',
+        name: 'Profile',
+        component: Profile
+    },
+    {
+        path: '/update_password',
+        name: 'UpdatePassword',
+        component: UpdatePassword
+    },
+    {
+        path: '/library',
+        name: 'Library',
+        component: Library
+    },
+    {
+        path: '/search',
+        name: 'SearchMovie',
+        component: SearchMovie
+    },
+    {
+        path: '/info/:id',
+        name: 'MovieDetails',
+        component: MovieDetails
+    }
 ]
 
 // const router = createRouter({

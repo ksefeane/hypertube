@@ -5,6 +5,11 @@
         <h2>Today Movies</h2>
         <!-- <router-link to="/">Home</router-link>  -->
         <div v-if="movies">
+            <button @click="sort_by_year_asc">Sort by year (asc)</button>
+            <button @click="sort_by_year_desc">Sort by year (desc)</button>
+            <button @click="sort_by_rating_asc">Sort by rating (asc)</button>
+            <button @click="sort_by_rating_desc">Sort by rating (desc)</button>
+            <br>
             <div class="col" v-for="film in paginated_movies" :key="film" @click="send_info(film)">
                 <router-link v-bind:to="'/info/' + film.title">
                     <div class="card" style="width: 18rem;"  >
@@ -73,6 +78,18 @@ export default {
             if (this.page_number < 0) {
                 this.page_number = 0
             }
+        },
+        sort_by_year_asc() {
+            this.movies.sort((a, b) => (a.year > b.year) ? 1: -1)
+        },
+        sort_by_year_desc() {
+            this.movies.sort((a, b) => (a.year > b.year) ? -1: 1)
+        },
+        sort_by_rating_desc() {
+            this.movies.sort((a, b) => (a.rating > b.rating) ? -1: 1)
+        },
+        sort_by_rating_asc() {
+            this.movies.sort((a, b) => (a.rating > b.rating) ? 1: -1)
         }
     },
     computed: {

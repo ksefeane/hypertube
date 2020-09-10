@@ -1,6 +1,7 @@
 <template>
     <div>
         <app-header></app-header>
+        <router-link to="/library">Library</router-link> 
         <form>
             <input type="text" name="" id="" placeholder="Enter movie name" v-model="movie">
         </form>
@@ -43,7 +44,7 @@ export default {
     data() {
         return {
             movie: '',
-            found_movies: []
+            found_movies: [],
         }
     },
     methods: {
@@ -52,12 +53,16 @@ export default {
             axios.post(path + '?query_term=' + this.movie).then((result) => {
                 console.log(result)
                 this.found_movies = result.data.data.movies
-                console.log(this.found_movies)
+                this.sort_by_year_desc()
+                // console.log(this.found_movies)
                 // this.find_magnet()
                 // this.movie = ''
             }).catch((err) => {
                 console.log(err)
             })
+        },
+        sort_by_year_desc() {
+            this.found_movies.sort((a, b) => (a.year > b.year) ? -1: 1)
         },
         // find_magnet() {
             // const TorrentSearchApi = require('torrent-search-api');

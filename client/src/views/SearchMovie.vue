@@ -12,7 +12,6 @@
             <div v-for="film in found_movies" v-bind:key="film" @click="send_info(film)">
                 <router-link v-bind:to="'/info/' + film.title">
                     <h2>{{ film.title }}</h2>
-                </router-link>
                 <img :src="film.medium_cover_image" alt="">
                 <!-- <br>
                 <small>Score: {{ film.rating }}</small> <br>
@@ -21,6 +20,7 @@
                 <p>Year: {{ film.year }}</p>
                 <p>Runtime: {{ film.runtime }} minutes</p>
                 <p>{{ film.summary }}</p> -->
+                </router-link>
             </div>
         </div>
         <app-footer></app-footer>

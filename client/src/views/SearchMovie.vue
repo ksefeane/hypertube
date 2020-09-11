@@ -48,14 +48,22 @@ export default {
         }
     },
     methods: {
+        jwtHeader() {
+            return {
+                'Authorization': 'Bearer '+localStorage.getItem("jwt")
+            }
+        },
         search_movie() {
            // const path = 'https://yts.mx/api/v2/list_movies.json'
-            const path2 = 'http://localhost:5000/api/library/animeinfo/'
-            console.log(path2)
-            axios.get(path2 + this.movie).then((result) => {
-                console.log(result)
+            const path = 'http://localhost:5000/api/library/animeinfo/'+this.movie
+            let options = {
+               method: 'get',
+               headers: this.jwtHeader(),
+               url: path
+           }
+            axios(options).then((result) => {
                 this.found_movies = result.data
-                console.log(this.found_movies)
+                //console.log(this.found_movies)
                 //this.sort_by_year_desc()
                 // console.log(this.found_movies)
                 // this.find_magnet()

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <video controls src="http://localhost:5000/api/video/stream/Anaconda.1997.1080p.BrRip.x264.YIFY.mp4">
+            <video controls src="http://localhost:5000/api/video/stream/The.Last.Avatar.2014.720p.WEBRip.x264.AAC-[YTS.MX].mp4">
             No video support
             
             </video>

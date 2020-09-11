@@ -11,7 +11,7 @@ export default router
 .get('/movie/:search', sweep, movieSearch)
 .get('/local/:search', sweep, localSearch)
 .get('/:search', jwtauth, sweep, allSearch)
-.get('/animeinfo/:search', animeInfo)
+.get('/animeinfo/:search', jwtauth, animeInfo)
 .get('/movieinfo/:search', movieInfo)
 
 //return top results

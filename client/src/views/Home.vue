@@ -12,9 +12,6 @@
 <script>
 // @ is an alias to /src
 
-import Header from "../components/Header";
-
-
 export default {
   // name: 'Home',
   // components: {
@@ -22,7 +19,7 @@ export default {
   // }
   name: 'home',
   components: {
-    'app-header': Header,
+    // 'app-header': Header,
     // 'app-footer': Footer
   },
   data() {
@@ -32,3 +29,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+.bg {
+  
+  /* The image used */
+  background-image: url("https://nhsportpress.com/wp-content/uploads/2018/12/movie-collage.png");
+
+  /* Half height */
+  height: 500px;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+</style>

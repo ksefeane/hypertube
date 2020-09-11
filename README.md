@@ -1,24 +1,8 @@
-# to-do
+# hypertube
+a recreation of YouTube
 
-## Project setup
-```
-npm install
-```
+instructions
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+**start mysql service
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+enter: 'npm start' in terminal

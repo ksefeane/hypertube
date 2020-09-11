@@ -83,13 +83,8 @@ export default {
             //     console.log('We have an error')
             //     console.log(error)
             // })
-<<<<<<< HEAD
             localStorage.setItem('user', this.username)
             this.$router.push('/profile/' + this.username)
-=======
-            // localStorage.setItem('user', this.username)
-            // this.$router.push('/profile/te')
->>>>>>> upstream/master
         },
         auth() {
           //      window.location.href = 'http://localhost:5000'

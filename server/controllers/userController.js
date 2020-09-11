@@ -5,7 +5,7 @@ import { verify } from 'jsonwebtoken'
 
 export function auth(req, res, next) {
     req.isAuthenticated() ? next() : 
-        req.user ? next() : res.redirect('/api/users/auth/42')
+        req.user ? next() : res.send({'error': 'access token denied'})
 }
 
 export function jwtauth(req, res, next) {

@@ -1,12 +1,25 @@
 import { 
     User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, fetchDetails, updateUsername, updateEmail, updateLast, updateFirst
 } from '../models/userModel'
-import { use } from 'passport'
-import e from 'express'
+import { verify } from 'jsonwebtoken'
 
 export function auth(req, res, next) {
     req.isAuthenticated() ? next() : 
         req.user ? next() : res.redirect('/api/users/auth/42')
+}
+
+export function jwtauth(req, res, next) {
+    try {
+        const token = req.headers.authorization.replace("Bearer ", "")
+        const decode = verify(token, "secret")
+        req.user = decode
+        console.log(decode)
+        next()
+    } catch (e) {
+        return res.status(401).json({
+            message: "authentication failed"
+        })
+    }
 }
 
 export async function listUsers(req, res) {

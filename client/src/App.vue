@@ -4,22 +4,24 @@
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div> -->
-    
+    </div>-->
+
     <router-view />
-    <!-- <app-footer></app-footer> -->
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
+import Footer from "../src/components/Footer";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
+    'app-footer': Footer
     // HelloWorld
-  }
-}
+  },
+};
 </script>
 
 <style>

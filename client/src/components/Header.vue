@@ -1,8 +1,8 @@
 <template>
   <div>
     <header>
-      <nav class="navbar navbar-expand-lg  bg-light">
-        <a class="navbar-brand" href="#">Hypertube</a>
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/">Hypertube</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -14,26 +14,15 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <router-link class="nav-link" to="/" v-show="false">Home</router-link>
-            </li>
-
-            <!-- <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li> -->
-          </ul>
-          <form class="form-inline my-2 my-lg-0">
-              <router-link class="nav-link" to="/login">Login</router-link>
-            <router-link class="btn btn-outline-primary my-2 my-sm-0" to="/register">Register</router-link>
-          </form>
-        </div>
+          <!-- <form class="form-inline my-2 my-lg-0">
+            <router-link v-if="['login', 'register'].indexOf($route.name) > -1"></router-link>
+            <router-link class="nav-link" to="/login">Login</router-link>
+            <router-link  class="btn btn-outline-primary my-2 my-sm-0" to="/register" >Register</router-link>
+          </form>-->
       </nav>
       <!-- <h1>
         <router-link to="/">Hypertube</router-link>
-      </h1> -->
+      </h1>-->
       {{ title }}
     </header>
   </div>
@@ -43,8 +32,18 @@
 export default {
   data() {
     return {
-    //   title: "This is the header",
+      //   title: "This is the header",
     };
   },
 };
 </script>
+<style lang="scss" scoped>
+.header{
+    background-color: #b5afbc;
+}
+.navbar {
+  background-color: #b5afbc;
+  border-color: #7c5295;
+  border-bottom-style: solid;
+}
+</style>

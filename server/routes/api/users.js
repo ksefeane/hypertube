@@ -17,6 +17,7 @@ export default router
 //get
 .get('/logout', logoutUser)
 .get('/', auth, listUsers)
+
 //post
 .post('/signup', registerUser)
 .post('/signin', loginUser)

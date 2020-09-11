@@ -54,7 +54,8 @@ export default [
     {
         path: '/library',
         name: 'Library',
-        component: Library
+        component: Library,
+        meta: {requiresAuth: true}
     },
     {
         path: '/search',

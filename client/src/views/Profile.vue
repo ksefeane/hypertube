@@ -8,26 +8,26 @@
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
-            <input type="submit" value="Update First Name" @click="update_first">
+            <input type="submit" value="Update First Name" @click="update_first"><br><br>
             <form>
                 <input type="text" v-model="last_name"> <br>
             </form>
-            <input type="submit" value="Update Last Name" @click="update_last">
+            <input type="submit" value="Update Last Name" @click="update_last"><br><br>
             <form>
                 <input type="text" v-model="username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username">
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
-            <input type="submit" value="Update Email" @click="update_email">
+            <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
-            <router-link to="/update_password">Update Password</router-link>
+            <router-link to="/update_password">Update Password</router-link><br>
             <input type="file" name="" id="" @change="onFileSelected">
             <button @click="uploadImage">Upload</button>
-            <br>
+            <br><br>
         </div>
-        <h1>{{ message }}</h1>
+        
         <app-footer></app-footer>
     </div>
 </template>

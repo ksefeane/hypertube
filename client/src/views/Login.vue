@@ -64,7 +64,9 @@ export default {
             if (res.data.error) {
                 this.err.push(res.data.error)
             } else if (res.data.success) {
-                this.err.push('login successful')
+                localStorage.setItem("jwt", res.data.success.token)
+                this.$router.push(`/profile/${res.data.success.username}`)
+                //this.err.push(res.data.success)
             } else {
                 this.err.push('an unexpected error occured')
             }

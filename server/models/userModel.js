@@ -1,7 +1,7 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
-import { validString, securePassword, validEmail } from './securityModel'
-import { sendEmail } from './emailModel' 
+import { validString, securePassword, validEmail, createToken } from './securityModel'
+import { sendEmail } from './emailModel'
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
@@ -51,7 +51,8 @@ export async function fetchUsers() {
 export async function signinUser(user) {
     let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)
     let pass = pro ? await compare(user.password, pro[0].password) : 0
-    return (pass ? {'success': 'login successful'} : {'error': 'username or password incorrect'})
+    let token = await createToken(user.username)
+    return (pass ? {'success': {'username': pro[0].username, 'token': token}} : {'error': 'username or password incorrect'})
 }
 export async function findOrCreate(profile) {
     var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)

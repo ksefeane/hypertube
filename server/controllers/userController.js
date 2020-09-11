@@ -1,10 +1,25 @@
 import { 
     User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword
 } from '../models/userModel'
+import { verify } from 'jsonwebtoken'
 
 export function auth(req, res, next) {
     req.isAuthenticated() ? next() : 
-        req.user ? next() : res.redirect('/api/users/auth/42')
+        req.user ? next() : res.send({'error': 'access token denied'})
+}
+
+export function jwtauth(req, res, next) {
+    try {
+        const token = req.headers.authorization.replace("Bearer ", "")
+        console.log(token)
+        const decode = verify(token, "secret")
+        req.user = decode
+        next()
+    } catch (e) {
+        return res.status(401).json({
+            message: "authentication failed"
+        })
+    }
 }
 
 export async function listUsers(req, res) {
@@ -22,7 +37,7 @@ export async function registerUser(req, res, next) {
 export async function loginUser(req, res, next) {
     var user = new User(req.body)
     var stat = await signinUser(user)
-    res.send(stat)
+    res.status(201).json(stat)
 }
 
 export function authLogin(req, res, next) {

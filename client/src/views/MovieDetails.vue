@@ -11,7 +11,7 @@
             </div>
             <h1>{{ id }}</h1>
             <!-- <p>{{ film }}</p> -->
-            <img :src="film.large_cover_image" alt="">
+            <img :src="film.img" alt="">
             <br>
             <small>Score: {{ film.rating }}</small> <br>
             <small>Rating: {{ film.mpa_rating }}</small>

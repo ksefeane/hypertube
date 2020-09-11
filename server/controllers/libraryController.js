@@ -85,8 +85,6 @@ export async function animeInfo(req, res) {
     try {
         let name = req.params.search
         name = name.length > 20 ? name.substring(0, 20) : name
-        let search = await pantsu.search(name, 1, {sort: 'seeders'})
-        search = search[0]
         // name = search.title
         let jikan = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${name}`)
         jikan = jikan.data.results
@@ -102,9 +100,9 @@ export async function animeInfo(req, res) {
                 "img": jikan[i].image_url
             })
         }
-        find = find.length > 0 ? find[0] : 'no information available'
+        find = find.length > 0 ? find : []
         res.send(find)
-    } catch (e) {console.log(e.response)}
+    } catch (e) {e.Error}
 }
 
 //fetches movie search name & magnet
@@ -149,7 +147,7 @@ export async function movieInfo(req, res) {
                 'img': info.Poster
             })
         }
-        find = find.length ? find[0] : 'no information available'
+        find = find.length ? find : []
         res.send(find)
     } catch (e) { console.log(e)}
 }

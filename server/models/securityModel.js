@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 export async function validString(field, str) {
 	return (str.length < 3 ? 
 		{'error':`${field} too short`} : !str.match(/^[a-zA-Z0-9_]+$/) ? 
@@ -17,4 +19,9 @@ export async function securePassword(pass) {
 export async function validEmail(addr) {
 	var e = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 	return (!addr.match(e) ? {'error':'invalid email'} : {'success':'valid email'})
+}
+
+export async function createToken(user) {
+    let token = jwt.sign({name: user.username}, 'secret')
+    return (token)
 }

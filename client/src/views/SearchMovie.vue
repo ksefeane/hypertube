@@ -11,9 +11,9 @@
         <div v-if="found_movies">
             
             <div v-for="film in found_movies" v-bind:key="film" @click="send_info(film)">
-                <router-link v-bind:to="'/info/' + film.title">
-                    <h2>{{ film.title }}</h2>
-                <img :src="film.medium_cover_image" alt="">
+                <router-link v-bind:to="'/info/' + film.name">
+                    <h2>{{ film.name }}</h2>
+                <img :src="film.img" alt="">
                 <!-- <br>
                 <small>Score: {{ film.rating }}</small> <br>
                 <small>Rating: {{ film.mpa_rating }}</small>
@@ -48,12 +48,23 @@ export default {
         }
     },
     methods: {
+        jwtHeader() {
+            return {
+                'Authorization': 'Bearer '+localStorage.getItem("jwt")
+            }
+        },
         search_movie() {
-            const path = 'https://yts.mx/api/v2/list_movies.json'
-            axios.post(path + '?query_term=' + this.movie).then((result) => {
-                console.log(result)
-                this.found_movies = result.data.data.movies
-                this.sort_by_year_desc()
+           // const path = 'https://yts.mx/api/v2/list_movies.json'
+            const path = 'http://localhost:5000/api/library/animeinfo/'+this.movie
+            let options = {
+               method: 'get',
+               headers: this.jwtHeader(),
+               url: path
+           }
+            axios(options).then((result) => {
+                this.found_movies = result.data
+                //console.log(this.found_movies)
+                //this.sort_by_year_desc()
                 // console.log(this.found_movies)
                 // this.find_magnet()
                 // this.movie = ''

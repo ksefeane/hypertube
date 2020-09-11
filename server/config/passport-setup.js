@@ -59,11 +59,11 @@ passport.use('42', ftClient)
 passport.use('github', gitClient)
 
 passport.serializeUser((user, done) => {
-  done(null, user.id)
+    done(null, user.id)
 })
 
 passport.deserializeUser(async (uid, done) => {
-  done(null, await fetchUser(uid))
+    done(null, await fetchUser(uid))
 })
 
 export default passport

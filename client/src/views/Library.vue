@@ -1,7 +1,9 @@
 <template>
     <div>
         <app-header></app-header>
-        <router-link to="/search">Search movies</router-link> 
+        
+        <router-link to="/search">Search movies</router-link><br>
+        <a @click="logout"> Logout</a>
         <h2>Today Movies</h2>
         <!-- <router-link to="/">Home</router-link>  -->
         <div v-if="movies">
@@ -32,10 +34,10 @@
 
 <script>
 import axios from 'axios'
+import swal from 'sweetalert'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
-
 
 export default {
     components: {
@@ -53,15 +55,20 @@ export default {
     },
     methods:{
         getTodayMovieList: function() {
-        return axios.get('https://yts.mx/api/v2/list_movies.json')
-        .then((response) => { 
-            this.movies = response.data.data.movies;
-            this.no_of_movies = this.movies.length
-            console.log(this.movies)
+            return axios.get('https://yts.mx/api/v2/list_movies.json')
+            .then((response) => { 
+                this.movies = response.data.data.movies;
+                this.no_of_movies = this.movies.length
+                console.log(this.movies)
             })
             .catch((error) => {
                 throw error.response.data;
             });
+        },
+        logout() {
+            localStorage.removeItem("jwt")
+            swal("success", "logged out", "success")
+            this.$route.push()
         },
         send_info(movie) {
             EventBus.$emit('movie_details', movie)

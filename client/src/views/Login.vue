@@ -4,15 +4,16 @@
         {{ msg }}
         <div class="form-field">
             <form>
-                <div id="err" v-for="error in err" v-bind:key="error">
-                    <p>{{ error }}</p>
-                </div>
-                <label for="username">Username: </label>
-                <input type="text" name="username" v-model="username"> <br>
-                <label for="password">password: </label>
-                <input type="password" name="password" v-model="password"> <br>
+                <br>
+                <label for="username">Username: </label><br>
+                <input type="text" name="username" v-model="username"> <br><br>
+                <label for="password">password: </label><br>
+                <input type="password" name="password" v-model="password"> <br><br>
             </form>
-            <button @click="validate">Log in</button>
+            <button @click="validate">Log in</button><br><br>
+            <div id="err" v-for="error in err" v-bind:key="error">
+                    <small>{{ error }}</small>
+            </div>
             <hr>
             <small>login using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
             <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
@@ -25,9 +26,10 @@
 
 <script>
 // import router from 'vue-router';
-// import axios from 'axios'
+import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import swal from 'sweetalert'
 
 export default {
     components: {
@@ -47,15 +49,29 @@ export default {
         validate() {
             this.err = []
             if (this.password.length < 8) {
-                this.err.push('Password short')
+                this.err.push('Password too short')
             } else if (this.username.length == 0) {
                 this.err.push('Enter username')
             } else {
                 this.login()
             }
         },
-        login() {
-            // const path = 'http://localhost:5000/api/users/signin/'
+        async login() {
+            let path = 'http://localhost:5000/api/users/signin/'
+            let res = await axios.post(path, {
+                'username': this.username,
+                'password': this.password
+            }).catch(e => {e})
+            if (res.data.error) {
+                this.err.push(res.data.error)
+            } else if (res.data.success) {
+                localStorage.setItem("jwt", res.data.success.token)
+                swal("success", "login successful", "success")
+                this.$router.push(`/profile/${res.data.success.username}`)
+                //this.err.push(res.data.success)
+            } else {
+                this.err.push('an unexpected error occured')
+            }
             // axios.post(path, {
             //     'username': this.username,
             //     'password': this.password
@@ -67,8 +83,13 @@ export default {
             //     console.log('We have an error')
             //     console.log(error)
             // })
+<<<<<<< HEAD
             localStorage.setItem('user', this.username)
             this.$router.push('/profile/' + this.username)
+=======
+            // localStorage.setItem('user', this.username)
+            // this.$router.push('/profile/te')
+>>>>>>> upstream/master
         },
         auth() {
           //      window.location.href = 'http://localhost:5000'

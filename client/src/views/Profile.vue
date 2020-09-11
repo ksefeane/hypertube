@@ -9,10 +9,6 @@
             <!-- <canvas id="profile_pic"></canvas> -->
             <input type="file" name="" id="" @change="onFileSelected"> <br>
             <button @click="uploadImage">Upload</button>
-            <form>
-                <input type="text" v-model="username"> <br>
-            </form>
-            <input type="submit" value="Update Username" @click="update_username">
             <br>
             <form>
                 <input type="text" v-model="first_name"> <br>
@@ -22,6 +18,10 @@
                 <input type="text" v-model="last_name"> <br>
             </form>
             <input type="submit" value="Update Last Name" @click="update_last">
+            <form>
+                <input type="text" v-model="username"> <br>
+            </form>
+            <input type="submit" value="Update Username" @click="update_username">
             <form>
                 <input type="email" v-model="email"> <br>
             </form>

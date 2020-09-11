@@ -50,7 +50,10 @@ export async function fetchUsers() {
     return (f)
 }
 export async function signinUser(user) {
-    return ('soon')
+    let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)
+    let pass = pro ? await compare(user.password, pro[0].password) : 0
+    let token = await createToken(user.username)
+    return (pass ? {'success': {'username': pro[0].username, 'token': token}} : {'error': 'username or password incorrect'})
 }
 export async function findOrCreate(profile) {
     var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)

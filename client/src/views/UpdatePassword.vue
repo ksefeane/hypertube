@@ -1,7 +1,7 @@
 <template>
     <div>
         <app-header></app-header>
-        <router-link to="/profile">Back to profile</router-link>
+        <router-link :to="'/profile/' + uid">Back to profile</router-link>
             <div id="err" v-for="error in err" v-bind:key="error">
                 <small>{{ error }}</small>
             </div>
@@ -29,7 +29,8 @@ export default {
             current_pass: '',
             new_pass: '',
             confirm_pass: '',
-            err: []
+            err: [],
+            uid: localStorage.getItem('user')
         }
     },
     methods: {

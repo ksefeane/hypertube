@@ -1,41 +1,53 @@
 {
-  "name": "hypertube",
-  "version": "1.0.0",
-  "description": "a video streaming webapp",
-  "main": "index.js",
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node -r esm server/index.js",
-    "dev": "nodemon -r esm server/index.js"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ksefeane/hypertube.git"
-  },
-  "author": "ksefeane tchewa enayimul",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ksefeane/hypertube/issues"
-  },
-  "homepage": "https://github.com/ksefeane/hypertube#readme",
   "dependencies": {
-    "axios": "^0.19.2",
-    "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
-    "client-oauth2": "^4.3.3",
-    "cors": "^2.8.5",
-    "esm": "^3.2.25",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "mysql": "^2.18.1",
-    "passport": "^0.4.1",
-    "passport-42": "^1.2.6",
-    "passport-github": "^1.1.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-oauth2": "^1.5.0",
-    "passport-telegram": "^1.0.0",
-    "util": "^0.12.3"
+    "axios": "^0.20.0",
+    "core-js": "^3.6.5",
+    "sass": "^1.26.10",
+    "vue": "^3.0.0-0",
+    "vue-authenticate": "^1.4.1",
+    "vue-axios": "^2.1.5",
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "babel-eslint": "^10.1.0",
+    "css-loader": "^4.2.2",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "mini-css-extract-plugin": "^0.10.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^10.0.1",
+    "style-loader": "^1.2.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

@@ -39,7 +39,6 @@ import Footer from "../components/Footer";
 
 import axios from 'axios'
 import jwt from 'njwt'
-import swal from 'sweetalert'
 export default {
     components: {
         'app-header': Header,
@@ -123,7 +122,6 @@ export default {
             let token = localStorage.getItem("jwt")
             //swal(`testing ${token}`)
             let dec = await jwt.verify(token, 'secret')
-            swal(`${dec.body.name}`)
             console.log(dec)
         }
     },

@@ -8,12 +8,33 @@ class query {
 			v += '?, '
 		v = v.slice(0, -2)
 		var sql = "INSERT INTO " + t_name + " (" + params.join() + ") " +
-			"VALUES " + "(" + v + ")"
+            "VALUES " + "(" + v + ")"
 		return (await DB.insert(sql, values))
 	}
 	static async fetchone(t_name, val, params, pval) {
 		var sql = `SELECT ${val} FROM ${t_name} WHERE ${params} =\'${pval}\'`
-		return (await DB.fetch(sql))	
+        var res = await DB.fetch(sql)
+		return (res.length > 0 ? res : null)	
+	}
+    static async fetchall(t_name) {
+        var sql = "SELECT * FROM " + t_name
+        return (await DB.fetch(sql))
+    }
+    static async fetchregex(t_name, val, params, pval) {
+        try {
+            var sql = `SELECT (${val}) FROM (${t_name}) WHERE (${params}) LIKE \'%${pval}%\'`
+            var res = await DB.fetch(sql)
+            return (res.length > 0 ? res : null)
+        } catch (e) {console.log(e)}
+		
+	}
+    static async update(t_name, sets, vals, param, pval) {
+		var z = ''
+		for (let s in sets)
+			z += sets[s] + "=?, "
+		z = z.slice(0, -2)
+		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
+		return(await DB.insert(sql, vals))
 	}
 	static delone(t_name, params, pval, callback) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
@@ -24,33 +45,13 @@ class query {
 				callback(null, res)
 		})
 	}
-	static update(t_name, sets, values, param, pval, callback) {
-		var z = ''
-		for (let s in sets)
-			z += sets[s] + "=?, "
-		z = z.slice(0, -2)
-		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
-		DB.insert(sql, values, (err, res) => {
-			if (err)
-				callback("failed to update", null)
-			else
-				callback(null, "updated")
-		})
-	}
+	
 	static async getall(t_name) {
 		var sql = `SELECT * FROM ${t_name}`
 		var f = await DB.fetch(sql)
 		return (f)
 	}
-	static fetchall(t_name, callback) {
-		var sql = "SELECT * FROM " + t_name
-		DB.fetch(sql, (err, res) => {
-			if (err)
-				callback(err, null)
-			else
-				callback(null, res)
-		})
-	}
+	
 	static fetchallOB(t_name, orderBy, callback) {
 		var sql = `SELECT * FROM ${t_name} ORDER BY ${orderBy}`
 		DB.fetch(sql, (err, res) => {

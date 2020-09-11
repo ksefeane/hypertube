@@ -1,16 +1,18 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
-import { validString, securePassword, validEmail } from './securityModel'
+import { validString, securePassword, validEmail, createToken } from './securityModel'
+import { sendEmail } from './emailModel'
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
 export class User {
     constructor(user) {
-        this.username = user.username
-        this.first_name = user.first_name
-        this.last_name = user.last_name
-        this.email = user.email
-        this.password = user.password
+        this.id = user.id ? user.id : null
+        this.username = user.username ? user.username : ''
+        this.first_name = user.first_name ? user.first_name : ''
+        this.last_name = user.last_name ? user.last_name : ''
+        this.email = user.email ? user.email : ''
+        this.password = user.password ? user.password : ''
     }   
 }
 export async function signupUser(user) {
@@ -33,8 +35,8 @@ async function findUser(username, email) {
     var fuser = q.fetchone('users', 'username', 'username', username)
     var femail = q.fetchone('users', 'email', 'email', email)
     var found = await Promise.all([fuser, femail])
-    return (found[0].length > 0 ? {'error': 'username is unavailable'} : 
-        found[1].length > 0 ? {'error': 'email is unavailable'} : 
+    return (found[0] ? {'error': 'username is unavailable'} : 
+        found[1] ? {'error': 'email is unavailable'} : 
         {'success': 'username & email available'})
 }
 export async function insertUser(user) {
@@ -47,15 +49,54 @@ export async function fetchUsers() {
     return (f)
 }
 export async function signinUser(user) {
-    return ('soon')
+    let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)
+    let pass = pro ? await compare(user.password, pro[0].password) : 0
+    let token = await createToken(user.username)
+    return (pass ? {'success': {'username': pro[0].username, 'token': token}} : {'error': 'username or password incorrect'})
 }
 export async function findOrCreate(profile) {
-    var user = await q.fetchone('users', params, 'email', profile.email)
-    if (user.length == 0) {
-        var user = new User(profile)
-        user.username = profile.login        
-        user.password = await hash(Math.random.toString(36).substring(8), 10)
-        insertUser(user)
+    var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)
+    if (!user) {
+        var newuser = new User(profile)
+        newuser.username = profile.login
+        newuser.password = await hash(Math.random.toString(36).substring(8), 10)
+        var id = await insertUser(newuser)
+        newuser.id = id.insertId
+        return (newuser)
     }
-    return (user)
+    return (new User(user[0]))
+}
+export async function fetchUser(uid) {
+    var user = await q.fetchone('users', ['id', 'username'], 'id', uid)
+    return (user[0])
+}
+export async function uploadImage(user) {
+    console.log(user)
+    return ('soon')
+}
+export async function sendEmailLink(username) {
+    var token = await hash(Math.random.toString(36).substring(8), 10)
+    var email = await q.fetchone('users', ['email'], 'username', username)
+    var link = `<p>hello ${username}</p><br>
+        <a href='http://localhost:5000/api/forgotpassword/${token}'>
+        click here to reset password</a>`
+    var stat = email ? await sendEmail({from: 'hypertube@hypertube.com', to: email[0].email, 
+        subject: 'reset password', text: link}) : {'error': 'email not found'}
+    email ? q.insert('tokens', ['username', 'token', 'type'], [username, token, 'resetpassword']) : 0
+    return (stat)
+}
+export async function checkEmailLink(token) {
+    var user = await q.fetchone('tokens', ['username'], 'token', token)
+    //destroy token in db
+    return (user ? user : null)
+}
+export async function setPassword(token, password) {
+    var vpass = await securePassword(password)
+    if (Object.keys(vpass)[0] === 'error')
+        return (vpass)
+    var newpass = hash(password, 10)
+    var user = checkEmailLink(token)
+    var change = await Promise.all([newpass, user])
+    q.update('users', ['password'], change[0], 'username', change[1][0].username)
+    return (user ? {'success': 'password changed successfully'} : {'error': 'password change failed'})
 }

@@ -1,6 +1,6 @@
 import tables from '../config/tables'
 import { logins, db } from '../config/config'
-import { createConnection } from 'mysql'
+import { createConnection } from 'mysql';
 import { promisify } from 'util'
 
 const dbc = createConnection(logins, db)
@@ -56,7 +56,7 @@ export default class DB {
                 return (0)
             }
             else {
-                console.log(`DB: ${db} -> (connected)`)
+                console.log(`DB: ${db} -> (connected)\n`)
                 return (1)
             }
         })

@@ -11,9 +11,9 @@ export function auth(req, res, next) {
 export function jwtauth(req, res, next) {
     try {
         const token = req.headers.authorization.replace("Bearer ", "")
-        console.log(token)
         const decode = verify(token, "secret")
         req.user = decode
+        console.log(decode)
         next()
     } catch (e) {
         return res.status(401).json({

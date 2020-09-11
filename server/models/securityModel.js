@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'njwt'
 
 export async function validString(field, str) {
 	return (str.length < 3 ? 
@@ -21,7 +21,7 @@ export async function validEmail(addr) {
 	return (!addr.match(e) ? {'error':'invalid email'} : {'success':'valid email'})
 }
 
-export async function createToken(user) {
-    let token = jwt.sign({name: user.username}, 'secret')
-    return (token)
+export async function createToken(username) {
+    let token = jwt.create({name: username}, 'secret')
+    return (token.compact())
 }

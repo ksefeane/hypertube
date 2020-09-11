@@ -68,7 +68,7 @@ export default {
             //     console.log(error)
             // })
             localStorage.setItem('user', this.username)
-            this.$router.push('/profile/te')
+            this.$router.push('/profile/' + this.username)
         },
         auth() {
           //      window.location.href = 'http://localhost:5000'

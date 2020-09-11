@@ -2,7 +2,7 @@ module.exports = config ={
 	logins: {
 		host: 'localhost',
 		user: 'root',
-		password: '1792fd'
+		password: ''
 	},
 	db: 'hypertube'
 }

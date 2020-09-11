@@ -11,7 +11,6 @@ import SearchMovie from '../views/SearchMovie.vue'
 import MovieDetails from '../views/MovieDetails.vue'
 import Library from '../views/Library.vue'
 
-
 export default [
     {   
         path: '/', 
@@ -44,7 +43,8 @@ export default [
     {
         path: '/profile/:id',
         name: 'Profile',
-        component: Profile
+        component: Profile,
+        meta: {requiresAuth: true}
     },
     {
         path: '/update_password',
@@ -60,12 +60,14 @@ export default [
     {
         path: '/search',
         name: 'SearchMovie',
-        component: SearchMovie
+        component: SearchMovie,
+        meta: {requiresAuth: true}
     },
     {
         path: '/info/:id',
         name: 'MovieDetails',
-        component: MovieDetails
+        component: MovieDetails,
+        meta: {requiresAuth: true}
     }
 ]
 

@@ -68,6 +68,7 @@ export default {
         logout() {
             localStorage.removeItem("jwt")
             swal("success", "logged out", "success")
+            this.$route.push()
         },
         send_info(movie) {
             EventBus.$emit('movie_details', movie)

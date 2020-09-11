@@ -38,6 +38,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import axios from 'axios'
+import jwt from 'njwt'
+import swal from 'sweetalert'
 export default {
     components: {
         'app-header': Header,
@@ -48,10 +50,10 @@ export default {
             id: this.$route.params.id,
             uid: localStorage.getItem('user'),
             username: '',
-            first_name: 'Marcellus',
-            email: 'marcel@wool.com',
-            last_name: 'Wallace',
-            message: 'this is the profile page',
+            first_name: '',
+            email: '',
+            last_name: '',
+            message: '',
             selectedFile: null
         }
     },
@@ -117,6 +119,16 @@ export default {
         update_email() {
             this.update_details('email', this.email)
         },
+        async getUserData() {
+            let token = localStorage.getItem("jwt")
+            //swal(`testing ${token}`)
+            let dec = await jwt.verify(token, 'secret')
+            swal(`${dec.body.name}`)
+            console.log(dec)
+        }
+    },
+    created() {
+        this.getUserData()
     }
 }
 </script>

@@ -37,7 +37,7 @@ export async function registerUser(req, res, next) {
 export async function loginUser(req, res, next) {
     var user = new User(req.body)
     var stat = await signinUser(user)
-    res.send(stat)
+    res.status(201).json(stat)
 }
 
 export function authLogin(req, res, next) {

@@ -67,7 +67,6 @@ export async function signinOauth(token) {
     return ({'error': 'not authorized'})
 }
 export async function getuserDetails(username) {
-    console.log(username)
     let par = ['username', 'first_name', 'last_name', 'email']
     let pro = await q.fetchone('users', par, 'username', username)
     return (pro ? pro[0] : {'error': 'user not found'})

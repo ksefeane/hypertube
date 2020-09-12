@@ -46,8 +46,8 @@ export async function loginUser(req, res, next) {
 }
 export async function authLogin(req, res, next) {
     let token = await oauthToken(req.user.username)
-    res.header('token', token)
-    res.redirect('http://localhost.localdomain:8080?t='+token)
+    res.set('token', token)
+    res.redirect(301, 'http://localhost.localdomain:8080?t='+token)
 }
 export async function loginoauth(req, res, next) {
     try {

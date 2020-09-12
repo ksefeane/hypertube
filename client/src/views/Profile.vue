@@ -123,9 +123,10 @@ export default {
             let decode = await jwt.verify(token, 'secret')
             let options = {
                 method: 'get',
+                headers: {'Authorization': localStorage.getItem("jwt")},
                 url: 'http://localhost:5000/api/users/me/'+decode.body.name
             }
-            let user = await axios(options)
+            let user = await axios(options).catch(e => {console.log(e)})
             console.log(user.data)
         }
     },

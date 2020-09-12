@@ -1,5 +1,5 @@
 import { 
-    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword
+    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -13,7 +13,7 @@ export function jwtauth(req, res, next) {
         const token = req.headers.authorization.replace("Bearer ", "")
         const decode = verify(token, "secret")
         req.user = decode
-        console.log(decode)
+       // console.log(decode)
         next()
     } catch (e) {
         return res.status(401).json({
@@ -40,8 +40,14 @@ export async function loginUser(req, res, next) {
     res.status(201).json(stat)
 }
 
-export function authLogin(req, res, next) {
-    res.redirect('/api/users')
+export async function authDirect(req, res, next) {
+    var stat = await signinOauth(req.user)
+    res.status(201).json(stat)
+    next()
+}
+
+export async function authLogin(req, res, next) {
+    res.redirect('http://localhost.localdomain:8080/profile/'+req.user.username)
 }
 
 export function logoutUser(req, res) {

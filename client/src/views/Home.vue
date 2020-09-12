@@ -45,7 +45,7 @@ export default {
           console.log(res.data)
           if (res.data.success) {
               localStorage.setItem("jwt", res.data.success.token)
-              sweet("success", "login successful", "success")
+              sweet(res.data.success.username, "welcome to hypertube", "success")
               this.$router.push(`/profile/${res.data.success.username}`)
           }
       }

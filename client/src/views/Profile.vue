@@ -2,34 +2,32 @@
     <div>
         <!-- <app-header></app-header> -->
         <div>
-            <h1>Hello {{ uid }}</h1>
-            <div v-for="update in updates" :key="update">
-                <small>{{ update }}</small>
-            </div>
+            <h1>profile {{ uid }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
-            <input type="file" name="" id="" @change="onFileSelected"> <br>
-            <button @click="uploadImage">Upload</button>
-            <br>
+            
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
-            <input type="submit" value="Update First Name" @click="update_first">
+            <input type="submit" value="Update First Name" @click="update_first"><br><br>
             <form>
                 <input type="text" v-model="last_name"> <br>
             </form>
-            <input type="submit" value="Update Last Name" @click="update_last">
+            <input type="submit" value="Update Last Name" @click="update_last"><br><br>
             <form>
                 <input type="text" v-model="username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username">
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
-            <input type="submit" value="Update Email" @click="update_email">
+            <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
-            <router-link to="/update_password">Update Password</router-link>
+            <router-link to="/update_password">Update Password</router-link><br>
+            <input type="file" name="" id="" @change="onFileSelected">
+            <button @click="uploadImage">Upload</button>
+            <br><br>
         </div>
-        <h1>{{ message }}</h1>
+        
         <app-footer></app-footer>
     </div>
 </template>
@@ -54,9 +52,8 @@ export default {
             first_name: '',
             email: '',
             last_name: '',
-            message: 'this is the profile page',
-            selectedFile: null,
-            updates: []
+            message: '',
+            selectedFile: null
         }
     },
     // computed: {
@@ -71,7 +68,7 @@ export default {
         },
         uploadImage() {
             console.log(this.selectedFile);
-            // console.log(this.id)
+            console.log(this.id)
             let type = this.selectedFile.type
             // const url = ''
             // console.log('name: ' + this.selectedFile.name);
@@ -81,6 +78,7 @@ export default {
             const path = 'http://localhost:5000/api/users/upload/' + this.id
             let nn = type.split('/')
             if (nn[0] === 'image') {
+                console.log("We've got an IMAGE!")
                 axios.post(path, {
                     'image': this.selectedFile
                 }).then((result) => {
@@ -96,69 +94,29 @@ export default {
             //     'image': this.selectedFile
             // })
         },
-        update_details(data, url) {
-            this.updates = []
-            const path = 'http://localhost:5000/api/users/update-' + url
-            axios.post(path, data).then((response) => {
-                console.log(response)
-            }).catch((err) => {
-                console.log(err)
-            })
+        update_details(field, value) {
+            // const path = 'http://localhost:5000/api/users/signup/'
+            // axios.post(path, {
+            //     field: value
+            // }).then((response) => {
+            //     console.log(response)
+            // }).catch((err) => {
+            //     console.log(err)
+            // })
+            alert(field + ' : ' + value)
         },
         update_username() {
-            this.updates = []
-            let data = {
-                'email': this.email, 
-                'username': this.username
-            }
-            this.update_details(data, 'username/')
-            this.updates.push("Username updated")
+            this.update_details('username', this.username)
             localStorage.setItem('user', this.username)
         },
         update_first() {
-            this.updates = []
-            let data = {
-                'email': this.email, 
-                'first_name': this.first_name
-            }
-            this.update_details(data, 'first/')
-            this.updates.push("First name updated")
+            this.update_details('first_name', this.first_name)
         },
         update_last() {
-            this.updates = []
-            let data = {
-                'email': this.email, 
-                'last_name': this.last_name
-            }
-            this.update_details(data, 'last/')
-            this.updates.push("Last name updated")
+            this.update_details('last_name', this.last_name)
         },
         update_email() {
-            this.updates = []
-            let data = {
-                'email': this.email, 
-                'username': this.username
-            }
-            this.update_details(data, 'email/')
-            this.updates.push("Email updated")
-        },
-        fetch_user_data() {
-            // fetch user info and paste it on the form for editing
-            const path = 'http://localhost:5000/api/users/update/'
-            axios.post(path, {
-                'username': this.id
-            }).then((result) => {
-                // console.log('It worked')
-                // console.log(result.data[0])
-                if (result.data[0]) {
-                    this.email = result.data[0].email
-                    this.last_name = result.data[0].last_name
-                    this.first_name = result.data[0].first_name
-                    this.username = result.data[0].username
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+            this.update_details('email', this.email)
         },
         async getUserData() {
             let token = localStorage.getItem("jwt")
@@ -170,9 +128,6 @@ export default {
             let user = await axios(options)
             console.log(user.data)
         }
-    },
-    mounted() {
-        this.fetch_user_data()
     },
     created() {
         this.getUserData()

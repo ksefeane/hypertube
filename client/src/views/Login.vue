@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header></app-header>
+        <!-- <app-header></app-header> -->
         <h1>{{ msg }}</h1>
         <div class="form-field">
             <form>
@@ -27,14 +27,14 @@
 <script>
 // import router from 'vue-router';
 import axios from 'axios'
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
 import swal from 'sweetalert'
 
 export default {
     components: {
-        'app-header': Header,
-        'app-footer': Footer
+        // 'app-header': Header,
+        // 'app-footer': Footer
     },
     data() {
         return {
@@ -62,7 +62,6 @@ export default {
                 'username': this.username,
                 'password': this.password
             }).catch(e => {e})
-            console.log(res.data)
             if (res.data.error) {
                 this.err.push(res.data.error)
             } else if (res.data.success) {
@@ -85,7 +84,7 @@ export default {
             //     console.log(error)
             // })
             // localStorage.setItem('user', this.username)
-            // this.$router.push('/profile/' + this.username)
+            // this.$router.push('/profile/te')
         },
         auth() {
           //      window.location.href = 'http://localhost:5000'

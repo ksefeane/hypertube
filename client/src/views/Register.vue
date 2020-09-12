@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <router-link to="/">Home</router-link>  -->
+        <app-header></app-header>
         <div class="form-field">
             <form>
                 <br>
@@ -37,20 +37,21 @@
             Password: {{ password}} <br>
             Repeat: {{ confirm_password }} <br>
         </div> -->
-        <!-- <app-footer></app-footer> -->
+        <app-footer></app-footer>
     </div>
 </template>
 
 <script>
 // import axios from 'axios'
-// import Header from "../components/Header";
-// import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 import { secure_password, axios_post } from "../functions/functions";
 
 export default {
     components: {
-        // 'app-footer': Footer
+        'app-footer': Footer,
+        'app-header': Header
     },
     data() {
         return {

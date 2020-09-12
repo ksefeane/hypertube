@@ -14,8 +14,8 @@
 <script>
 // @ is an alias to /src
 
-// import Header from "../components/Header";
-// import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from 'axios'
 import sweet from 'sweetalert'
 
@@ -26,8 +26,8 @@ export default {
   // }
   name: 'home',
   components: {
-    // 'app-header': Header,
-    // 'app-footer': Footer
+    'app-header': Header,
+    'app-footer': Footer
   },
   data() {
     return {

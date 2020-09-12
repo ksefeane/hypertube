@@ -30,7 +30,7 @@ export default {
         logout() {
             localStorage.removeItem("jwt")
             swal("success", "logged out", "success")
-            this.$route.push()
+            this.$router.push('/login')
         },
         // logout() {
         //     localStorage.removeItem('user')

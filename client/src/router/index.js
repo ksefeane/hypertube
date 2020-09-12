@@ -43,8 +43,8 @@ export default [
     {
         path: '/profile/:id',
         name: 'Profile',
-        component: Profile
-        //meta: {requiresAuth: true}
+        component: Profile,
+        meta: {requiresAuth: true}
     },
     {
         path: '/update_password',

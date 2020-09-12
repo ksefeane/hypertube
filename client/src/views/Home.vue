@@ -14,6 +14,8 @@
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import axios from 'axios'
+//import sweet from 'sweetalert'
 
 export default {
   // name: 'Home',
@@ -27,8 +29,25 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Hypertube!!'
+      msg: 'Welcome to Hypertube!!',
+      token: ''
     }
+  },
+  methods: {
+      async oauthRedirect() {
+          let options = {
+              method: 'get',
+              url: 'http://localhost:5000/api/users/redirect/'+this.$route.query.u
+          }
+          let res = await axios(options).catch(e => {console.log(e)})
+          console.log(res.data.success)
+          //sweet(`${this.token}`)
+      }
+  },
+  created() {
+          console.log(this.$route.query.u)
+
+      this.oauthRedirect()
   }
 }
 </script>

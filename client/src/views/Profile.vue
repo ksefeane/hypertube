@@ -126,7 +126,8 @@ export default {
         }
     },
     created() {
-        this.getUserData()
+        //this.getUserData()
+        console.log()
     }
 }
 </script>

@@ -62,7 +62,6 @@ export default {
                 'username': this.username,
                 'password': this.password
             }).catch(e => {e})
-            console.log(res.data)
             if (res.data.error) {
                 this.err.push(res.data.error)
             } else if (res.data.success) {

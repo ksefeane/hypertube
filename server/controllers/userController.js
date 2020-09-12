@@ -3,9 +3,14 @@ import {
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
-export function auth(req, res, next) {
-    req.isAuthenticated() ? next() : 
-        req.user ? next() : res.send({'error': 'access token denied'})
+export function authRedirect(req, res, next) {
+    if (req.isAuthenticated) {
+        next()
+    } else {
+        return res.status(401).json({
+            message: "not logged in"
+        })
+    }
 }
 
 export function jwtauth(req, res, next) {
@@ -40,14 +45,17 @@ export async function loginUser(req, res, next) {
     res.status(201).json(stat)
 }
 
-export async function authDirect(req, res, next) {
-    var stat = await signinOauth(req.user)
-    res.status(201).json(stat)
-    next()
+export async function loginoauth(req, res, next) {
+    try {
+        var stat = await signinOauth(req.params.user)
+        res.status(201).json(stat)
+    } catch (e) {console.log(e)}
+    
 }
 
 export async function authLogin(req, res, next) {
-    res.redirect('http://localhost.localdomain:8080/profile/'+req.user.username)
+    console.log(req.user)
+    res.redirect('http://localhost.localdomain:8080?u='+req.user.username)
 }
 
 export function logoutUser(req, res) {

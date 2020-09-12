@@ -1,6 +1,5 @@
 <template>
     <div>
-        <app-header></app-header>
         <!-- <router-link to="/">Home</router-link>  -->
         <div class="form-field">
             <form>
@@ -44,14 +43,13 @@
 
 <script>
 // import axios from 'axios'
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import { secure_password, axios_post } from "../functions/functions";
 
 export default {
     components: {
-        'app-header': Header,
         'app-footer': Footer
     },
     data() {

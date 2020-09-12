@@ -1,5 +1,5 @@
 import { 
-    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken
+    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -57,12 +57,11 @@ export async function loginoauth(req, res, next) {
     
 }
 export async function getUser(req, res) {
-    let user = await getuserDetails()
+    let user = await getuserDetails(req.params.user)
     res.send(user)
 }
 export function logoutUser(req, res) {
     req.logout()
-    res.redirect('/api/users/auth/42')
 }
 export async function passwordReset(req, res) {
     var username = req.body.username

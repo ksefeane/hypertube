@@ -120,14 +120,17 @@ export default {
         },
         async getUserData() {
             let token = localStorage.getItem("jwt")
-            //swal(`testing ${token}`)
-            let dec = await jwt.verify(token, 'secret')
-            console.log(dec)
+            let decode = await jwt.verify(token, 'secret')
+            let options = {
+                method: 'get',
+                url: 'http://localhost:5000/api/users/me/'+decode.body.name
+            }
+            let user = await axios(options)
+            console.log(user.data)
         }
     },
     created() {
-        //this.getUserData()
-        console.log()
+        this.getUserData()
     }
 }
 </script>

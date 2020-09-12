@@ -4,18 +4,20 @@
           <h1> <router-link to="/">Hypertube</router-link></h1>
           <div v-if="!is_logged_in">
               <!-- <router-link to="/register">Log in</router-link> -->
-              <router-link to="/login">Log In</router-link> 
+              <router-link to="/login">Log In</router-link>
+              <button @click="logout">Log out</button> 
           </div>
           <div v-else>
               <button @click="logout">Log out</button>
           </div>
       </header>
-      
   </div>
 </template>
 
 <script>
+
 // import { log } from 'util'
+import swal from 'sweetalert'
 export default {
     data() {
         return {
@@ -26,10 +28,15 @@ export default {
     },
     methods: {
         logout() {
-            localStorage.removeItem('user')
-            this.is_logged_in = false
-            this.$router.push('/')
-        }
+            localStorage.removeItem("jwt")
+            swal("success", "logged out", "success")
+            this.$route.push()
+        },
+        // logout() {
+        //     localStorage.removeItem('user')
+        //     this.is_logged_in = false
+        //     this.$router.push('/')
+        // }
     },
     // computed: {
     //     checkUid() {
@@ -43,14 +50,18 @@ export default {
     created() {
         this.uid = localStorage.getItem('user')
         if (this.uid) {
-            this.is_logged_in = true
+            this.is_logged_in = false
         }
     }
 }
 </script>
-
-<style scoped>
-header {
-    background-color: peru;
+<style  scoped>
+.header{
+    background-color: #b5afbc;
+}
+.navbar {
+  background-color: #b5afbc;
+  border-color: #7c5295;
+  border-bottom-style: solid;
 }
 </style>

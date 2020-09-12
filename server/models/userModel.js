@@ -49,6 +49,11 @@ export async function fetchUsers() {
     var f = await q.getall('users')
     return (f)
 }
+export async function signinOauth(username) {
+    let pro = await q.fetchone('users', ['username'], 'username', username)
+    let token = await createToken(username)
+    return ({'success': {'username': pro[0].username, 'token': token}})
+}
 export async function signinUser(user) {
     let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)
     let pass = pro ? await compare(user.password, pro[0].password) : 0

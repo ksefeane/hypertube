@@ -40,6 +40,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import axios from 'axios'
+import jwt from 'njwt'
 export default {
     components: {
         'app-header': Header,
@@ -157,10 +158,20 @@ export default {
             }).catch((err) => {
                 console.log(err)
             })
+        },
+        async getUserData() {
+            let token = localStorage.getItem("jwt")
+            //swal(`testing ${token}`)
+            let dec = await jwt.verify(token, 'secret')
+            console.log(dec)
         }
     },
     mounted() {
         this.fetch_user_data()
+    },
+    created() {
+        //this.getUserData()
+        console.log()
     }
 }
 </script>

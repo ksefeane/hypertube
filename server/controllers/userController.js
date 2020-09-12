@@ -1,11 +1,16 @@
 import { 
-    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, fetchDetails, updateUsername, updateEmail, updateLast, updateFirst
+    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, fetchDetails, updateUsername, updateEmail, updateLast, updateFirst, signinOauth
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
-export function auth(req, res, next) {
-    req.isAuthenticated() ? next() : 
-        req.user ? next() : res.send({'error': 'access token denied'})
+export function authRedirect(req, res, next) {
+    if (req.isAuthenticated) {
+        next()
+    } else {
+        return res.status(401).json({
+            message: "not logged in"
+        })
+    }
 }
 
 export function jwtauth(req, res, next) {
@@ -13,7 +18,7 @@ export function jwtauth(req, res, next) {
         const token = req.headers.authorization.replace("Bearer ", "")
         const decode = verify(token, "secret")
         req.user = decode
-        console.log(decode)
+       // console.log(decode)
         next()
     } catch (e) {
         return res.status(401).json({
@@ -40,8 +45,17 @@ export async function loginUser(req, res, next) {
     res.status(201).json(stat) 
 }
 
-export function authLogin(req, res, next) {
-    res.redirect('/api/users')
+export async function loginoauth(req, res, next) {
+    try {
+        var stat = await signinOauth(req.params.user)
+        res.status(201).json(stat)
+    } catch (e) {console.log(e)}
+    
+}
+
+export async function authLogin(req, res, next) {
+    console.log(req.user)
+    res.redirect('http://localhost.localdomain:8080?u='+req.user.username)
 }
 
 export function logoutUser(req, res) {

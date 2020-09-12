@@ -56,6 +56,10 @@ export async function loginoauth(req, res, next) {
     } catch (e) {console.log(e)}
     
 }
+export async function getUser(req, res) {
+    let user = await getuserDetails()
+    res.send(user)
+}
 export function logoutUser(req, res) {
     req.logout()
     res.redirect('/api/users/auth/42')
@@ -87,3 +91,4 @@ export async function uploadPhoto(req, res) {
         res.send(stat)
     }
 }
+

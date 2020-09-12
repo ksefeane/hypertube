@@ -66,6 +66,11 @@ export async function signinOauth(token) {
     }
     return ({'error': 'not authorized'})
 }
+export async function getuserDetails(username) {
+    let par = ['username', 'first_name', 'last_name', 'email']
+    let pro = await q.fetchone('users', par, 'username', username)
+    return (pro ? pro[0] : {'error': 'user not found'})
+}
 export async function signinUser(user) {
     let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)
     let pass = pro ? await compare(user.password, pro[0].password) : 0

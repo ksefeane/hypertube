@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const router = Router()
 import { 
-    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth
+    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser
 } from '../../controllers/userController'
 import upload from '../../models/imageModel'
 import passport from 'passport'
@@ -17,6 +17,7 @@ export default router
 //get
 .get('/logout', logoutUser)
 .get('/', listUsers)
+.get('/me/:user', getUser)
 //post
 .post('/signup', registerUser)
 .post('/signin', loginUser)

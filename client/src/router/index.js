@@ -38,13 +38,14 @@ export default [
     {
         path: '/play',
         name: 'play',
-        component: Play
+        component: Play,
+        meta: {requiresAuth: true}
     },
     {
         path: '/profile/:id',
         name: 'Profile',
-        component: Profile
-        //meta: {requiresAuth: true}
+        component: Profile,
+        meta: {requiresAuth: true}
     },
     {
         path: '/update_password',

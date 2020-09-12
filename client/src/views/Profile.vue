@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header></app-header>
+        <!-- <app-header></app-header> -->
         <div>
             <h1>Hello {{ uid }}</h1>
             <div v-for="update in updates" :key="update">
@@ -36,15 +36,15 @@
 
 <script>
 // import axios from 'axios'
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
 
 import axios from 'axios'
 import jwt from 'njwt'
 export default {
     components: {
-        'app-header': Header,
-        'app-footer': Footer
+        // 'app-header': Header,
+        // 'app-footer': Footer
     },
     data() {
         return {
@@ -162,17 +162,20 @@ export default {
         },
         async getUserData() {
             let token = localStorage.getItem("jwt")
-            //swal(`testing ${token}`)
-            let dec = await jwt.verify(token, 'secret')
-            console.log(dec)
+            let decode = await jwt.verify(token, 'secret')
+            let options = {
+                method: 'get',
+                url: 'http://localhost:5000/api/users/me/'+decode.body.name
+            }
+            let user = await axios(options)
+            console.log(user.data)
         }
     },
     mounted() {
         this.fetch_user_data()
     },
     created() {
-        //this.getUserData()
-        console.log()
+        this.getUserData()
     }
 }
 </script>

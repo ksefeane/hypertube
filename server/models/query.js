@@ -35,15 +35,10 @@ class query {
 		z = z.slice(0, -2)
 		var sql = "UPDATE " + t_name + " SET " + z + " WHERE " + param + "=\'" + pval + "\'"
 		return(await DB.insert(sql, vals))
-	}
-	static delone(t_name, params, pval, callback) {
+    }
+    static async delone(t_name, params, pval) {
 		var sql = "DELETE FROM " + t_name + " WHERE " + params + "=\'" + pval + "\'"
-		DB.insert(sql, (err, res) => {
-			if (err)
-				callback(err, null)
-			else
-				callback(null, res)
-		})
+        return (await DB.insert(sql))
 	}
 	
 	static async getall(t_name) {

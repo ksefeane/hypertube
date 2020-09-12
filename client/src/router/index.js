@@ -38,7 +38,8 @@ export default [
     {
         path: '/play',
         name: 'play',
-        component: Play
+        component: Play,
+        meta: {requiresAuth: true}
     },
     {
         path: '/profile/:id',

@@ -43,6 +43,7 @@ export default {
           }
           let res = await axios(options).catch(e => {console.log(e)})
           console.log(res.header)
+          console.log(res.data)
           if (res.data.success) {
               localStorage.setItem("jwt", res.data.success.token)
               sweet("success", "login successful", "success")

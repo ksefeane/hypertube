@@ -61,7 +61,7 @@ export async function signinOauth(token) {
     let pro = await q.fetchone('tokens', ['username'], 'token', token)
     if (pro) {
         let token = await createToken(pro[0].username)
-        q.delone('tokens', 'token', token)
+        q.delone('tokens', 'username', pro[0].username)
         return ({'success': {'username': pro[0].username, 'token': token}})
     }
     return ({'error': 'not authorized'})

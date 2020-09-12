@@ -1,7 +1,7 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
 import crypto from 'crypto'
-import { validString, securePassword, validEmail } from './securityModel'
+import { validString, securePassword, validEmail, createToken } from './securityModel'
 import { sendEmail } from './emailModel' 
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
@@ -49,10 +49,29 @@ export async function fetchUsers() {
     var f = await q.getall('users')
     return (f)
 }
-export async function signinOauth(username) {
-    let pro = await q.fetchone('users', ['username'], 'username', username)
-    let token = await createToken(username)
-    return ({'success': {'username': pro[0].username, 'token': token}})
+export async function oauthToken(username) {
+    let user = await q.fetchone('users', 'username', 'username', username)
+    if (user) {
+        let token = await createToken(user[0].username)
+        q.insert('tokens', ['username', 'token', 'type'], [username, token, 'oauth'])
+        return (token)
+    }
+    return (null)
+}
+export async function signinOauth(token) {
+    let pro = await q.fetchone('tokens', ['username'], 'token', token)
+    if (pro) {
+        let token = await createToken(pro[0].username)
+        q.delone('tokens', 'username', pro[0].username)
+        return ({'success': {'username': pro[0].username, 'token': token}})
+    }
+    return ({'error': 'not authorized'})
+}
+export async function getuserDetails(username) {
+    console.log(username)
+    let par = ['username', 'first_name', 'last_name', 'email']
+    let pro = await q.fetchone('users', par, 'username', username)
+    return (pro ? pro[0] : {'error': 'user not found'})
 }
 export async function signinUser(user) {
     let pro = await q.fetchone('users', ['username', 'password'], 'username', user.username)

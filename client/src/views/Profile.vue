@@ -86,7 +86,7 @@ export default {
                 }).then((result) => {
                     console.log(result)
                 }).catch((error) => {
-                    console.log("yohohoho", error)
+                    console.log(error)
                 })
             } else if (nn[0] === 'video') {
                 console.log("We've got a VIDEO!");

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <app-header></app-header>
+        <!-- <app-header></app-header> -->
         <div>
             <router-link to="/search">Search movies</router-link> | 
             <router-link to="/library">Library</router-link>  
@@ -28,14 +28,14 @@
 <script>
 import axios from "axios";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
 
 export default {
     components: {
-        'app-header': Header,
-        'app-footer': Footer,
+        // 'app-header': Header,
+        // 'app-footer': Footer,
     },
     data() {
         return {

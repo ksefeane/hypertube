@@ -127,7 +127,6 @@ export default {
                 url: 'http://localhost:5000/api/users/me/'+decode.body.name
             }
             let user = await axios(options).catch(e => {console.log(e)})
-            console.log(user.data)
             this.username = user.data.username
             this.email = user.data.email
             this.last_name = user.data.last_name

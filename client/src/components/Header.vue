@@ -11,11 +11,11 @@
               <button @click="logout">Log out</button>
           </div>
       </header>
-      
   </div>
 </template>
 
 <script>
+
 // import { log } from 'util'
 import swal from 'sweetalert'
 export default {
@@ -55,9 +55,13 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-header {
-    background-color: peru;
+<style  scoped>
+.header{
+    background-color: #b5afbc;
+}
+.navbar {
+  background-color: #b5afbc;
+  border-color: #7c5295;
+  border-bottom-style: solid;
 }
 </style>

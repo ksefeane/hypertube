@@ -1,7 +1,7 @@
 <template>
     <div>
-        <app-header></app-header>
-        {{ msg }}
+        <!-- <app-header></app-header> -->
+        <h1>{{ msg }}</h1>
         <div class="form-field">
             <form>
                 <br>
@@ -27,18 +27,18 @@
 <script>
 // import router from 'vue-router';
 import axios from 'axios'
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
 import swal from 'sweetalert'
 
 export default {
     components: {
-        'app-header': Header,
-        'app-footer': Footer
+        // 'app-header': Header,
+        // 'app-footer': Footer
     },
     data() {
         return {
-            msg: 'Log in',
+            msg: 'Hypertube Log in',
             username: '',
             password: '',
             err: [],
@@ -99,5 +99,8 @@ export default {
     /* border-style: double; */
     margin: auto;
     width: 40%;
+}
+h1{
+    text-align: center;
 }
 </style>

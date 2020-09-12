@@ -1,5 +1,5 @@
 import { 
-    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth
+    User, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -44,20 +44,18 @@ export async function loginUser(req, res, next) {
     var stat = await signinUser(user)
     res.status(201).json(stat)
 }
-
+export async function authLogin(req, res, next) {
+    let token = await oauthToken(req.user.username)
+    res.header('token', token)
+    res.redirect('http://localhost.localdomain:8080?t='+token)
+}
 export async function loginoauth(req, res, next) {
     try {
-        var stat = await signinOauth(req.params.user)
+        var stat = await signinOauth(req.params.token)
         res.status(201).json(stat)
     } catch (e) {console.log(e)}
     
 }
-
-export async function authLogin(req, res, next) {
-    console.log(req.user)
-    res.redirect('http://localhost.localdomain:8080?u='+req.user.username)
-}
-
 export function logoutUser(req, res) {
     req.logout()
     res.redirect('/api/users/auth/42')

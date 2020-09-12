@@ -1,11 +1,12 @@
 <template>
   <div>
-     <div class="bg"></div>
-    <!-- <app-header></app-header> -->
+     <!-- <div class="bg"></div> -->
+    <app-header></app-header>
     {{ msg }}
     <router-link to="/register">Register</router-link> | 
     <router-link to="/login">Log in</router-link> |
     <!-- <router-link to="/profile">Profile</router-link>  -->
+    <app-footer></app-footer>
    
   </div>
 </template>
@@ -13,14 +14,11 @@
 <script>
 // @ is an alias to /src
 
-<<<<<<< HEAD
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
 import axios from 'axios'
-//import sweet from 'sweetalert'
+import sweet from 'sweetalert'
 
-=======
->>>>>>> 1a00b09541a751b3a1d5c404e19bbcb21799b91a
 export default {
   // name: 'Home',
   // components: {
@@ -41,20 +39,23 @@ export default {
       async oauthRedirect() {
           let options = {
               method: 'get',
-              url: 'http://localhost:5000/api/users/redirect/'+this.$route.query.u
+              url: 'http://localhost:5000/api/users/redirect/'+this.$route.query.t
           }
           let res = await axios(options).catch(e => {console.log(e)})
-          console.log(res.data.success)
-          //sweet(`${this.token}`)
+          console.log(res.header)
+          if (res.data.success) {
+              localStorage.setItem("jwt", res.data.success.token)
+              sweet("success", "login successful", "success")
+              this.$router.push(`/profile/${res.data.success.username}`)
+          }
       }
   },
   created() {
-          console.log(this.$route.query.u)
-
       this.oauthRedirect()
   }
 }
 </script>
+
 <style scoped>
 .bg {
   

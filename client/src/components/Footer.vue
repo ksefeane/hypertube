@@ -9,7 +9,7 @@
 export default {
   data() {
     return {
-      title: "© Hypertube 2020",
+      title: "© children of thanos 2020",
     };
   },
 };

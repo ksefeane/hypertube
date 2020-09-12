@@ -19,7 +19,7 @@ var tables = {
 		"CREATE TABLE `tokens` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `username` varchar(20) NOT NULL," +
-		" `token` varchar(100) NOT NULL," +
+		" `token` varchar(300) NOT NULL," +
 		" `type` varchar(100)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"

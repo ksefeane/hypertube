@@ -13,7 +13,7 @@ export default router
 .get('/auth/redirect', passport.authenticate('42', {failureRedirect: '/api/users/signup'}), authLogin)
 .get('/auth/github', passport.authenticate('github', {scope: 'user'}))
 .get('/auth/redirect2', passport.authenticate('github', {failureRedirect: '/api/users/signup'}), authLogin)
-.get('/redirect/:user', authRedirect, loginoauth)
+.get('/redirect/:token', authRedirect, loginoauth)
 //get
 .get('/logout', logoutUser)
 .get('/', listUsers)

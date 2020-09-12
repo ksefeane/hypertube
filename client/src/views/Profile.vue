@@ -1,8 +1,8 @@
 <template>
     <div>
-        <!-- <app-header></app-header> -->
+        <app-header></app-header>
         <div>
-            <h1>profile {{ uid }}</h1>
+            <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
             
             <form>
@@ -34,20 +34,20 @@
 
 <script>
 // import axios from 'axios'
-// import Header from "../components/Header";
-// import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 import axios from 'axios'
 import jwt from 'njwt'
 export default {
     components: {
-        // 'app-header': Header,
-        // 'app-footer': Footer
+        'app-header': Header,
+        'app-footer': Footer
     },
     data() {
         return {
             id: this.$route.params.id,
-            uid: localStorage.getItem('user'),
+            uid: '',
             username: '',
             first_name: '',
             email: '',
@@ -128,6 +128,10 @@ export default {
             }
             let user = await axios(options).catch(e => {console.log(e)})
             console.log(user.data)
+            this.username = user.data.username
+            this.email = user.data.email
+            this.last_name = user.data.last_name
+            this.first_name = user.data.first_name
         }
     },
     created() {

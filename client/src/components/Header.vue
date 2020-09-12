@@ -2,10 +2,10 @@
   <div>
       <header>
           <h1> <router-link to="/">Hypertube</router-link></h1>
-          <div v-if="!is_logged_in">
+          <div v-if="!uid">
               <!-- <router-link to="/register">Log in</router-link> -->
               <router-link to="/login">Log In</router-link>
-              <button @click="logout">Log out</button> 
+              <!-- <button @click="logout">Log out</button>  -->
           </div>
           <div v-else>
               <button @click="logout">Log out</button>
@@ -22,15 +22,17 @@ export default {
     data() {
         return {
             title: 'This is the header',
-            uid: null,
+            uid: localStorage.getItem('jwt'),
             is_logged_in: false
         }
     },
     methods: {
         logout() {
             localStorage.removeItem("jwt")
+            // localStorage.removeItem("user")
+            this.uid = null
             swal("success", "logged out", "success")
-            this.$route.push()
+            this.$router.push('/')
         },
         // logout() {
         //     localStorage.removeItem('user')
@@ -48,7 +50,7 @@ export default {
     //     this.checkUid
     // },
     created() {
-        this.uid = localStorage.getItem('user')
+        this.uid = localStorage.getItem('jwt')
         if (this.uid) {
             this.is_logged_in = false
         }

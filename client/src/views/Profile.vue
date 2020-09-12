@@ -97,6 +97,7 @@ export default {
             // })
         },
         update_details(data, url) {
+            this.updates = []
             const path = 'http://localhost:5000/api/users/update-' + url
             axios.post(path, data).then((response) => {
                 console.log(response)
@@ -147,8 +148,8 @@ export default {
             axios.post(path, {
                 'username': this.id
             }).then((result) => {
-                console.log('It worked')
-                console.log(result.data[0])
+                // console.log('It worked')
+                // console.log(result.data[0])
                 if (result.data[0]) {
                     this.email = result.data[0].email
                     this.last_name = result.data[0].last_name

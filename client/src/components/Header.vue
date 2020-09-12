@@ -5,7 +5,7 @@
           <div v-if="!is_logged_in">
               <!-- <router-link to="/register">Log in</router-link> -->
               <router-link to="/login">Log In</router-link>
-              <button @click="logout">Log out</button> 
+              <!-- <button @click="logout">Log out</button>  -->
           </div>
           <div v-else>
               <button @click="logout">Log out</button>
@@ -48,9 +48,9 @@ export default {
     //     this.checkUid
     // },
     created() {
-        this.uid = localStorage.getItem('user')
+        this.uid = localStorage.getItem('jwt')
         if (this.uid) {
-            this.is_logged_in = false
+            this.is_logged_in = true
         }
     }
 }

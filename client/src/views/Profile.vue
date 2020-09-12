@@ -4,7 +4,9 @@
         <div>
             <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
-            
+            <div v-for="update in updates" :key="update">
+                <small>{{ update }}</small>
+            </div>
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
@@ -53,7 +55,8 @@ export default {
             email: '',
             last_name: '',
             message: '',
-            selectedFile: null
+            selectedFile: null,
+            updates: []
         }
     },
     // computed: {
@@ -94,29 +97,50 @@ export default {
             //     'image': this.selectedFile
             // })
         },
-        update_details(field, value) {
-            // const path = 'http://localhost:5000/api/users/signup/'
-            // axios.post(path, {
-            //     field: value
-            // }).then((response) => {
-            //     console.log(response)
-            // }).catch((err) => {
-            //     console.log(err)
-            // })
-            alert(field + ' : ' + value)
+        update_details(data, url) {
+            this.updates = []
+            const path = 'http://localhost:5000/api/users/update-' + url
+            axios.post(path, data).then((response) => {
+                console.log(response)
+            }).catch((err) => {
+                console.log(err)
+            })
         },
         update_username() {
-            this.update_details('username', this.username)
-            localStorage.setItem('user', this.username)
+            this.updates = []
+            let data = {
+                'email': this.email, 
+                'username': this.username
+            }
+            this.update_details(data, 'username/')
+            this.updates.push("Username updated")
         },
         update_first() {
-            this.update_details('first_name', this.first_name)
+            this.updates = []
+            let data = {
+                'email': this.email, 
+                'first_name': this.first_name
+            }
+            this.update_details(data, 'first/')
+            this.updates.push("First name updated")
         },
         update_last() {
-            this.update_details('last_name', this.last_name)
+            this.updates = []
+            let data = {
+                'email': this.email, 
+                'last_name': this.last_name
+            }
+            this.update_details(data, 'last/')
+            this.updates.push("Last name updated")
         },
         update_email() {
-            this.update_details('email', this.email)
+            this.updates = []
+            let data = {
+                'email': this.email, 
+                'username': this.username
+            }
+            this.update_details(data, 'email/')
+            this.updates.push("Email updated")
         },
         async getUserData() {
             let token = localStorage.getItem("jwt")

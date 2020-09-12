@@ -1,5 +1,6 @@
 import q from './query'
 import { hash, compare } from 'bcrypt'
+import crypto from 'crypto'
 import { validString, securePassword, validEmail, createToken } from './securityModel'
 import { sendEmail } from './emailModel'
 
@@ -99,11 +100,11 @@ export async function uploadImage(user) {
     return ('soon')
 }
 export async function sendEmailLink(username) {
-    var token = await hash(Math.random.toString(36).substring(8), 10)
+    // var token = await hash(Math.random.toString(36).substring(8), 10)
+    var token = crypto.randomBytes(20).toString('hex')
     var email = await q.fetchone('users', ['email'], 'username', username)
     var link = `<p>hello ${username}</p><br>
-        <a href='http://localhost:5000/api/forgotpassword/${token}'>
-        click here to reset password</a>`
+    <a href='http://localhost:8080/reset/${token}' target='_blank>click here to reset password</a>`
     var stat = email ? await sendEmail({from: 'hypertube@hypertube.com', to: email[0].email, 
         subject: 'reset password', text: link}) : {'error': 'email not found'}
     email ? q.insert('tokens', ['username', 'token', 'type'], [username, token, 'resetpassword']) : 0
@@ -123,4 +124,29 @@ export async function setPassword(token, password) {
     var change = await Promise.all([newpass, user])
     q.update('users', ['password'], change[0], 'username', change[1][0].username)
     return (user ? {'success': 'password changed successfully'} : {'error': 'password change failed'})
+}
+
+export async function fetchDetails(username) {
+    var data = await q.fetchone('users', ['first_name', 'last_name', 'email', 'username'], 'username', username)
+    return data 
+}
+
+export async function updateUsername(username, email) {
+    var data = await q.update('users', ['username'], [username],'email', email)
+    return data
+}
+
+export async function updateEmail(username, email) {
+    var data = await q.update('users', ['email'], [email],'username', username)
+    return data
+}
+
+export async function updateLast(last_name, email) {
+    var data = await q.update('users', ['last_name'], [last_name],'email', email)
+    return data
+}
+
+export async function updateFirst(first_name, email) {
+    var data = await q.update('users', ['first_name'], [first_name],'email', email)
+    return data
 }

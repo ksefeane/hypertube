@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const router = Router()
 import { 
-    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser
+    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, changeLast, changeUsername
 } from '../../controllers/userController'
 import upload from '../../models/imageModel'
 import passport from 'passport'
@@ -22,5 +22,9 @@ export default router
 .post('/signup', registerUser)
 .post('/signin', loginUser)
 .post('/upload', upload.single('photo'), uploadPhoto)
+.post('/update-username', changeUsername)
+.post('/update-email', changeEmail)
+.post('/update-last', changeLast)
+.post('/update-first', changeFirst)
 
 //delete

@@ -29,3 +29,13 @@ export async  function axios_post(url, data) {
         return "Oops!"
     }
 }
+
+export async function post_comment(url, data) {
+    const path = 'http://localhost:5000' + url
+    try {
+        const result = await axios.post(path, data)
+        return result
+    } catch (error) {
+        return "Error!";
+    }
+}

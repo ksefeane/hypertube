@@ -1,5 +1,5 @@
 import { 
-    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername
+    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -47,7 +47,7 @@ export async function loginUser(req, res, next) {
 export async function authLogin(req, res, next) {
     let token = await oauthToken(req.user.username)
     res.header('token', token)
-    res.redirect('http://localhost.localdomain:8080?t='+token)
+    res.redirect('http://localhost:8080?t='+token)
 }
 export async function loginoauth(req, res, next) {
     try {
@@ -81,6 +81,7 @@ export async function changePassword(req, res) {
 }
 
 export async function uploadPhoto(req, res) {
+    console.log(req.file)
     if (!req.file) {
         res.send('error please upload a valid picture')
         var stat = await uploadImage(req.user)
@@ -116,5 +117,15 @@ export async function changeFirst(req, res) {
     var email = req.body.email
     var first_name = req.body.first_name
     var stat = await updateFirst(first_name, email)
+    res.send(stat)
+}
+
+export async function changePasswordProfile(req, res) {
+    // console.log(req.body)
+    var username = req.body.username
+    var old_pass = req.body.old_pass
+    var new_pass = req.body.new_pass
+    var confirm_pass = req.body.confirm_pass
+    var stat = new_pass === confirm_pass ? await updatePassword(old_pass, new_pass, username) : {'error': 'passwords do not match'}
     res.send(stat)
 }

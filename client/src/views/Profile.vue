@@ -2,13 +2,17 @@
     <div>
         <app-header></app-header>
         <div>
+            <router-link to="/library">Library</router-link>
             <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
-            <div id="preview">
-                <img v-if="url" :src="url">
+            <div id="preview" v-if="url">
+                <img :src="url">
+            </div>
+            <div id="preview2" v-else>
+                <img src="../../../server/public/uploads/temp/avatar.jpg" alt="error">
             </div>
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">
@@ -73,7 +77,8 @@ export default {
             new_pass: '',
             confirm_pass: '',
             errors: [],
-            url: null
+            url: null,
+            pro_pic: ""
         }
     },
     // computed: {
@@ -85,7 +90,8 @@ export default {
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             // console.log(event)
-            this.url = URL.createObjectURL(this.selectedFile)
+            this.url = URL.createObjectURL(this.selectedFile) 
+            // this.pro_pic = null
         },
         validate() {
             let check = secure_password(this.new_pass)
@@ -102,6 +108,10 @@ export default {
             }
         },
         uploadImage() {
+            if (!this.selectedFile) {
+                this.errors.push("Select image")
+                return
+            }
             let type = this.selectedFile.type
             var data = new FormData()
             data.append('photo', this.selectedFile)
@@ -115,7 +125,8 @@ export default {
             let nn = type.split('/')
             if (nn[0] === 'image') {
                 axios.post(path, data, config).then((result) => {
-                    console.log(result)
+                    this.pro_pic = result
+                    this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -194,6 +205,7 @@ export default {
             this.email = user.data.email
             this.last_name = user.data.last_name
             this.first_name = user.data.first_name
+            localStorage.setItem('user', this.username)
         }
     },
     created() {
@@ -209,6 +221,15 @@ export default {
   align-items: center;
 }
 #preview img {
+  width: 200px;
+  height: 200px;
+}
+#preview2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#preview2 img {
   width: 200px;
   height: 200px;
 }

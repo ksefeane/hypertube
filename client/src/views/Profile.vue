@@ -1,35 +1,44 @@
 <template>
     <div>
         <app-header></app-header>
-        <div>
-            <h1>profile {{ username }}</h1>
-            <!-- <canvas id="profile_pic"></canvas> -->
-            <div v-for="update in updates" :key="update">
-                <small>{{ update }}</small>
+            <div>
+                <h1>profile {{ username }}</h1>
+                <div id="preview">
+                    <img v-if="url" :src="url">
+                </div>
+                <form>
+                    <input type="file" name="photo" id="" @change="onFileSelected">
+                </form>
+                <button @click="uploadImage">Upload</button>
+                <div v-for="update in updates" :key="update">
+                    <small>{{ update }}</small>
+                </div>
+                <form>
+                    <input type="text" v-model="first_name"> <br>
+                </form>
+                <input type="submit" value="Update First Name" @click="update_first"><br><br>
+                <form>
+                    <input type="text" v-model="last_name"> <br>
+                </form>
+                <input type="submit" value="Update Last Name" @click="update_last"><br><br>
+                <!-- <form>
+                    <input type="text" v-model="username"> <br>
+                </form>
+                <input type="submit" value="Update Username" @click="update_username"><br><br> -->
+                <form>
+                    <input type="email" v-model="email"> <br>
+                </form>
+                <input type="submit" value="Update Email" @click="update_email"><br>
+                <br>
+                <form>
+                    <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
+                    <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                    <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+                </form>
+                <input type="submit" value="Update Password" @click="update_password"><br>
+                <!-- <router-link to="/update_password">Update Password</router-link><br> -->
+                <br><br>
             </div>
-            <form>
-                <input type="text" v-model="first_name"> <br>
-            </form>
-            <input type="submit" value="Update First Name" @click="update_first"><br><br>
-            <form>
-                <input type="text" v-model="last_name"> <br>
-            </form>
-            <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <form>
-                <input type="text" v-model="username"> <br>
-            </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br>
-            <form>
-                <input type="email" v-model="email"> <br>
-            </form>
-            <input type="submit" value="Update Email" @click="update_email"><br>
-            <br>
-            <router-link to="/update_password">Update Password</router-link><br>
-            <input type="file" name="" id="" @change="onFileSelected">
-            <button @click="uploadImage">Upload</button>
-            <br><br>
-        </div>
-        
         <app-footer></app-footer>
     </div>
 </template>
@@ -49,14 +58,19 @@ export default {
     data() {
         return {
             id: this.$route.params.id,
-            uid: '',
+            uid: localStorage.getItem('jwt'),
             username: '',
             first_name: '',
             email: '',
             last_name: '',
+            current_pass: '',
+            new_pass: '',
+            confirm_pass: '',
             message: '',
             selectedFile: null,
-            updates: []
+            updates: [],
+            url: null,
+            test: null
         }
     },
     // computed: {
@@ -67,24 +81,34 @@ export default {
     methods: {
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
+            this.test = event
+            console.log(this.selectedFile)
+            this.url = URL.createObjectURL(this.selectedFile)
             // console.log(event)
         },
         uploadImage() {
-            console.log(this.selectedFile);
-            console.log(this.id)
+            // console.log(this.selectedFile);
+            // console.log(this.id)
             let type = this.selectedFile.type
             // const url = ''
             // console.log('name: ' + this.selectedFile.name);
             // console.log('size: ' + this.selectedFile.size);
             // console.log('type: ' + this.selectedFile.type);
             // console.log(typeof type);
-            const path = 'http://localhost:5000/api/users/upload/' + this.id
+            var data = new FormData()
+            // console.log(this.selectedFile.name)
+            // data.append('doo', 'test')
+            data.append('photo', this.selectedFile)
+            data.append('username', this.username)
+            let config = {
+                header: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            const path = 'http://localhost:5000/api/users/upload/'
             let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("We've got an IMAGE!")
-                axios.post(path, {
-                    'image': this.selectedFile
-                }).then((result) => {
+                axios.post(path, data, config).then((result) => {
                     console.log(result)
                 }).catch((error) => {
                     console.log(error)
@@ -92,10 +116,6 @@ export default {
             } else if (nn[0] === 'video') {
                 console.log("We've got a VIDEO!");
             }
-            // console.log(formData);
-            // axios.post(url, {
-            //     'image': this.selectedFile
-            // })
         },
         update_details(data, url) {
             this.updates = []
@@ -142,6 +162,19 @@ export default {
             this.update_details(data, 'email/')
             this.updates.push("Email updated")
         },
+        update_password() {
+            this.updates = []
+            let data = {
+                'username': this.username,
+                'old_pass': this.current_pass,
+                'new_pass': this.new_pass,
+                'confirm_pass': this.confirm_pass
+            }
+            this.update_details(data, 'password/')
+            this.current_pass = ''
+            this.new_pass = ''
+            this.confirm_pass = ''
+        },
         async getUserData() {
             let token = localStorage.getItem("jwt")
             let decode = await jwt.verify(token, 'secret')
@@ -150,7 +183,7 @@ export default {
                 url: 'http://localhost:5000/api/users/me/'+decode.body.name
             }
             let user = await axios(options)
-            console.log(user.data)
+            // console.log(user.data)
             this.username = user.data.username
             this.email = user.data.email
             this.last_name = user.data.last_name
@@ -159,6 +192,19 @@ export default {
     },
     created() {
         this.getUserData()
+        this.uid = localStorage.getItem('jwt')
     }
 }
 </script>
+
+<style scoped>
+#preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#preview img {
+  width: 200px;
+  height: 200px;
+}
+</style>

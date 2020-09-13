@@ -48,6 +48,11 @@ export async function createMagnet(hash, name) {
     
 }
 
+export async function filterName(name) {
+    let rep = name.replace(/\[.*?\]|\(.*?\)|.mkv|.mp4/g, '')
+    return (rep)
+}
+
 export async function deleteTorrent(magnet) {
     var torrent = client.get(magnet)
     

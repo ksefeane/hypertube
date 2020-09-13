@@ -13,8 +13,8 @@
             <!-- <p>{{ film }}</p> -->
             <img :src="film.img" alt="">
             <br>
-            <small>Score: {{ film.rating }}</small> <br>
-            <small>Rating: {{ film.mpa_rating }}</small>
+            <small>Score: {{ film.score }}</small> <br>
+            <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
             <br>
             <p>Year: {{ film.year }}</p>
             <p>Runtime: {{ film.runtime }} minutes</p>
@@ -46,6 +46,11 @@ export default {
         }
     },
     methods: {
+        async movieinfo() {
+            let mov = await axios.get('http://localhost:5000/api/library/movie/'+this.id)
+                .catch(e => {console.log(e)})
+            console.log(mov.data)
+        },
         download_film() {
             // tell backend to download movie
             this.show = true
@@ -62,9 +67,12 @@ export default {
     mounted() {
         EventBus.$on('movie_details', (data) => {
             this.film = data;
-            console.log(data)
+            //console.log(data)
             // alert('created')
         })
-    }
+    },
+    created() {
+        this.movieinfo()
+    },
 }
 </script>

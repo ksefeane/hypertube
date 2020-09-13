@@ -13,15 +13,18 @@
             <!-- <p>{{ film }}</p> -->
             <img :src="film.img" alt="">
             <br>
+            <small v-for="torrent in film.torrents" :key="torrent">
+                <button @click="download_film(torrent.magnet)" v-if="!show">{{torrent.quality}} - {{torrent.size}}</button>
+            </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
             <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
             <br>
             <p>Year: {{ film.year }}</p>
             <p>Runtime: {{ film.runtime }} minutes</p>
             <p>{{ film.summary }}</p>
-            <button @click="download_film" v-if="!show">Download {{ id }}</button>
+            <!-- <button @click="download_film" v-if="!show">Download {{ id }}</button> -->
         </div>
-        <app-footer></app-footer>
+        <!-- <app-footer></app-footer> -->
     </div>
 </template>
 
@@ -29,13 +32,13 @@
 import axios from "axios";
 
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
 
 export default {
     components: {
         'app-header': Header,
-        'app-footer': Footer,
+        // 'app-footer': Footer,
     },
     data() {
         return {
@@ -49,11 +52,15 @@ export default {
         async movieinfo() {
             let mov = await axios.get('http://localhost:5000/api/library/movie/'+this.id)
                 .catch(e => {console.log(e)})
-            console.log(mov.data)
+            //console.log(mov.data[0])
+            this.film = mov.data[0]
         },
-        download_film() {
-            // tell backend to download movie
-            this.show = true
+        async download_film(magnet) {
+            let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
+                 .catch(e => {console.log(e)})
+            console.log(mov.data)
+            // this.film = mov.data[0]
+            //this.show = true
         },
         stream_movie() {
             const path = 'http://localhost:5000/api/video/stream/' + this.id
@@ -73,6 +80,7 @@ export default {
     },
     created() {
         this.movieinfo()
+        //this.download_film()
     },
 }
 </script>

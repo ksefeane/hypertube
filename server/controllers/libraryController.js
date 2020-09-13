@@ -154,7 +154,37 @@ export async function movieLibrary(req, res) {
         res.send({'error': e.code})
     }
 }
-
+//fetches movie search name & magnet
+export async function movieSearch(req, res) {
+    try {
+        let search = req.params.search
+        let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search+'&sort_by=seeds')
+        let suc = stat.data.data.movies
+        let find = []
+        let torrents = []
+        for (let i in suc) {
+            let name = suc[i].title_long
+            for (let j in suc[i].torrents) {
+                torrents.push({
+                    'magnet': await createMagnet(suc[i].torrents[j].hash, name), 
+                    'seeders': suc[i].torrents[j].seeds, 
+                    'size': suc[i].torrents[j].size, 
+                    'quality': suc[i].torrents[j].quality})
+            }
+            find.push({
+                'title': name, 
+                'score': suc[i].rating,
+                'summary': suc[i].summary,
+                'year': suc[i].year,
+                'img': suc[i].medium_cover_image,
+                'runtime': suc[i].runtime,
+                'torrents': torrents
+            })
+        }
+        find = find.length ? find : 'no torrent found'
+        res.send(find)
+    } catch (e) { console.log(e.code)}
+}
 export async function animeInfo(req, res) {
     try {
         let name = req.params.search
@@ -179,28 +209,7 @@ export async function animeInfo(req, res) {
     } catch (e) {e.Error}
 }
 
-//fetches movie search name & magnet
-export async function movieSearch(req, res) {
-    try {
-        let search = req.params.search
-        let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search+'&sort_by=seeds')
-        let suc = stat.data.data.movies
-        let find = []
-        let torrents = []
-        for (let i in suc) {
-            let name = suc[i].title_long
-            for (let j in suc[i].torrents) {
-                let magnet = await createMagnet(suc[i].torrents[j].hash, name)
-                let seeders = suc[i].torrents[j].seeds
-                let size = suc[i].torrents[j].size
-                torrents.push({'magnet': magnet, 'seeders': seeders, 'size': size})
-            }
-            find.push({'name': name, 'torrents': torrents})
-        }
-        find = find.length ? find : 'no torrent found'
-        res.send(find)
-    } catch (e) { console.log(e.code)}
-}
+
 
 export async function movieInfo(req, res) {
     try {

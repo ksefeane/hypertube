@@ -5,15 +5,13 @@ import { jwtauth } from '../../controllers/userController'
 
 export default router
 
-//search
-//.get('/search', movieSearchLibrary)
-.get('/topvideos', topVideos)
 .get('/topmovies', movieLibrary)
-.get('/topanime', animeLibrary)
 .get('/movie/:search', sweep, movieSearch)
 
 
-
+//.get('/search', movieSearchLibrary)
+//.get('/topvideos', topVideos)
+//.get('/topanime', animeLibrary)
 // .get('/anime/:search', sweep, animeSearch)
 // .get('/local/:search', sweep, localSearch)
 // .get('/:search', jwtauth, sweep, allSearch)

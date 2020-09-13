@@ -33,7 +33,7 @@
                 <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
                 <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
             </form>
-            <input type="submit" value="Update Password" @click="update_password"><br>
+            <input type="submit" value="Update Password" @click="validate"><br>
         </div>
         
         <app-footer></app-footer>
@@ -44,7 +44,7 @@
 // import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
+import { secure_password } from "../functions/functions";
 import axios from 'axios'
 import jwt from 'njwt'
 export default {
@@ -66,6 +66,7 @@ export default {
             current_pass: '',
             new_pass: '',
             confirm_pass: '',
+            errors: []
         }
     },
     // computed: {
@@ -78,6 +79,20 @@ export default {
             this.selectedFile = event.target.files[0]
             // console.log(event)
             this.url = URL.createObjectURL(this.selectedFile)
+        },
+        validate() {
+            let check = secure_password(this.password)
+            if (check !== 'good') {
+                this.errors.push(check)
+                return
+            }
+            if (this.password != this.confirm_password) {
+                this.errors.push('Passwords do not match')
+                return
+            }
+            if (this.errors.length == 0) {
+                this.update_password()
+            }
         },
         uploadImage() {
             let type = this.selectedFile.type

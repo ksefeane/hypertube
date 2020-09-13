@@ -151,6 +151,19 @@ export default {
             this.update_details(data, 'email/')
             this.updates.push("Email updated")
         },
+        update_password() {
+            this.updates = []
+            let data = {
+                'username': this.username,
+                'old_pass': this.current_pass,
+                'new_pass': this.new_pass,
+                'confirm_pass': this.confirm_pass
+            }
+            this.update_details(data, 'password/')
+            this.current_pass = ''
+            this.new_pass = ''
+            this.confirm_pass = ''
+        },
         async getUserData() {
             let token = localStorage.getItem("jwt")
             let decode = await jwt.verify(token, 'secret')

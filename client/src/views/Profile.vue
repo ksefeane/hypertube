@@ -77,23 +77,22 @@ export default {
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             // console.log(event)
+            this.url = URL.createObjectURL(this.selectedFile)
         },
         uploadImage() {
-            console.log(this.selectedFile);
-            console.log(this.id)
             let type = this.selectedFile.type
-            // const url = ''
-            // console.log('name: ' + this.selectedFile.name);
-            // console.log('size: ' + this.selectedFile.size);
-            // console.log('type: ' + this.selectedFile.type);
-            // console.log(typeof type);
-            const path = 'http://localhost:5000/api/users/upload/' + this.id
+            var data = new FormData()
+            data.append('photo', this.selectedFile)
+            data.append('username', this.username)
+            let config = {
+                header: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            const path = 'http://localhost:5000/api/users/upload/'
             let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("We've got an IMAGE!")
-                axios.post(path, {
-                    'image': this.selectedFile
-                }).then((result) => {
+                axios.post(path, data, config).then((result) => {
                     console.log(result)
                 }).catch((error) => {
                     console.log(error)
@@ -101,10 +100,6 @@ export default {
             } else if (nn[0] === 'video') {
                 console.log("We've got a VIDEO!");
             }
-            // console.log(formData);
-            // axios.post(url, {
-            //     'image': this.selectedFile
-            // })
         },
         update_details(data, url) {
             this.updates = []

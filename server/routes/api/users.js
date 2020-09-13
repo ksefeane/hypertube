@@ -27,5 +27,6 @@ export default router
 .post('/update-email', changeEmail)
 .post('/update-last', changeLast)
 .post('/update-first', changeFirst)
+.post('/update-password', changePasswordProfile)
 
 //delete

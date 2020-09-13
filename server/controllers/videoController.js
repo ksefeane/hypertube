@@ -75,6 +75,7 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
+                console.log(fileSize)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)

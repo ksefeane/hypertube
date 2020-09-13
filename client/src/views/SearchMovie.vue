@@ -11,9 +11,9 @@
         <div v-if="found_movies">
             
             <div v-for="film in found_movies" v-bind:key="film" @click="send_info(film)">
-                <router-link v-bind:to="'/info/' + film.name">
-                    <h2>{{ film.name }}</h2>
-                <img :src="film.img" alt="">
+                <router-link v-bind:to="'/info/' + film.title">
+                    <h2>{{ film.title }}</h2>
+                <img :src="film.img" alt=""><br><br>
                 <!-- <br>
                 <small>Score: {{ film.rating }}</small> <br>
                 <small>Rating: {{ film.mpa_rating }}</small>

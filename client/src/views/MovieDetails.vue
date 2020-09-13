@@ -5,7 +5,7 @@
             <router-link to="/search">Search movies</router-link> | 
             <router-link to="/library">Library</router-link>  
             <div v-if="show">
-                <video controls :src="stream" height="600" width="900">
+                <video controls src="stream" height="600" width="900">
                 No video support
                 </video>
             </div>
@@ -78,13 +78,10 @@ export default {
     mounted() {
         EventBus.$on('movie_details', (data) => {
             this.film = data;
-            //console.log(data)
-            // alert('created')
         })
     },
     created() {
         this.movieinfo()
-        //this.download_film()
     },
 }
 </script>

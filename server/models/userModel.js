@@ -68,7 +68,6 @@ export async function signinOauth(token) {
     return ({'error': 'not authorized'})
 }
 export async function getuserDetails(username) {
-    console.log(username)
     let par = ['username', 'first_name', 'last_name', 'email']
     let pro = await q.fetchone('users', par, 'username', username)
     return (pro ? pro[0] : {'error': 'user not found'})
@@ -149,21 +148,4 @@ export async function updateLast(last_name, email) {
 export async function updateFirst(first_name, email) {
     var data = await q.update('users', ['first_name'], [first_name],'email', email)
     return data
-}
-
-export async function updatePassword(old_password, new_passworrd, username) {
-    var err = {"error": []}
-    let check = await q.fetchone('users', ['password'], 'username', username)
-    let verify = check ? await compare(old_password, check[0].password) : 0
-    let secure = securePassword(new_passworrd)
-    var valid = await Promise.all([secure])
-    for await (const v of valid) {
-        if (Object.keys(v)[0] === 'error')
-            err.error.push(v.error)
-    }
-    let newpass = err.error.length > 0 ? null : await hash(new_passworrd, 10)
-    if (!newpass) {
-        return err
-    }
-    return verify ? await q.update('users', ['password'], [newpass], 'username', username) : {'error': 'incorrect password'}
 }

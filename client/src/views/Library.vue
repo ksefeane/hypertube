@@ -55,9 +55,9 @@ export default {
     },
     methods:{
         getTodayMovieList: function() {
-            return axios.get('https://yts.mx/api/v2/list_movies.json')
+            return axios.get('https://localhost:5000/api/library/topmovies')
             .then((response) => { 
-                this.movies = response.data.data.movies;
+                this.movies = response.data;
                 this.no_of_movies = this.movies.length
                 console.log(this.movies)
             })

@@ -66,7 +66,7 @@ export default {
                 this.err.push(res.data.error)
             } else if (res.data.success) {
                 localStorage.setItem("jwt", res.data.success.token)
-                swal("success", "login successful", "success")
+                swal("", "welcome to hypertube "+this.username, "success")
                 this.$router.push(`/profile/${res.data.success.username}`)
                 //this.err.push(res.data.success)
             } else {

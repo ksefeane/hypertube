@@ -42,11 +42,10 @@ export default {
               url: 'http://localhost:5000/api/users/redirect/'+this.$route.query.t
           }
           let res = await axios(options).catch(e => {console.log(e)})
-          console.log(res.header)
           console.log(res.data)
           if (res.data.success) {
               localStorage.setItem("jwt", res.data.success.token)
-              sweet("success", "login successful", "success")
+              sweet(res.data.success.username, "welcome to hypertube", "success")
               this.$router.push(`/profile/${res.data.success.username}`)
           }
       }

@@ -15,5 +15,5 @@ export default router
 .get('/movieinfo/:search', movieInfo)
 
 //return top results
-.get('/topmovies', movieLibrary)
+.get('/topmovies/2', movieLibrary)
 .get('/topanime/:number', animeLibrary)

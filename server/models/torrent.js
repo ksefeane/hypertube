@@ -1,6 +1,6 @@
 import WebTorrent from 'webtorrent'
 import fs from 'fs'
-import { getExt, insertVideo, infoHash } from './videoModel'
+import { getExt, insertVideo, infoHash, sleep } from './videoModel'
 import q from './query'
 
 let client = new WebTorrent()
@@ -92,6 +92,7 @@ export async function infoTorrent(magnet) {
 
 
 export async function downloadTorrent(magnet) {
+    await sleep(3000)
     let info = []
     let tor = await streamable(magnet)
     if (tor.tor) {

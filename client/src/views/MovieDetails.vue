@@ -5,13 +5,13 @@
             <router-link to="/search">Search movies</router-link> | 
             <router-link to="/library">Library</router-link>  
             <div v-if="show">
-                <video controls :src="stream_movie(this.file_name)" height="400" width="700">
+                <video controls :src="stream" height="600" width="900">
                 No video support
                 </video>
             </div>
             <h1>{{ id }}</h1>
             <!-- <p>{{ film }}</p> -->
-            <img :src="film.img" alt="">
+            <img v-if="pic" :src="film.img" alt="">
             <br>
             <small v-for="torrent in film.torrents" :key="torrent">
                 <button @click="download_film(torrent.magnet)">{{torrent.quality}} - {{torrent.size}}</button>
@@ -45,8 +45,10 @@ export default {
             film: {},
             id: this.$route.params.id,
             show: false,
+            pic: true,
             stream: '',
             file_name: '',
+            magnet: ''
         }
     },
     methods: {
@@ -57,18 +59,21 @@ export default {
             this.film = mov.data[0]
         },
         async download_film(magnet) {
-            let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
-                 .catch(e => {console.log(e)})
-            console.log(mov.data)
-            this.file_name = mov.data.downloading
-            //console.log(this.film.)
-            // this.film = mov.data[0]
-            this.show = true
+            this.magnet = magnet
+            let status = null
+            while (!status) {
+                let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
+                    .catch(e => {console.log(e)})
+                if (mov.data.downloading) {
+                    status = mov.data.downloading
+                    console.log(mov.data.downloading)
+                    this.file_name = mov.data.downloading
+                    this.show = true
+                    this.pic = false
+                    this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+                }
+            }
         },
-        stream_movie() {
-            const path = 'http://localhost:5000/api/video/stream/' + this.file_name
-            return (path)
-        }
     },
     mounted() {
         EventBus.$on('movie_details', (data) => {

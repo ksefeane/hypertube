@@ -33,7 +33,7 @@
                 <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
                 <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
             </form>
-            <input type="submit" value="Update Password" @click="validate"><br>
+            <input type="submit" value="Update Password" @click="validate"><br><br>
         </div>
         
         <app-footer></app-footer>
@@ -81,12 +81,12 @@ export default {
             this.url = URL.createObjectURL(this.selectedFile)
         },
         validate() {
-            let check = secure_password(this.password)
+            let check = secure_password(this.new_pass)
             if (check !== 'good') {
                 this.errors.push(check)
                 return
             }
-            if (this.password != this.confirm_password) {
+            if (this.new_pass != this.confirm_pass) {
                 this.errors.push('Passwords do not match')
                 return
             }

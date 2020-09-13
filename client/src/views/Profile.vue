@@ -7,6 +7,13 @@
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
+            <div id="preview">
+                <img v-if="url" :src="url">
+            </div>
+            <form>
+                <input type="file" name="photo" id="" @change="onFileSelected">
+            </form>
+            <button @click="uploadImage">Upload</button>
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
@@ -15,19 +22,24 @@
                 <input type="text" v-model="last_name"> <br>
             </form>
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <form>
+            <!-- <form>
                 <input type="text" v-model="username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br>
+            <input type="submit" value="Update Username" @click="update_username"><br><br> -->
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
             <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
-            <router-link to="/update_password">Update Password</router-link><br>
-            <input type="file" name="" id="" @change="onFileSelected">
-            <button @click="uploadImage">Upload</button>
+            <!-- <router-link to="/update_password">Update Password</router-link><br> -->
+            
             <br><br>
+            <form>
+                <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
+                <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+            </form>
+            <input type="submit" value="Update Password" @click="validate"><br><br>
         </div>
         
         <app-footer></app-footer>
@@ -38,7 +50,7 @@
 // import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
+import { secure_password } from "../functions/functions";
 import axios from 'axios'
 import jwt from 'njwt'
 export default {
@@ -56,7 +68,12 @@ export default {
             last_name: '',
             message: '',
             selectedFile: null,
-            updates: []
+            updates: [],
+            current_pass: '',
+            new_pass: '',
+            confirm_pass: '',
+            errors: [],
+            url: null
         }
     },
     // computed: {
@@ -68,23 +85,36 @@ export default {
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             // console.log(event)
+            this.url = URL.createObjectURL(this.selectedFile)
+        },
+        validate() {
+            let check = secure_password(this.new_pass)
+            if (check !== 'good') {
+                this.errors.push(check)
+                return
+            }
+            if (this.new_pass != this.confirm_pass) {
+                this.errors.push('Passwords do not match')
+                return
+            }
+            if (this.errors.length == 0) {
+                this.update_password()
+            }
         },
         uploadImage() {
-            console.log(this.selectedFile);
-            console.log(this.id)
             let type = this.selectedFile.type
-            // const url = ''
-            // console.log('name: ' + this.selectedFile.name);
-            // console.log('size: ' + this.selectedFile.size);
-            // console.log('type: ' + this.selectedFile.type);
-            // console.log(typeof type);
-            const path = 'http://localhost:5000/api/users/upload/' + this.id
+            var data = new FormData()
+            data.append('photo', this.selectedFile)
+            data.append('username', this.username)
+            let config = {
+                header: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            const path = 'http://localhost:5000/api/users/upload/'
             let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("We've got an IMAGE!")
-                axios.post(path, {
-                    'image': this.selectedFile
-                }).then((result) => {
+                axios.post(path, data, config).then((result) => {
                     console.log(result)
                 }).catch((error) => {
                     console.log(error)
@@ -92,10 +122,6 @@ export default {
             } else if (nn[0] === 'video') {
                 console.log("We've got a VIDEO!");
             }
-            // console.log(formData);
-            // axios.post(url, {
-            //     'image': this.selectedFile
-            // })
         },
         update_details(data, url) {
             this.updates = []
@@ -142,6 +168,19 @@ export default {
             this.update_details(data, 'email/')
             this.updates.push("Email updated")
         },
+        update_password() {
+            this.updates = []
+            let data = {
+                'username': this.username,
+                'old_pass': this.current_pass,
+                'new_pass': this.new_pass,
+                'confirm_pass': this.confirm_pass
+            }
+            this.update_details(data, 'password/')
+            this.current_pass = ''
+            this.new_pass = ''
+            this.confirm_pass = ''
+        },
         async getUserData() {
             let token = localStorage.getItem("jwt")
             let decode = await jwt.verify(token, 'secret')
@@ -162,3 +201,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+#preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#preview img {
+  width: 200px;
+  height: 200px;
+}
+</style>

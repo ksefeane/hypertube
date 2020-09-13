@@ -155,7 +155,7 @@ export async function movieLibrary(req, res) {
     }
 }
 //fetches movie search name & magnet
-export async function movieSearch(req, res) {
+export async function movieDetails(req, res) {
     try {
         let search = req.params.search
         let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+search+'&sort_by=seeds')

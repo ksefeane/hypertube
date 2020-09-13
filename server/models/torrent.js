@@ -92,7 +92,7 @@ export async function infoTorrent(magnet) {
 
 
 export async function downloadTorrent(magnet) {
-    await sleep(3000)
+    await sleep(7000)
     let info = []
     let tor = await streamable(magnet)
     if (tor.tor) {
@@ -132,7 +132,7 @@ export async function downloadTorrent(magnet) {
 export async function streamable(magnet) {
     let info = {}
     info.tor = client.get(magnet) ? client.get(magnet) : 0
-    info.video = info.tor ? await infoHash(info.tor.infoHash) : 0
+    info.video = info.tor ? await infoHash(info.tor.infoHash) : {'name': 'waiting for download'}
     return (info)
 }
 

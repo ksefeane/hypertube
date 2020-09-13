@@ -30,6 +30,7 @@ var tables = {
 		" `name` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
         " `hash` varchar(100)," +
+        " `status` varchar(100)," +
         " `created` varchar(20)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"

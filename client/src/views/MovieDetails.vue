@@ -24,7 +24,7 @@
             <p>{{ film.summary }}</p>
             <!-- <button @click="download_film" v-if="!show">Download {{ id }}</button> -->
         </div>
-        <!-- <app-footer></app-footer> -->
+        <app-footer></app-footer>
     </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         async movieinfo() {
-            let mov = await axios.get('http://localhost:5000/api/library/movie/'+this.id)
+            let mov = await axios.get('http://localhost:5000/api/library/movieinfo/'+this.id)
                 .catch(e => {console.log(e)})
             //console.log(mov.data[0])
             this.film = mov.data[0]

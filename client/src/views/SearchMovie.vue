@@ -54,11 +54,10 @@ export default {
             }
         },
         search_movie() {
-           // const path = 'https://yts.mx/api/v2/list_movies.json'
-            const path = 'http://localhost:5000/api/library/animeinfo/'+this.movie
+            const path = 'http://localhost:5000/api/library/movieinfo/'+this.movie
             let options = {
                method: 'get',
-               headers: this.jwtHeader(),
+               //headers: this.jwtHeader(),
                url: path
            }
             axios(options).then((result) => {

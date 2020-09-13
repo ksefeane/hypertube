@@ -3,6 +3,9 @@
         <app-header></app-header>
             <div>
                 <h1>profile {{ username }}</h1>
+                <div v-for="update in updates" :key="update">
+                    <small>{{ update }}</small>
+                </div>
                 <div id="preview">
                     <img v-if="url" :src="url">
                 </div>
@@ -36,7 +39,6 @@
                     <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
                 </form>
                 <input type="submit" value="Update Password" @click="update_password"><br>
-                <!-- <router-link to="/update_password">Update Password</router-link><br> -->
                 <br><br>
             </div>
         <app-footer></app-footer>
@@ -44,7 +46,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -70,34 +71,16 @@ export default {
             selectedFile: null,
             updates: [],
             url: null,
-            test: null
         }
     },
-    // computed: {
-    //     initialise: function() {
-    //         this.uid = localStorage.getItem('user')
-    //     }
-    // },
     methods: {
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
-            this.test = event
-            console.log(this.selectedFile)
             this.url = URL.createObjectURL(this.selectedFile)
-            // console.log(event)
         },
         uploadImage() {
-            // console.log(this.selectedFile);
-            // console.log(this.id)
             let type = this.selectedFile.type
-            // const url = ''
-            // console.log('name: ' + this.selectedFile.name);
-            // console.log('size: ' + this.selectedFile.size);
-            // console.log('type: ' + this.selectedFile.type);
-            // console.log(typeof type);
             var data = new FormData()
-            // console.log(this.selectedFile.name)
-            // data.append('doo', 'test')
             data.append('photo', this.selectedFile)
             data.append('username', this.username)
             let config = {
@@ -183,7 +166,6 @@ export default {
                 url: 'http://localhost:5000/api/users/me/'+decode.body.name
             }
             let user = await axios(options)
-            // console.log(user.data)
             this.username = user.data.username
             this.email = user.data.email
             this.last_name = user.data.last_name

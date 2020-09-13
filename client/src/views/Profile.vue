@@ -7,6 +7,13 @@
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
+            <div id="preview">
+                <img v-if="url" :src="url">
+            </div>
+            <form>
+                <input type="file" name="photo" id="" @change="onFileSelected">
+            </form>
+            <button @click="uploadImage">Upload</button>
             <form>
                 <input type="text" v-model="first_name"> <br>
             </form>
@@ -15,18 +22,17 @@
                 <input type="text" v-model="last_name"> <br>
             </form>
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <form>
+            <!-- <form>
                 <input type="text" v-model="username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br>
+            <input type="submit" value="Update Username" @click="update_username"><br><br> -->
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
             <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
-            <router-link to="/update_password">Update Password</router-link><br>
-            <input type="file" name="" id="" @change="onFileSelected">
-            <button @click="uploadImage">Upload</button>
+            <!-- <router-link to="/update_password">Update Password</router-link><br> -->
+            
             <br><br>
             <form>
                 <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
@@ -66,7 +72,8 @@ export default {
             current_pass: '',
             new_pass: '',
             confirm_pass: '',
-            errors: []
+            errors: [],
+            url: null
         }
     },
     // computed: {
@@ -194,3 +201,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+#preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#preview img {
+  width: 200px;
+  height: 200px;
+}
+</style>

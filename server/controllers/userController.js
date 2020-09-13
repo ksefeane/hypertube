@@ -1,5 +1,5 @@
 import { 
-    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername
+    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -116,5 +116,14 @@ export async function changeFirst(req, res) {
     var email = req.body.email
     var first_name = req.body.first_name
     var stat = await updateFirst(first_name, email)
+    res.send(stat)
+}
+
+export async function changePasswordProfile(req, res) {
+    var username = req.body.username
+    var old_pass = req.body.old_pass
+    var new_pass = req.body.new_pass
+    var confirm_pass = req.body.confirm_pass
+    var stat = new_pass === confirm_pass ? await updatePassword(old_pass, new_pass, username) : {'error': 'passwords do not match'}
     res.send(stat)
 }

@@ -1,8 +1,9 @@
 import { Router } from 'express'
 const router = Router()
 import { 
-    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, changeLast, changePasswordProfile, changeUsername, jwtauth
+    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, changeLast, changeUsername, jwtauth
 } from '../../controllers/userController'
+import { changePasswordProfile } from '../../controllers/userController'
 import upload from '../../models/imageModel'
 import passport from 'passport'
 

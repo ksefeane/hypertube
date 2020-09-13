@@ -197,7 +197,7 @@ export async function animeInfo(req, res) {
         for (let i in jikan) {
             let date = jikan[i].start_date ? jikan[i].start_date.substring(0, 10) : null
             find.push({
-                "name": jikan[i].title,
+                "title": jikan[i].title,
                 "score": jikan[i].score,
                 "summary": jikan[i].synopsis,
                 "year": date ,

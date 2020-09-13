@@ -21,11 +21,8 @@ let gitClient = new Oauth2Strategy({
   clientSecret: keys.git.clientSecret,
   callbackURL: '/api/users/auth/redirect2'
 }, async (token, refreshToken, profile, callback) => {
-    profile.first_name = profile.name
-    
-    if (profile.email == null)
-      callback({'error': 'email not found'}, null)
-    callback(null, await findOrCreate(profile))
+  profile.first_name = profile.name
+  callback(null, await findOrCreate(profile))
 })
 
 ftClient.userProfile = function (accesstoken, done) {

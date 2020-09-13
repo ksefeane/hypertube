@@ -28,6 +28,12 @@
             <input type="file" name="" id="" @change="onFileSelected">
             <button @click="uploadImage">Upload</button>
             <br><br>
+            <form>
+                <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
+                <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+            </form>
+            <input type="submit" value="Update Password" @click="update_password"><br>
         </div>
         
         <app-footer></app-footer>
@@ -56,7 +62,10 @@ export default {
             last_name: '',
             message: '',
             selectedFile: null,
-            updates: []
+            updates: [],
+            current_pass: '',
+            new_pass: '',
+            confirm_pass: '',
         }
     },
     // computed: {

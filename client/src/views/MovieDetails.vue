@@ -5,7 +5,7 @@
             <router-link to="/search">Search movies</router-link> | 
             <router-link to="/library">Library</router-link>  
             <div v-if="show">
-                <video controls :src="stream">
+                <video controls :src="stream_movie(this.file_name)" height="400" width="700">
                 No video support
                 </video>
             </div>
@@ -14,7 +14,7 @@
             <img :src="film.img" alt="">
             <br>
             <small v-for="torrent in film.torrents" :key="torrent">
-                <button @click="download_film(torrent.magnet)" v-if="!show">{{torrent.quality}} - {{torrent.size}}</button>
+                <button @click="download_film(torrent.magnet)">{{torrent.quality}} - {{torrent.size}}</button>
             </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
             <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
@@ -45,7 +45,8 @@ export default {
             film: {},
             id: this.$route.params.id,
             show: false,
-            stream: ''
+            stream: '',
+            file_name: '',
         }
     },
     methods: {
@@ -59,16 +60,14 @@ export default {
             let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
                  .catch(e => {console.log(e)})
             console.log(mov.data)
+            this.file_name = mov.data.downloading
+            //console.log(this.film.)
             // this.film = mov.data[0]
-            //this.show = true
+            this.show = true
         },
         stream_movie() {
-            const path = 'http://localhost:5000/api/video/stream/' + this.id
-            axios.get(path, {
-                'movie': this.id
-            }).then((result) => {
-                console.log(result)
-            })
+            const path = 'http://localhost:5000/api/video/stream/' + this.file_name
+            return (path)
         }
     },
     mounted() {

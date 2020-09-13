@@ -8,7 +8,6 @@ const destination = 'server/public/videos/'
 export async function downloadMagnet(req, res, next) {
     var magnet = await magnetUrl(req.query)
     var torrent = await downloadTorrent(magnet)
-  //  var stat = await infoTorrent(magnet)
     console.log(torrent)
  //   console.log(stat)
     res.send(torrent)

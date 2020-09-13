@@ -1,6 +1,6 @@
 import WebTorrent from 'webtorrent'
 import fs from 'fs'
-import { getExt, insertVideo } from './videoModel'
+import { getExt, insertVideo, infoHash } from './videoModel'
 import q from './query'
 
 let client = new WebTorrent()
@@ -92,9 +92,10 @@ export async function infoTorrent(magnet) {
 
 
 export async function downloadTorrent(magnet) {
+    let info = []
     let tor = await streamable(magnet)
-    if (tor) {
-        return (tor.downloaded ? `downloading torrent ${tor.infoHash}` : `queued torrent ${tor.infoHash}`)
+    if (tor.tor) {
+        return (tor.tor.downloaded ? {'downloading':tor.video.name} : {'queue':tor.video.name})
     } else {
         client.add(magnet, (torrent) => {
             const files = torrent.files
@@ -102,7 +103,7 @@ export async function downloadTorrent(magnet) {
             files.forEach(async (file) => {
                 let ext = getExt(file.name)
                 if (ext == '.mkv' || ext == '.mp4' || ext == 'avi') {
-                    let db = await insertVideo(file.name, ext)
+                    let db = await insertVideo(file.name, ext, torrent.infoHash)
                     if (db == 0) {
                         const stream = file.createReadStream()
                         const save = fs.createWriteStream(dest+file.name)
@@ -128,8 +129,10 @@ export async function downloadTorrent(magnet) {
 }
 
 export async function streamable(magnet) {
-    let tor = client.get(magnet)
-    return (tor ? tor : 0)
+    let info = {}
+    info.tor = client.get(magnet) ? client.get(magnet) : 0
+    info.video = info.tor ? await infoHash(info.tor.infoHash) : 0
+    return (info)
 }
 
 export default client

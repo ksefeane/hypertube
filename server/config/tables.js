@@ -24,11 +24,12 @@ var tables = {
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
     ),
-    movies : (
+    videos : (
 		"CREATE TABLE `videos` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `name` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
+        " `hash` varchar(100)," +
         " `created` varchar(20)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"

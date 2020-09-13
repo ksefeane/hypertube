@@ -71,15 +71,20 @@ export async function maintainVideos(path) {
     return (find[0])
 }
 
-export async function insertVideo(name, ext) {
-    let params = ['name', 'ext', 'created']
+export async function insertVideo(name, ext, hash) {
+    let params = ['name', 'ext', 'hash', 'created']
     let created = new Date().getDate()
     let res = await q.fetchone('videos', 'name', 'name', name)
-    res ? 1 : q.insert('videos', params, [name, ext, created]) 
+    res ? 1 : q.insert('videos', params, [name, ext, hash, created]) 
     return (res ? 1 : 0)
 }
 
 export async function findVideo(name) {
     let find = await q.fetchregex('videos', 'name', 'name', name)
     return (find)
+}
+
+export async function infoHash(hash) {
+    let find = await q.fetchone('videos', 'name', 'hash', hash)
+    return (find ? find[0] : 0)
 }

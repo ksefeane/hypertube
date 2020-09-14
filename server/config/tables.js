@@ -29,7 +29,6 @@ var tables = {
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `title` varchar(100) NOT NULL," +
 		" `name` varchar(100) NOT NULL," +
-		" `title` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
         " `hash` varchar(100)," +
         " `status` varchar(100)," +

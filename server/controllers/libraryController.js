@@ -184,7 +184,7 @@ export async function movieDetails(req, res) {
         res.send(find)
     } catch (e) { console.log(e.code)}
 }
-export async function animeInfo(req, res) {
+export async function animeDetails(req, res) {
     try {
         let name = req.params.search
         name = name.length > 20 ? name.substring(0, 20) : name
@@ -200,7 +200,9 @@ export async function animeInfo(req, res) {
                 "score": jikan[i].score,
                 "summary": jikan[i].synopsis,
                 "year": date ,
-                "img": jikan[i].image_url
+                "img": jikan[i].image_url,
+                "runtime": '',
+                "torrents": '',
             })
         }
         res.send(find)

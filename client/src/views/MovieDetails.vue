@@ -56,8 +56,10 @@ export default {
         async movieinfo() {
             let mov = await axios.get('http://localhost:5000/api/library/movieinfo/'+this.id)
                 .catch(e => {console.log(e)})
-            //console.log(mov.data[0])
-            this.film = mov.data[0]
+            let ani = await axios.get('http://localhost:5000/api/library/animeinfo/'+this.id)
+                .catch(e => {console.log(e)})
+            let animatch = ani.data.find(el => el.title == this.id)
+            this.film = mov.data[0] || animatch
         },
         async download_film(magnet) {
             this.magnet = magnet

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { 
-    downloadMagnet, deleteVideo,
-    getInfo, streamVideo, streamState
+    downloadMagnet, deleteVideo, 
+    getInfo, streamVideo, streamState 
 } from '../../controllers/videoController'
 import { fetchComments, addNewComment } from "../../controllers/videoController";
 const router = Router()
@@ -14,8 +14,8 @@ export default router
 .get('/stream/:movie', streamVideo)
 
 //download 
-// .get('/downloadMagnet/:magnet', downloadMagnet)
-.post('/downloadMagnet/:magnet', downloadMagnet)
+.get('/downloadMagnet/:magnet', downloadMagnet)
+// .post('/downloadMagnet/:magnet', downloadMagnet)
 
 
 //.get('/downloadAnime/:search', downloadAnime)

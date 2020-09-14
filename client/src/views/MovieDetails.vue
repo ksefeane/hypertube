@@ -74,7 +74,12 @@ export default {
             file_name: '',
             magnet: '',
             type: '',
-            torrents: []
+            torrents: [],
+            errors:[],
+            success:[],
+            username: localStorage.getItem('user'),
+            comments: [],
+            comment_content:'',
         }
     },
     methods: {

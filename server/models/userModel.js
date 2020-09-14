@@ -104,7 +104,7 @@ function base64_encode(file) {
 }
 export async function uploadImage(user) {
     const tempPath = path.join(__dirname, '../public/uploads/temp/')
-    console.log(tempPath)
+    // console.log(tempPath)
     var base64str = base64_encode(tempPath + user + '.jpg')
     return (base64str)
 }
@@ -142,7 +142,7 @@ export async function fetchDetails(username) {
 
 export async function updateUsername(username, email) {
     var data = await q.update('users', ['username'], [username],'email', email)
-    return data
+    return {'username': username, 'data': data}
 }
 
 export async function updateEmail(username, email) {

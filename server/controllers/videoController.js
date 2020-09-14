@@ -82,7 +82,6 @@ export async function streamVideo(req, res) {
                     let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
                     let chunk = (end-start)+1
                     let stream = fs.createReadStream(path, {start, end})
-       //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
                     stream.on('open', () => {
                         res.writeHead(206, { 
                             "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
@@ -94,7 +93,6 @@ export async function streamVideo(req, res) {
                     });
                 } else {
                     let stream = fs.createReadStream(path)
-         //           getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
                     stream.on('open', () => {
                         res.writeHead(206, {
                             "Content-Length": fileSize,

@@ -2,10 +2,10 @@
     <div>
         <app-header></app-header>
         <div>
-            <router-link to="/search">Search movies</router-link> | 
+            <router-link to="/search">Search</router-link> | 
             <router-link to="/library">Library</router-link>  
             <div v-if="show">
-                <video controls src="stream" height="600" width="900">
+                <video controls :src="stream" height="500" width="900">
                 No video support
                 </video>
             </div>
@@ -46,6 +46,7 @@ export default {
             id: this.$route.params.id,
             show: false,
             pic: true,
+            ready: false,
             stream: '',
             file_name: '',
             magnet: ''
@@ -66,14 +67,20 @@ export default {
                     .catch(e => {console.log(e)})
                 if (mov.data.downloading) {
                     status = mov.data.downloading
-                    console.log(mov.data.downloading)
                     this.file_name = mov.data.downloading
-                    this.show = true
-                    this.pic = false
-                    this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+                    this.ready = true
+                    this.stream_movie()
                 }
             }
         },
+        stream_movie() {
+            if (this.ready) {
+                this.show = true
+                this.pic = false
+                this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+                console.log(this.stream)
+            }  
+        }
     },
     mounted() {
         EventBus.$on('movie_details', (data) => {
@@ -82,6 +89,7 @@ export default {
     },
     created() {
         this.movieinfo()
+        this.stream_movie()
     },
 }
 </script>

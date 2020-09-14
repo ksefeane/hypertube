@@ -181,7 +181,6 @@ export async function movieDetails(req, res) {
                 'torrents': torrents
             })
         }
-        find = find.length ? find : 'no torrent found'
         res.send(find)
     } catch (e) { console.log(e.code)}
 }
@@ -204,7 +203,6 @@ export async function animeInfo(req, res) {
                 "img": jikan[i].image_url
             })
         }
-        find = find.length > 0 ? find : []
         res.send(find)
     } catch (e) {e.Error}
 }

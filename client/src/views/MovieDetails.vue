@@ -65,7 +65,7 @@ export default {
         return {
             film: {},
             id: this.$route.params.id,
-            show: true,
+            show: false,
             pic: true,
             loading: false,
             ready: false,

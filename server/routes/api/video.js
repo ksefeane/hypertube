@@ -13,7 +13,7 @@ export default router
 .get('/status/:movie', streamState)
 .get('/stream/:movie', streamVideo)
 
-//download 
+//download torrent
 .get('/downloadMagnet/:magnet', downloadMagnet)
 // .post('/downloadMagnet/:magnet', downloadMagnet)
 
@@ -22,5 +22,6 @@ export default router
 //.get('/downloadMovie/:search', downloadMovie)
 
 // api for adding a comment
+// .post('/addcomment', addNewComment)
 .post('/addcomment', addNewComment)
 .post('/fetch-comments', fetchComments)

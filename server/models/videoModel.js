@@ -71,11 +71,11 @@ export async function maintainVideos(path) {
     return (find[0])
 }
 
-export async function insertVideo(name, ext, hash, title) {
-    let params = ['name', 'ext', 'hash', 'created', 'title']
+export async function insertVideo(title, name, ext, hash) {
+    let params = ['title', 'name', 'ext', 'hash', 'created']
     let created = new Date().getDate()
     let res = await q.fetchone('videos', 'name', 'name', name)
-    res ? 1 : q.insert('videos', params, [name, ext, hash, created, title]) 
+    res ? 1 : q.insert('videos', params, [title, name, ext, hash, created]) 
     return (res ? 1 : 0)
 }
 

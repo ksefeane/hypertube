@@ -7,8 +7,7 @@ import { newComment, getComments, sleep } from '../models/videoModel'
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
-    console.log(req.body)
-    var title = req.body.movie
+    var title = req.params.title
     var magnet = await magnetUrl(req.query)
     var torrent = await downloadTorrent(magnet, title)
     res.send(torrent)
@@ -74,10 +73,12 @@ export async function streamState(req, res) {
         if (err && err.code === 'ENOENT') {
             res.send({'error': err.code})
         } else {
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+
             stat.size > 10000000 ? res.send({'status': 'ready'}) : 
                 res.send({
                     'status': 'downloading', 
-                    'size': Number(stat.size/100).toFixed(0)+'kb'
+                    'size': Number(stat.size/1000).toFixed(0)+'kb'
                 })   
         }
     }) 
@@ -99,6 +100,7 @@ export async function streamVideo(req, res) {
                     let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
                     let chunk = (end-start)+1
                     let stream = fs.createReadStream(path, {start, end})
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
                     stream.on('open', () => {
                         res.writeHead(206, { 
                             "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
@@ -110,6 +112,7 @@ export async function streamVideo(req, res) {
                     });
                 } else {
                     let stream = fs.createReadStream(path)
+         //           getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
                     stream.on('open', () => {
                         res.writeHead(206, {
                             "Content-Length": fileSize,
@@ -119,7 +122,7 @@ export async function streamVideo(req, res) {
                     })
                }
             } catch (e) {
-                console.log({'error': e.code})
+                console.log(e)
             }  
         }
     })

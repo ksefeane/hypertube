@@ -65,7 +65,7 @@ export default {
         return {
             film: {},
             id: this.$route.params.id,
-            show: true,
+            show: false,
             pic: true,
             loading: false,
             ready: false,
@@ -107,7 +107,7 @@ export default {
             this.magnet = magnet
             let status = null
             while (!status) {
-                let mov = await axios.post('http://localhost:5000/api/video/downloadMagnet/'+magnet, {'movie': this.id})
+                let mov = await axios.get(`http://localhost:5000/api/video/downloadMagnet/${this.id}/${magnet}`)
                     .catch(e => {console.log(e)})
                 if (mov.data.downloading) {
                     status = mov.data.downloading

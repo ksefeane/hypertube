@@ -102,7 +102,7 @@ export async function downloadTorrent(magnet, title) {
             files.forEach(async (file) => {
                 let ext = getExt(file.name)
                 if (ext == '.mkv' || ext == '.mp4' || ext == 'avi') {
-                    let db = await insertVideo(file.name, ext, torrent.infoHash, title)
+                    let db = await insertVideo(title, file.name, ext, torrent.infoHash)
                     if (db == 0) {
                         const stream = file.createReadStream()
                         const save = fs.createWriteStream(dest+file.name)

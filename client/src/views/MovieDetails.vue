@@ -37,7 +37,6 @@
             </form>
             <button v-on:click="validate">Submit</button><br><br>
 
-            <p>{{ comment_content }}</p>
 
             <div id="comm">
                 <div v-for="comment in comments" v-bind:key="comment.id">
@@ -66,7 +65,7 @@ export default {
         return {
             film: {},
             id: this.$route.params.id,
-            show: false,
+            show: true,
             pic: true,
             loading: false,
             ready: false,
@@ -108,7 +107,7 @@ export default {
             this.magnet = magnet
             let status = null
             while (!status) {
-                let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
+                let mov = await axios.post('http://localhost:5000/api/video/downloadMagnet/'+magnet, {'movie': this.id})
                     .catch(e => {console.log(e)})
                 if (mov.data.downloading) {
                     status = mov.data.downloading
@@ -131,6 +130,7 @@ export default {
                 this.show = true
                 this.pic = false
                 this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+                this.fetchComments()
             }  
         },
         validate: function() {
@@ -151,7 +151,7 @@ export default {
             this.success = []
             const data = {
                 'username': this.username,
-                'movie': this.movie,
+                'movie': this.id,
                 'comment': this.comment_content,
                 'created_at': moment().format("YYYY-MM-DD HH:mm:ss")
             }
@@ -171,7 +171,7 @@ export default {
         },
         async fetchComments() {
             const data = {
-                'movie': this.movie
+                'movie': this.id
             }
             var results = await axios_post('/api/video/fetch-comments', data)
             if (results.data.error) {

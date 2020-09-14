@@ -7,8 +7,10 @@ import { newComment, getComments, sleep } from '../models/videoModel'
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
+    console.log(req.body)
+    var title = req.body.movie
     var magnet = await magnetUrl(req.query)
-    var torrent = await downloadTorrent(magnet)
+    var torrent = await downloadTorrent(magnet, title)
     res.send(torrent)
 }
 

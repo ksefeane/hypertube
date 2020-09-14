@@ -65,7 +65,7 @@ export default {
         return {
             film: {},
             id: this.$route.params.id,
-            show: true,
+            show: false,
             pic: true,
             loading: false,
             ready: false,
@@ -150,7 +150,7 @@ export default {
             this.success = []
             const data = {
                 'username': this.username,
-                'movie': this.id,
+                'movie': this.movie,
                 'comment': this.comment_content,
                 'created_at': moment().format("YYYY-MM-DD HH:mm:ss")
             }
@@ -170,7 +170,7 @@ export default {
         },
         async fetchComments() {
             const data = {
-                'movie': this.id
+                'movie': this.movie
             }
             var results = await axios_post('/api/video/fetch-comments', data)
             if (results.data.error) {

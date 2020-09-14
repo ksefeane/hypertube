@@ -13,8 +13,8 @@
             <!-- <p>{{ film }}</p> -->
             <img v-if="pic" :src="film.img" alt="">
             <br>
-            <small v-for="torrent in film.torrents" :key="torrent">
-                <button @click="download_film(torrent.magnet)">{{torrent.quality}} - {{torrent.size}}</button>
+            <small v-for="torrent in torrents" :key="torrent">
+                <button @click="download_film(torrent.magnet)">{{torrent.quality}} {{torrent.name}} {{torrent.size}}</button><br>
             </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
             <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
@@ -49,17 +49,33 @@ export default {
             ready: false,
             stream: '',
             file_name: '',
-            magnet: ''
+            magnet: '',
+            type: '',
+            torrents: []
         }
     },
     methods: {
         async movieinfo() {
+
             let mov = await axios.get('http://localhost:5000/api/library/movieinfo/'+this.id)
                 .catch(e => {console.log(e)})
             let ani = await axios.get('http://localhost:5000/api/library/animeinfo/'+this.id)
                 .catch(e => {console.log(e)})
-            let animatch = ani.data.find(el => el.title == this.id)
-            this.film = mov.data[0] || animatch
+            if (mov.data.length) {
+                this.film = mov.data[0]
+                this.torrents = mov.data[0].torrents
+                console.log(this.film)
+            } else {
+                this.film = ani.data.find(e => e.title == this.id)
+                this.animeTorrents()
+            }
+        },
+        async animeTorrents() {
+            let ani = await axios.get('http://localhost:5000/api/library/animetorrents/'+this.id)
+                .catch(e => {console.log(e)})
+            this.torrents = ani.data
+           // console.log(this.film.torrents)
+            console.log(ani.data)
         },
         async download_film(magnet) {
             this.magnet = magnet

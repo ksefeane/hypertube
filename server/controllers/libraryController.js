@@ -95,45 +95,6 @@ export async function allSearch(req, res) {
     }
 }
 
-//fetches anime by top seeder from nyaa.si
-export async function animeSearch(req, res) {
-    try {
-        let search = await si.search(req.params.search, 10, {sort: 'seeders'})
-        let find = []
-        for (let i in search) {
-            find.push({'name': search[i].name, 'size': search[i].filesize, 'seeders': search[i].seeders, 'magnet': search[i].magnet})
-        }
-        find = find.length > 0 ? find : 'no torrent found'
-        res.send(find)
-    } catch (e) {console.log(e.message)}
-}
-
-//find top 20 seeded anime 
-export async function animeLibrary(req, res) {
-    try {
-        let ani = await si.search('*', 5, {sort: 'seeders'})
-        let find = []
-        let titles = []
-        for (let i in ani) {
-            let name = await filterName(ani[i].name)
-            titles.push(name)
-        }
-        for (let i in titles) {
-            let jikan = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${titles[i]}`)
-            jikan = jikan.data.results
-            find.push({
-                'title': jikan[0].title,
-                'img': jikan[0].image_url,
-                'score': jikan[0].score,
-                'year': jikan[0].start_date.substring(0, 4)
-            })
-        }
-        res.send(find)
-    } catch (e) {
-        console.log(e)
-        res.send({'error': e.code})
-    }
-}
 export async function movieLibrary(req, res) {
     try {
         let mov = await axios.get('https://yts.mx/api/v2/list_movies.json')
@@ -178,7 +139,8 @@ export async function movieDetails(req, res) {
                 'year': suc[i].year,
                 'img': suc[i].medium_cover_image,
                 'runtime': suc[i].runtime,
-                'torrents': torrents
+                'torrents': torrents,
+                "type": 'movie'
             })
         }
         res.send(find)
@@ -201,15 +163,30 @@ export async function animeDetails(req, res) {
                 "summary": jikan[i].synopsis,
                 "year": date ,
                 "img": jikan[i].image_url,
-                "runtime": '',
-                "torrents": '',
+                "runtime": 0,
+                "type": 'anime'
             })
         }
         res.send(find)
     } catch (e) {e.Error}
 }
 
-
+//fetches anime by top seeder from nyaa.si
+export async function animeTorrents(req, res) {
+    try {
+        let search = await si.search(req.params.search, 5, {sort: 'seeders'})
+        let find = []
+        //console.log(search)
+        for (let i in search) {
+            find.push({
+                'name': search[i].name, 
+                'size': search[i].filesize, 
+                'seeders': search[i].seeders, 
+                'magnet': search[i].magnet})
+        }
+        res.send(find)
+    } catch (e) {console.log(e.message)}
+}
 
 export async function movieInfo(req, res) {
     try {

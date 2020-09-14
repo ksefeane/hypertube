@@ -2,8 +2,6 @@
     <div>
         <app-header></app-header>
         <div>
-            <router-link to="/search">Search</router-link> | 
-            <router-link to="/library">Library</router-link>  
             <div v-if="show">
                 <video controls :src="stream" height="500" width="900">
                 No video support
@@ -13,7 +11,7 @@
             <!-- <p>{{ film }}</p> -->
             <img v-if="pic" :src="film.img" alt="">
             <br>
-            <small v-for="torrent in torrents" :key="torrent">
+            <small v-for="(torrent, index) in torrents" :key="index">
                 <button @click="download_film(torrent.magnet)">{{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button><br>
             </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
@@ -101,7 +99,7 @@ export default {
                 .catch(e => {console.log(e)})
             this.torrents = ani.data
            // console.log(this.film.torrents)
-            console.log(ani.data)
+            // console.log(ani.data)
         },
         async download_film(magnet) {
             this.magnet = magnet

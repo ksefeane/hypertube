@@ -12,7 +12,8 @@ export default router
 .get('/status/:movie', streamState)
 .get('/stream/:movie', streamVideo)
 
-//download torrent
+//download 
+// .get('/downloadMagnet/:magnet', downloadMagnet)
 .post('/downloadMagnet/:magnet', downloadMagnet)
 
 

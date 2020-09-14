@@ -13,8 +13,8 @@
             <!-- <p>{{ film }}</p> -->
             <img v-if="pic" :src="film.img" alt="">
             <br>
-            <small v-for="torrent in film.torrents" :key="torrent">
-                <button @click="download_film(torrent.magnet)">{{torrent.quality}} - {{torrent.size}}</button>
+            <small v-for="torrent in torrents" :key="torrent">
+                <button @click="download_film(torrent.magnet)">{{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button><br>
             </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
             <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
@@ -30,15 +30,14 @@
 
 <script>
 import axios from "axios";
-
+import sweet from 'sweetalert'
 import Header from "../components/Header";
-// import Footer from "../components/Footer";
+import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
-
 export default {
     components: {
         'app-header': Header,
-        // 'app-footer': Footer,
+        'app-footer': Footer,
     },
     data() {
         return {
@@ -46,10 +45,13 @@ export default {
             id: this.$route.params.id,
             show: false,
             pic: true,
+            loading: false,
             ready: false,
             stream: '',
             file_name: '',
-            magnet: ''
+            magnet: '',
+            type: '',
+            torrents: []
         }
     },
     methods: {
@@ -58,8 +60,21 @@ export default {
                 .catch(e => {console.log(e)})
             let ani = await axios.get('http://localhost:5000/api/library/animeinfo/'+this.id)
                 .catch(e => {console.log(e)})
-            let animatch = ani.data.find(el => el.title == this.id)
-            this.film = mov.data[0] || animatch
+            if (mov.data.length) {
+                this.film = mov.data[0]
+                this.torrents = mov.data[0].torrents
+                console.log(this.film)
+            } else {
+                this.film = ani.data.find(e => e.title == this.id)
+                this.animeTorrents()
+            }
+        },
+        async animeTorrents() {
+            let ani = await axios.get('http://localhost:5000/api/library/animetorrents/'+this.id)
+                .catch(e => {console.log(e)})
+            this.torrents = ani.data
+           // console.log(this.film.torrents)
+            console.log(ani.data)
         },
         async download_film(magnet) {
             this.magnet = magnet
@@ -70,17 +85,24 @@ export default {
                 if (mov.data.downloading) {
                     status = mov.data.downloading
                     this.file_name = mov.data.downloading
-                    this.ready = true
+                    sweet("downloading", `${this.file_name}`)
                     this.stream_movie()
                 }
             }
         },
-        stream_movie() {
+        async stream_movie() {
+            while (!this.ready) {
+                console.log(this.file_name)
+                let vid = await axios.get('http://localhost:5000/api/video/status/'+this.file_name)
+                    .catch(e => {console.log(e)})
+                console.log(vid.data)
+                if (vid.data.status == 'ready')
+                    this.ready = true
+            }
             if (this.ready) {
                 this.show = true
                 this.pic = false
                 this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
-                console.log(this.stream)
             }  
         }
     },
@@ -91,7 +113,6 @@ export default {
     },
     created() {
         this.movieinfo()
-        this.stream_movie()
     },
 }
 </script>

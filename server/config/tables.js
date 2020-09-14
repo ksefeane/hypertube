@@ -34,6 +34,16 @@ var tables = {
         " `created` varchar(20)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
+	),
+	comments : (
+		"CREATE TABLE `comments` (" +
+		" `id` int(11) NOT NULL,"+
+		" `user_id` int(11) NOT NULL,"+
+		" `movie_id` int(11) NOT NULL,"+
+		" `content` longtext NOT NULL,"+
+		" `created_at` datetime NOT NULL,"+
+		" PRIMARY KEY (`id`)" +
+	  ") ENGINE=InnoDB"
 	)
 }	
 module.exports = tables;

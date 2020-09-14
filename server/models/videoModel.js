@@ -88,3 +88,22 @@ export async function infoHash(hash) {
     let find = await q.fetchone('videos', 'name', 'hash', hash)
     return (find ? find[0] : 0)
 }
+
+export async function newComment(username, movie, comment, date_time) {
+    const params = ['username', 'movie_id', 'content', 'created_at']
+    var movie_details = await q.fetchone('videos', 'id', 'name', movie)
+    // console.log(movie_details[0].id)
+    if (movie_details) {
+        const vals = [username, movie_details[0].id, comment, date_time]
+        return (await q.insert('comments', params, vals))
+    }
+    return ({'error': "No movie"})
+}
+
+export async function getComments(movie) {
+    var movie_details = await q.fetchone('videos', 'id', 'name', movie)
+    if (movie_details) {
+        return (await q.fetchone('comments', '*', 'movie_id', movie_details[0].id))
+    }
+    return ({'error': "No movie"})
+}

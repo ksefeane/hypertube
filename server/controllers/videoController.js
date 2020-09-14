@@ -2,15 +2,13 @@ import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../model
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
-import { newComment, getComments } from '../models/videoModel'
+import { newComment, getComments, sleep } from '../models/videoModel'
 
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
     var magnet = await magnetUrl(req.query)
     var torrent = await downloadTorrent(magnet)
-    console.log(torrent)
- //   console.log(stat)
     res.send(torrent)
 }
 
@@ -66,6 +64,23 @@ function streamMkv(stream, res, size) {
     }
 }
 
+export async function streamState(req, res) {
+    await sleep(3000)
+    let movie = req.params.movie
+    let path = destination+movie
+    fs.stat(path, (err, stat) => {
+        if (err && err.code === 'ENOENT') {
+            res.send({'error': err.code})
+        } else {
+            stat.size > 10000000 ? res.send({'status': 'ready'}) : 
+                res.send({
+                    'status': 'downloading', 
+                    'size': Number(stat.size/100).toFixed(0)+'kb'
+                })   
+        }
+    }) 
+}
+
 export async function streamVideo(req, res) {
     let movie = req.params.movie
     let path = destination+movie
@@ -76,7 +91,6 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
-                console.log(fileSize)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)
@@ -103,7 +117,7 @@ export async function streamVideo(req, res) {
                     })
                }
             } catch (e) {
-                console.log(e)
+                console.log({'error': e.code})
             }  
         }
     })

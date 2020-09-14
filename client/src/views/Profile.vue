@@ -12,7 +12,7 @@
                 <img :src="url">
             </div>
             <div id="preview2" v-else>
-                <img src='../../../server/public/uploads/temp/goku008.jpg' alt="error" @error="image_check" id="test">
+                <img src='' alt="error" @error="image_check" id="test">
             </div>
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">
@@ -76,7 +76,7 @@ export default {
             confirm_pass: '',
             errors: [],
             url: null,
-            pro_pic: '../../../server/public/uploads/temp/goku008.jpg',
+            pro_pic: '',
             imageAsBase64: ''
         }
     },

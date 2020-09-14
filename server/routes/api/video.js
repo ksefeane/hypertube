@@ -17,12 +17,11 @@ export default router
 .get('/downloadMagnet/:magnet', downloadMagnet)
 // .post('/downloadMagnet/:magnet', downloadMagnet)
 
+.post('/addcomment', addNewComment)
+.post('/fetch-comments', fetchComments)
 
 //.get('/downloadAnime/:search', downloadAnime)
 //.get('/downloadMovie/:search', downloadMovie)
 
 // api for adding a comment
 //.post('/addcomment', addNewComment)
-
-.post('/addcomment', addNewComment)
-.post('/fetch-comments', fetchComments)

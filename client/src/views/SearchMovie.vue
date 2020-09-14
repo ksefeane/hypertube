@@ -28,7 +28,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
 
-
 export default {
     components: {
         'app-header': Header,

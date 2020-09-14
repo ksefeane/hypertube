@@ -30,15 +30,15 @@
 
 <script>
 import axios from "axios";
-
+import sweet from 'sweetalert'
 import Header from "../components/Header";
-// import Footer from "../components/Footer";
+import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
 
 export default {
     components: {
         'app-header': Header,
-        // 'app-footer': Footer,
+        'app-footer': Footer,
     },
     data() {
         return {
@@ -87,6 +87,7 @@ export default {
                 if (mov.data.downloading) {
                     status = mov.data.downloading
                     this.file_name = mov.data.downloading
+                    sweet("downloading", `${this.file_name}`)
                     this.stream_movie()
                 }
             }
@@ -96,6 +97,7 @@ export default {
                 console.log(this.file_name)
                 let vid = await axios.get('http://localhost:5000/api/video/status/'+this.file_name)
                     .catch(e => {console.log(e)})
+                console.log(vid.data)
                 if (vid.data.status == 'ready')
                     this.ready = true
             }
@@ -103,7 +105,6 @@ export default {
                 this.show = true
                 this.pic = false
                 this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
-                console.log(this.stream)
             }  
         }
     },

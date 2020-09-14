@@ -22,6 +22,7 @@ export default router
 //.get('/downloadMovie/:search', downloadMovie)
 
 // api for adding a comment
-// .post('/addcomment', addNewComment)
+//.post('/addcomment', addNewComment)
+
 .post('/addcomment', addNewComment)
 .post('/fetch-comments', fetchComments)

@@ -29,6 +29,7 @@ var tables = {
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `title` varchar(100) NOT NULL," +
 		" `name` varchar(100) NOT NULL," +
+		" `title` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
         " `hash` varchar(100)," +
         " `status` varchar(100)," +
@@ -38,8 +39,8 @@ var tables = {
 	),
 	comments : (
 		"CREATE TABLE `comments` (" +
-		" `id` int(11) NOT NULL,"+
-		" `user_id` int(11) NOT NULL,"+
+		" `id` int(11) NOT NULL AUTO_INCREMENT,"+
+		" `username` varchar(20) NOT NULL,"+
 		" `movie_id` int(11) NOT NULL,"+
 		" `content` longtext NOT NULL,"+
 		" `created_at` datetime NOT NULL,"+

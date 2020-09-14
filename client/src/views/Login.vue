@@ -66,6 +66,7 @@ export default {
                 this.err.push(res.data.error)
             } else if (res.data.success) {
                 localStorage.setItem("jwt", res.data.success.token)
+                localStorage.setItem('user', this.username)
                 swal("", "welcome to hypertube "+this.username, "success")
                 this.$router.push(`/library`)
                 //this.err.push(res.data.success)

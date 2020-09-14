@@ -24,17 +24,38 @@
             <p>{{ film.summary }}</p>
             <!-- <button @click="download_film" v-if="!show">Download {{ id }}</button> -->
         </div>
+        <div v-if="show">
+            <form>
+            <div id="err" v-for="error in errors" v-bind:key="error">
+                <span>{{ error }}</span>
+            </div>
+            <div id="succ" v-for="succ in success" v-bind:key="succ">
+                <span>{{ succ }}</span>
+            </div>
+                <label for="comment">Comment </label><br>
+                <textarea v-model="comment_content" id="comment_content" name="comment_content" rows="4" cols="50" />
+            </form>
+            <button v-on:click="validate">Submit</button><br><br>
+
+
+            <div id="comm">
+                <div v-for="comment in comments" v-bind:key="comment.id">
+                    <p><i>{{ comment.created_at }}</i> <strong>{{ comment.username }}</strong>: {{ comment.content }}</p>
+                </div>
+            </div>
+        </div>
         <app-footer></app-footer>
     </div>
 </template>
 
 <script>
+import { axios_post } from "../functions/functions";
+import moment from 'moment';
 import axios from "axios";
 import sweet from 'sweetalert'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
-
 export default {
     components: {
         'app-header': Header,
@@ -52,12 +73,16 @@ export default {
             file_name: '',
             magnet: '',
             type: '',
-            torrents: []
+            torrents: [],
+            errors:[],
+            success:[],
+            username: localStorage.getItem('user'),
+            comments: [],
+            comment_content:'',
         }
     },
     methods: {
         async movieinfo() {
-
             let mov = await axios.get('http://localhost:5000/api/library/movieinfo/'+this.id)
                 .catch(e => {console.log(e)})
             let ani = await axios.get('http://localhost:5000/api/library/animeinfo/'+this.id)
@@ -105,7 +130,62 @@ export default {
                 this.show = true
                 this.pic = false
                 this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+                this.fetchComments()
             }  
+        },
+        validate: function() {
+            this.errors = []
+            if (this.comment_content.length < 1) {
+                this.errors.push('Comments must have at least 1 characters')
+                return
+            }
+            if (this.comment_content.length > 140) {
+                this.errors.push('Comments must have at most 140 characters')
+                return
+            }
+            if (this.errors.length == 0) {
+                this.addComment()
+            }
+        },
+        addComment: async function() {
+            this.success = []
+            const data = {
+                'username': this.username,
+                'movie': this.id,
+                'comment': this.comment_content,
+                'created_at': moment().format("YYYY-MM-DD HH:mm:ss")
+            }
+            // console.log(data)
+            var results = await axios_post('/api/video/addcomment', data)
+            if (results !== "Oops!") {
+                if (results.data.error) {
+                    this.errors.push(results.data.error)
+                } else if (results.data.affectedRows) {
+                    this.success.push("Comment Added!!!")
+                    this.fetchComments()
+                    this.clean_input()
+                }
+            } else {
+                this.errors.push("An unexpected error happened")
+            }   
+        },
+        async fetchComments() {
+            const data = {
+                'movie': this.id
+            }
+            var results = await axios_post('/api/video/fetch-comments', data)
+            if (results.data.error) {
+                this.errors.push(results.data.error)
+            } else {
+                this.comments = results.data
+            }
+        },
+        play_movie() {
+            this.play = true
+        },
+        clean_input() {
+            this.comment_content = '',
+            this.errors = []
         }
     },
     mounted() {

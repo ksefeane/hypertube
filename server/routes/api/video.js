@@ -3,6 +3,7 @@ import {
     downloadMagnet, deleteVideo, 
     getInfo, streamVideo, streamState 
 } from '../../controllers/videoController'
+import { fetchComments, addNewComment } from "../../controllers/videoController";
 const router = Router()
 
 export default router
@@ -15,6 +16,8 @@ export default router
 //download torrent
 .get('/downloadMagnet/:title/:magnet', downloadMagnet)
 
+.post('/addcomment', addNewComment)
+.post('/fetch-comments', fetchComments)
 
 //.get('/downloadAnime/:search', downloadAnime)
 //.get('/downloadMovie/:search', downloadMovie)

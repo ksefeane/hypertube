@@ -13,7 +13,7 @@ export default router
 .get('/stream/:movie', streamVideo)
 
 //download torrent
-.get('/downloadMagnet/:magnet', downloadMagnet)
+.post('/downloadMagnet/:magnet', downloadMagnet)
 
 
 //.get('/downloadAnime/:search', downloadAnime)

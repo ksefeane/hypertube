@@ -129,7 +129,6 @@ export async function streamVideo(req, res) {
 }
 
 export async function addNewComment(req, res) {
-    console.log(req.body)
     var username = req.body.username
     var movie = req.body.movie
     var comment = req.body.comment

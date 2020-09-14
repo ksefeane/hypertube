@@ -2,6 +2,7 @@ import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../model
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
+import { newComment, getComments } from '../models/videoModel'
 
 const destination = 'server/public/videos/'
 
@@ -106,4 +107,20 @@ export async function streamVideo(req, res) {
             }  
         }
     })
+}
+
+export async function addNewComment(req, res) {
+    console.log(req.body)
+    var username = req.body.username
+    var movie = req.body.movie
+    var comment = req.body.comment
+    var date_time = req.body.created_at
+    var stat = await newComment(username, movie, comment, date_time)
+    res.send(stat)
+}
+
+export async function fetchComments(req, res) {
+    var movie = req.body.movie
+    var stat = await getComments(movie)
+    res.send(stat)
 }

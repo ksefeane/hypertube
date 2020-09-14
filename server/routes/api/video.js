@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { 
-    downloadMagnet, downloadMovie, downloadAnime, deleteVideo, 
-    getInfo, streamVideo 
+    downloadMagnet, downloadMovie, downloadAnime, deleteVideo, addNewComment,
+    getInfo, streamVideo, fetchComments 
 } from '../../controllers/videoController'
 const router = Router()
 
@@ -17,4 +17,5 @@ export default router
 .get('/downloadMovie/:search', downloadMovie)
 
 // api for adding a comment
-//.post('/addcomment', addNewComment)
+.post('/addcomment', addNewComment)
+.post('/fetch-comments', fetchComments)

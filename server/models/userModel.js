@@ -3,6 +3,8 @@ import { hash, compare } from 'bcrypt'
 import crypto from 'crypto'
 import { validString, securePassword, validEmail, createToken } from './securityModel'
 import { sendEmail } from './emailModel'
+import fs from 'fs'
+import path from 'path'
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password']
 
@@ -94,9 +96,17 @@ export async function fetchUser(uid) {
     var user = await q.fetchone('users', ['id', 'username'], 'id', uid)
     return (user[0])
 }
+function base64_encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+}
 export async function uploadImage(user) {
-    console.log(user)
-    return ('soon')
+    const tempPath = path.join(__dirname, '../public/uploads/temp/')
+    console.log(tempPath)
+    var base64str = base64_encode(tempPath + user + '.jpg')
+    return (base64str)
 }
 export async function sendEmailLink(username) {
     // var token = await hash(Math.random.toString(36).substring(8), 10)

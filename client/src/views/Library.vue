@@ -3,7 +3,6 @@
         <app-header></app-header>
         
         <router-link to="/search">Search movies</router-link><br>
-        <a @click="logout"> Logout</a>
         <h2>Today Movies</h2>
         <!-- <router-link to="/">Home</router-link>  -->
         <div v-if="movies">
@@ -15,10 +14,10 @@
             <div class="col" v-for="film in paginated_movies" :key="film" @click="send_info(film)">
                 <router-link v-bind:to="'/info/' + film.title">
                     <div class="card" style="width: 18rem;"  >
-                        <img class="card-img-top" :src="film.medium_cover_image" alt="Card image cap">
+                        <img class="card-img-top" :src="film.img" alt="Card image cap">
                         <div class="card-body">
                             <h3 class="card-title">{{ film.title }}</h3>
-                            <p><small>Score: {{ film.rating }}</small> </p>
+                            <p><small>Score: {{ film.score }}</small> </p>
                             <p>Year: {{ film.year }}</p>
                             <p>Runtime: {{ film.runtime }} minutes</p>
                         </div>
@@ -54,16 +53,16 @@ export default {
       }
     },
     methods:{
-        getTodayMovieList: function() {
-            return axios.get('https://localhost:5000/api/library/topmovies')
-            .then((response) => { 
-                this.movies = response.data;
+        // async getVideos() {
+        //     let res = await axios.get('http://localhost:5000/api/')
+        // },
+        getTodayMovieList: async function() {
+            let res = await axios.get('http://localhost:5000/api/library/topmovies')
+            .catch((e) => {console.log(e)})
+                console.log(res.data)
+                this.movies = res.data
                 this.no_of_movies = this.movies.length
-                console.log(this.movies)
-            })
-            .catch((error) => {
-                throw error.response.data;
-            });
+               // console.log(this.movies)
         },
         logout() {
             localStorage.removeItem("jwt")

@@ -8,7 +8,6 @@ const destination = 'server/public/videos/'
 export async function downloadMagnet(req, res, next) {
     var magnet = await magnetUrl(req.query)
     var torrent = await downloadTorrent(magnet)
-  //  var stat = await infoTorrent(magnet)
     console.log(torrent)
  //   console.log(stat)
     res.send(torrent)
@@ -73,35 +72,40 @@ export async function streamVideo(req, res) {
         if (err && err.code === 'ENOENT') {
             res.sendStatus(404)
         } else {
-            const fileSize = stat.size
-            let range = req.headers.range
-            if (range) {
-                let parts = range.replace(/bytes=/,'').split('-')
-                let start = parseInt(parts[0], 10)
-                let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
-                let chunk = (end-start)+1
-                let stream = fs.createReadStream(path, {start, end})
-   //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
-                stream.on('open', () => {
-                    res.writeHead(206, { 
-                        "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
-                        "Accept-Ranges":"bytes",
-                        "Content-Length": chunk,
-                        "Content-Type":"new/mp4"
+            try {
+                const fileSize = stat.size
+                let range = req.headers.range
+                console.log(fileSize)
+                if (range) {
+                    let parts = range.replace(/bytes=/,'').split('-')
+                    let start = parseInt(parts[0], 10)
+                    let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
+                    let chunk = (end-start)+1
+                    let stream = fs.createReadStream(path, {start, end})
+       //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+                    stream.on('open', () => {
+                        res.writeHead(206, { 
+                            "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
+                            "Accept-Ranges":"bytes",
+                            "Content-Length": chunk,
+                            "Content-Type":"new/mp4"
+                        })
+                        stream.pipe(res);
+                    });
+                } else {
+                    let stream = fs.createReadStream(path)
+         //           getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
+                    stream.on('open', () => {
+                        res.writeHead(206, {
+                            "Content-Length": fileSize,
+                            "Content-Type": "new/mp4"
+                        })
+                        stream.pipe(res)
                     })
-                    stream.pipe(res);
-                });
-            } else {
-                let stream = fs.createReadStream(path)
-     //           getExt(movie) === '.mkv' ? streamMkv(stream, res, fileSize) : 0
-                stream.on('open', () => {
-                    res.writeHead(206, {
-                        "Content-Length": fileSize,
-                        "Content-Type": "new/mp4"
-                    })
-                    stream.pipe(res)
-                })
-           }
+               }
+            } catch (e) {
+                console.log(e)
+            }  
         }
     })
 }

@@ -1,19 +1,24 @@
 import { Router } from 'express'
 const router = Router()
-import { movieSearch, animeLibrary, animeSearch, movieLibrary, animeInfo, movieInfo, localSearch, allSearch, sweep } from '../../controllers/libraryController'
+import {
+    sweep, movieLibrary, movieDetails, animeInfo, animeSearch 
+} from '../../controllers/libraryController'
 import { jwtauth } from '../../controllers/userController'
 
 export default router
 
-//search
+.get('/topmovies', movieLibrary)
+.get('/movieinfo/:search', sweep, movieDetails)
+.get('/animeinfo/:search', sweep, animeInfo)
+
 //.get('/search', movieSearchLibrary)
-.get('/anime/:search', sweep, animeSearch)
-.get('/movie/:search', sweep, movieSearch)
-.get('/local/:search', sweep, localSearch)
-.get('/:search', jwtauth, sweep, allSearch)
-.get('/animeinfo/:search', jwtauth, animeInfo)
-.get('/movieinfo/:search', movieInfo)
+//.get('/topvideos', topVideos)
+//.get('/topanime', animeLibrary)
+// .get('/anime/:search', sweep, animeSearch)
+// .get('/local/:search', sweep, localSearch)
+// .get('/:search', jwtauth, sweep, allSearch)
+// .get('/animeinfo/:search', jwtauth, animeInfo)
+//.get('/movieinfo/:search', movieInfo)
 
 //return top results
-.get('/topmovies/2', movieLibrary)
-.get('/topanime/:number', animeLibrary)
+//.get('/topanime/:number', animeLibrary)

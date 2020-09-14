@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 		callback(null, tempPath+'/temp')
 	},
 	filename: (req, file, callback) => {
-		var save = `${req.user.username}`
+		var save = "user.jpg"
 		callback(null, save)
 	}
 })

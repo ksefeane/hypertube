@@ -24,6 +24,27 @@
             <p>{{ film.summary }}</p>
             <!-- <button @click="download_film" v-if="!show">Download {{ id }}</button> -->
         </div>
+        <div v-if="show">
+            <form>
+            <div id="err" v-for="error in errors" v-bind:key="error">
+                <span>{{ error }}</span>
+            </div>
+            <div id="succ" v-for="succ in success" v-bind:key="succ">
+                <span>{{ succ }}</span>
+            </div>
+                <label for="comment">Comment </label><br>
+                <textarea v-model="comment_content" id="comment_content" name="comment_content" rows="4" cols="50" />
+            </form>
+            <button v-on:click="validate">Submit</button><br><br>
+
+            <p>{{ comment_content }}</p>
+
+            <div id="comm">
+                <div v-for="comment in comments" v-bind:key="comment.id">
+                    <p><i>{{ comment.created_at }}</i> <strong>{{ comment.username }}</strong>: {{ comment.content }}</p>
+                </div>
+            </div>
+        </div>
         <app-footer></app-footer>
     </div>
 </template>

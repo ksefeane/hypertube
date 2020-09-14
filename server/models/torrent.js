@@ -89,7 +89,7 @@ export async function infoTorrent(magnet) {
     return (stat.destination.length > 0 ? stat : '\ninitializing torrent: '+torrent.infoHash)    
 }
 
-export async function downloadTorrent(magnet) {
+export async function downloadTorrent(magnet, title) {
     await sleep(7000)
     let info = []
     let tor = await streamable(magnet)
@@ -102,7 +102,7 @@ export async function downloadTorrent(magnet) {
             files.forEach(async (file) => {
                 let ext = getExt(file.name)
                 if (ext == '.mkv' || ext == '.mp4' || ext == 'avi') {
-                    let db = await insertVideo(file.name, ext, torrent.infoHash)
+                    let db = await insertVideo(title, file.name, ext, torrent.infoHash)
                     if (db == 0) {
                         const stream = file.createReadStream()
                         const save = fs.createWriteStream(dest+file.name)

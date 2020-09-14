@@ -7,8 +7,9 @@ import { sleep } from '../models/videoModel'
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
+    var title = req.params.title
     var magnet = await magnetUrl(req.query)
-    var torrent = await downloadTorrent(magnet)
+    var torrent = await downloadTorrent(magnet, title)
     res.send(torrent)
 }
 
@@ -72,10 +73,12 @@ export async function streamState(req, res) {
         if (err && err.code === 'ENOENT') {
             res.send({'error': err.code})
         } else {
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+
             stat.size > 10000000 ? res.send({'status': 'ready'}) : 
                 res.send({
                     'status': 'downloading', 
-                    'size': Number(stat.size/100).toFixed(0)+'kb'
+                    'size': Number(stat.size/1000).toFixed(0)+'kb'
                 })   
         }
     }) 
@@ -91,14 +94,13 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
-                console.log(fileSize)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)
                     let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
                     let chunk = (end-start)+1
                     let stream = fs.createReadStream(path, {start, end})
-       //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
                     stream.on('open', () => {
                         res.writeHead(206, { 
                             "Content-Range": `bytes ${start}-${end}/${fileSize}`, 

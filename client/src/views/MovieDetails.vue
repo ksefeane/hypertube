@@ -82,7 +82,7 @@ export default {
             this.magnet = magnet
             let status = null
             while (!status) {
-                let mov = await axios.get('http://localhost:5000/api/video/downloadMagnet/'+magnet)
+                let mov = await axios.get(`http://localhost:5000/api/video/downloadMagnet/${this.id}/${magnet}`)
                     .catch(e => {console.log(e)})
                 if (mov.data.downloading) {
                     status = mov.data.downloading

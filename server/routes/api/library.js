@@ -7,7 +7,7 @@ import { jwtauth } from '../../controllers/userController'
 
 export default router
 
-.get('/topmovies', movieLibrary)
+.get('/topmovies', sweep, movieLibrary)
 .get('/movieinfo/:search', sweep, movieDetails)
 .get('/animeinfo/:search', sweep, animeDetails)
 .get('/animetorrents/:search', animeTorrents)

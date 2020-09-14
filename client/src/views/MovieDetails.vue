@@ -14,7 +14,7 @@
             <img v-if="pic" :src="film.img" alt="">
             <br>
             <small v-for="torrent in torrents" :key="torrent">
-                <button @click="download_film(torrent.magnet)">{{torrent.quality}} {{torrent.name}} {{torrent.size}}</button><br>
+                <button @click="download_film(torrent.magnet)">{{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button><br>
             </small><br><br>
             <small>Score: {{ film.score }}</small> <br>
             <!-- <small>Rating: {{ film.mpa_rating }}</small> -->
@@ -46,6 +46,7 @@ export default {
             id: this.$route.params.id,
             show: false,
             pic: true,
+            loading: false,
             ready: false,
             stream: '',
             file_name: '',
@@ -86,12 +87,18 @@ export default {
                 if (mov.data.downloading) {
                     status = mov.data.downloading
                     this.file_name = mov.data.downloading
-                    this.ready = true
                     this.stream_movie()
                 }
             }
         },
-        stream_movie() {
+        async stream_movie() {
+            while (!this.ready) {
+                console.log(this.file_name)
+                let vid = await axios.get('http://localhost:5000/api/video/status/'+this.file_name)
+                    .catch(e => {console.log(e)})
+                if (vid.data.status == 'ready')
+                    this.ready = true
+            }
             if (this.ready) {
                 this.show = true
                 this.pic = false
@@ -107,7 +114,6 @@ export default {
     },
     created() {
         this.movieinfo()
-        this.stream_movie()
     },
 }
 </script>

@@ -89,8 +89,6 @@ export async function infoTorrent(magnet) {
     return (stat.destination.length > 0 ? stat : '\ninitializing torrent: '+torrent.infoHash)    
 }
 
-
-
 export async function downloadTorrent(magnet) {
     await sleep(7000)
     let info = []

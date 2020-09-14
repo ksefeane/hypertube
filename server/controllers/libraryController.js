@@ -174,7 +174,7 @@ export async function animeDetails(req, res) {
 //fetches anime by top seeder from nyaa.si
 export async function animeTorrents(req, res) {
     try {
-        let search = await si.search(req.params.search, 5, {sort: 'seeders'})
+        let search = await si.search(req.params.search, 10, {sort: 'seeders'})
         let find = []
         //console.log(search)
         for (let i in search) {

@@ -65,7 +65,7 @@ export default {
         return {
             film: {},
             id: this.$route.params.id,
-            show: false,
+            show: true,
             pic: true,
             loading: false,
             ready: false,
@@ -91,7 +91,6 @@ export default {
             if (mov.data.length) {
                 this.film = mov.data[0]
                 this.torrents = mov.data[0].torrents
-                console.log(this.torrents)
                 console.log(this.film)
             } else {
                 this.film = ani.data.find(e => e.title == this.id)
@@ -148,7 +147,6 @@ export default {
             }
         },
         addComment: async function() {
-            console.log(this.film.title)
             this.success = []
             const data = {
                 'username': this.username,
@@ -166,7 +164,6 @@ export default {
                     this.fetchComments()
                     this.clean_input()
                 }
-                console.log(results)
             } else {
                 this.errors.push("An unexpected error happened")
             }   

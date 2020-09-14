@@ -1,8 +1,9 @@
 import { Router } from 'express'
 import { 
-    downloadMagnet, deleteVideo, addNewComment,
-    getInfo, streamVideo, streamState, fetchComments 
+    downloadMagnet, deleteVideo,
+    getInfo, streamVideo, streamState
 } from '../../controllers/videoController'
+import { fetchComments, addNewComment } from "../../controllers/videoController";
 const router = Router()
 
 export default router

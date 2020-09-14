@@ -2,13 +2,17 @@
     <div>
         <app-header></app-header>
         <div>
+            <router-link to="/library">Library</router-link>
             <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
-            <div id="preview">
-                <img v-if="url" :src="url">
+            <div id="preview" v-if="url">
+                <img :src="url">
+            </div>
+            <div id="preview2" v-else>
+                <img src='../../../server/public/uploads/temp/goku008.jpg' alt="error" @error="image_check" id="test">
             </div>
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">
@@ -32,8 +36,6 @@
             <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
             <!-- <router-link to="/update_password">Update Password</router-link><br> -->
-            
-            <br><br>
             <form>
                 <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
                 <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
@@ -73,7 +75,9 @@ export default {
             new_pass: '',
             confirm_pass: '',
             errors: [],
-            url: null
+            url: null,
+            pro_pic: '../../../server/public/uploads/temp/goku008.jpg',
+            imageAsBase64: ''
         }
     },
     // computed: {
@@ -82,10 +86,15 @@ export default {
     //     }
     // },
     methods: {
+        image_check(event) {
+            console.log(event)
+            test_stuff()
+        },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             // console.log(event)
-            this.url = URL.createObjectURL(this.selectedFile)
+            this.url = URL.createObjectURL(this.selectedFile) 
+            // this.pro_pic = null
         },
         validate() {
             let check = secure_password(this.new_pass)
@@ -102,6 +111,10 @@ export default {
             }
         },
         uploadImage() {
+            if (!this.selectedFile) {
+                this.errors.push("Select image")
+                return
+            }
             let type = this.selectedFile.type
             var data = new FormData()
             data.append('photo', this.selectedFile)
@@ -111,11 +124,14 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }
-            const path = 'http://localhost:5000/api/users/upload/'
+            const path = 'http://localhost:5000/api/users/upload?username=' + this.username
             let nn = type.split('/')
             if (nn[0] === 'image') {
                 axios.post(path, data, config).then((result) => {
+                    this.message = result
                     console.log(result)
+                    // this.imageAsBase64 = result.data
+                    // this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -194,11 +210,17 @@ export default {
             this.email = user.data.email
             this.last_name = user.data.last_name
             this.first_name = user.data.first_name
+            localStorage.setItem('user', this.username)
         }
     },
     created() {
         this.getUserData()
     }
+}
+
+function test_stuff() {
+    var x = document.getElementById("test")
+    console.log(x.src)
 }
 </script>
 
@@ -209,6 +231,15 @@ export default {
   align-items: center;
 }
 #preview img {
+  width: 200px;
+  height: 200px;
+}
+#preview2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#preview2 img {
   width: 200px;
   height: 200px;
 }

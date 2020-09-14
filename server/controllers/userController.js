@@ -86,7 +86,8 @@ export async function uploadPhoto(req, res) {
         var stat = await uploadImage(req.user)
     } else {
         console.log('image uploaded')
-        var stat = await uploadImage(req.user)
+        var stat = await uploadImage(req.body.username)
+        // console.log(stat)
         res.send(stat)
     }
 }

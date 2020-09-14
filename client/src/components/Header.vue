@@ -29,6 +29,7 @@ export default {
     methods: {
         logout() {
             localStorage.removeItem("jwt")
+            localStorage.removeItem('user')
             swal("success", "logged out", "success")
             this.$router.push('/login')
         },

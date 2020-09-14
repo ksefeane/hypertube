@@ -28,6 +28,7 @@ var tables = {
 		"CREATE TABLE `videos` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `name` varchar(100) NOT NULL," +
+		" `title` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
         " `hash` varchar(100)," +
         " `status` varchar(100)," +

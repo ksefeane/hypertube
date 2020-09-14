@@ -2,14 +2,14 @@ import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../model
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
+import { newComment, getComments, sleep } from '../models/videoModel'
 
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
+    var title = req.params.title
     var magnet = await magnetUrl(req.query)
-    var torrent = await downloadTorrent(magnet)
-    console.log(torrent)
- //   console.log(stat)
+    var torrent = await downloadTorrent(magnet, title)
     res.send(torrent)
 }
 
@@ -65,6 +65,25 @@ function streamMkv(stream, res, size) {
     }
 }
 
+export async function streamState(req, res) {
+    await sleep(3000)
+    let movie = req.params.movie
+    let path = destination+movie
+    fs.stat(path, (err, stat) => {
+        if (err && err.code === 'ENOENT') {
+            res.send({'error': err.code})
+        } else {
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+
+            stat.size > 10000000 ? res.send({'status': 'ready'}) : 
+                res.send({
+                    'status': 'downloading', 
+                    'size': Number(stat.size/1000).toFixed(0)+'kb'
+                })   
+        }
+    }) 
+}
+
 export async function streamVideo(req, res) {
     let movie = req.params.movie
     let path = destination+movie
@@ -75,14 +94,13 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
-                console.log(fileSize)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)
                     let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1
                     let chunk = (end-start)+1
                     let stream = fs.createReadStream(path, {start, end})
-       //             getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
+       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
                     stream.on('open', () => {
                         res.writeHead(206, { 
                             "Content-Range": `bytes ${start}-${end}/${fileSize}`, 
@@ -108,4 +126,20 @@ export async function streamVideo(req, res) {
             }  
         }
     })
+}
+
+export async function addNewComment(req, res) {
+    console.log(req.body)
+    var username = req.body.username
+    var movie = req.body.movie
+    var comment = req.body.comment
+    var date_time = req.body.created_at
+    var stat = await newComment(username, movie, comment, date_time)
+    res.send(stat)
+}
+
+export async function fetchComments(req, res) {
+    var movie = req.body.movie
+    var stat = await getComments(movie)
+    res.send(stat)
 }

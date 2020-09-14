@@ -71,11 +71,11 @@ export async function maintainVideos(path) {
     return (find[0])
 }
 
-export async function insertVideo(name, ext, hash) {
-    let params = ['name', 'ext', 'hash', 'created']
+export async function insertVideo(title, name, ext, hash) {
+    let params = ['title', 'name', 'ext', 'hash', 'created']
     let created = new Date().getDate()
     let res = await q.fetchone('videos', 'name', 'name', name)
-    res ? 1 : q.insert('videos', params, [name, ext, hash, created]) 
+    res ? 1 : q.insert('videos', params, [title, name, ext, hash, created]) 
     return (res ? 1 : 0)
 }
 
@@ -87,4 +87,23 @@ export async function findVideo(name) {
 export async function infoHash(hash) {
     let find = await q.fetchone('videos', 'name', 'hash', hash)
     return (find ? find[0] : 0)
+}
+
+export async function newComment(username, movie, comment, date_time) {
+    const params = ['username', 'movie_id', 'content', 'created_at']
+    var movie_details = await q.fetchone('videos', 'id', 'title', movie)
+    // console.log(movie_details[0].id)
+    if (movie_details) {
+        const vals = [username, movie_details[0].id, comment, date_time]
+        return (await q.insert('comments', params, vals))
+    }
+    return ({'error': "No movie"})
+}
+
+export async function getComments(movie) {
+    var movie_details = await q.fetchone('videos', 'id', 'title', movie)
+    if (movie_details) {
+        return (await q.fetchone('comments', '*', 'movie_id', movie_details[0].id))
+    }
+    return ({'error': "No movie"})
 }

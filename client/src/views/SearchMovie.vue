@@ -3,7 +3,7 @@
         <app-header></app-header>
         <router-link to="/library">Library</router-link> 
         <form>
-            <input type="text" name="" id="" placeholder="Enter movie name" v-model="movie">
+            <input type="text" name="" id="" placeholder="search for..." v-model="movie">
         </form>
         <button @click="search_movie">Search</button>
         <br>
@@ -14,13 +14,6 @@
                 <router-link v-bind:to="'/info/' + film.title">
                     <h2>{{ film.title }}</h2>
                 <img :src="film.img" alt=""><br><br>
-                <!-- <br>
-                <small>Score: {{ film.rating }}</small> <br>
-                <small>Rating: {{ film.mpa_rating }}</small>
-                <br>
-                <p>Year: {{ film.year }}</p>
-                <p>Runtime: {{ film.runtime }} minutes</p>
-                <p>{{ film.summary }}</p> -->
                 </router-link>
             </div>
         </div>
@@ -34,7 +27,6 @@ import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
-
 
 export default {
     components: {
@@ -53,23 +45,20 @@ export default {
                 'Authorization': 'Bearer '+localStorage.getItem("jwt")
             }
         },
-        search_movie() {
-            const path = 'http://localhost:5000/api/library/movieinfo/'+this.movie
-            let options = {
-               method: 'get',
-               //headers: this.jwtHeader(),
-               url: path
-           }
-            axios(options).then((result) => {
-                this.found_movies = result.data
-                //console.log(this.found_movies)
-                //this.sort_by_year_desc()
-                // console.log(this.found_movies)
-                // this.find_magnet()
-                // this.movie = ''
-            }).catch((err) => {
-                console.log(err)
-            })
+        async search_movie() {
+            let movies = {
+                method: 'get',
+                url: 'http://localhost:5000/api/library/movieinfo/'+this.movie
+            }
+            let anime = {
+                method: 'get',
+                url: 'http://localhost:5000/api/library/animeinfo/'+this.movie
+            }
+            let mov = await axios(movies).catch(e => {console.log(e)})
+            let ani = await axios(anime).catch(e => {console.log(e)})
+            console.log(mov.data)
+            //console.log(ani.data)
+            this.found_movies = [...mov.data, ...ani.data]
         },
         sort_by_year_desc() {
             this.found_movies.sort((a, b) => (a.year > b.year) ? -1: 1)

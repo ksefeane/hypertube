@@ -2,7 +2,7 @@
     <div>
         <app-header></app-header>
         
-        <router-link to="/search">Search movies</router-link><br>
+        <router-link to="/search">Search</router-link><br>
         <h2>Today Movies</h2>
         <!-- <router-link to="/">Home</router-link>  -->
         <div v-if="movies">

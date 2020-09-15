@@ -8,7 +8,10 @@
               <!-- <button @click="logout">Log out</button>  -->
           </div>
           <div v-else>
-              <button @click="logout">Log out</button>
+                <router-link to="/profile">Profile</router-link> |
+                <router-link to="/library">Library</router-link> |
+                <router-link to="/search">Search</router-link>  |
+                <button @click="logout">Log out</button>
           </div>
       </header>
   </div>

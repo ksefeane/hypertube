@@ -7,12 +7,17 @@
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
-            <div id="preview" v-if="url">
-                <img :src="url">
+            <div id="preview">
+                <img :src="base64">
+            </div>
+            <hr>
+            <div id="preview" v-if="image">
+                <img :src="image" alt="" >
             </div>
             <div id="preview2" v-else>
-                <img src='../../../server/public/uploads/temp/goku008.jpg' alt="error" id="test">
+                <img :src="pro_pic" alt="error" id="test" @error="image_check">
             </div>
+            
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">
             </form>
@@ -75,6 +80,11 @@ export default {
             errors: [],
             url: null,
             pro_pic: '',
+            test_pic: localStorage.getItem('pic'),
+            image: '',
+            remoteUrl: '',
+            base64: '',
+            base: ''
         }
     },
     // computed: {
@@ -89,9 +99,24 @@ export default {
         },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
+            const selected_image = event.target.files[0]
             // console.log(event)
-            this.url = URL.createObjectURL(this.selectedFile) 
-            // this.pro_pic = null
+            this.url = URL.createObjectURL(this.selectedFile)
+            this.createBase64Image(selected_image)
+            
+        },
+        createBase64Image(fileObject) {
+            this.updates = []
+            const reader = new FileReader()
+            reader.readAsDataURL(fileObject)
+            reader.onload = (e) => {
+                this.image = e.target.result
+                this.base64 = reader.result
+                // var bite = window.btoa(this.image)
+                // this.base = "data:image/jpg;base64," + bite;
+                // console.log(window.btoa(this.base64))
+            };
+            
         },
         validate() {
             let check = secure_password(this.new_pass)
@@ -113,9 +138,10 @@ export default {
                 return
             }
             let type = this.selectedFile.type
-            var data = new FormData()
+            const data = new FormData()
             data.append('photo', this.selectedFile)
             data.append('username', this.username)
+            data.append('base64image', this.base64)
             let config = {
                 header: {
                     'Content-Type': 'multipart/form-data'
@@ -126,9 +152,12 @@ export default {
             if (nn[0] === 'image') {
                 axios.post(path, data, config).then((result) => {
                     this.message = result
-                    // console.log(result)
+                    console.log(result)
+                    if (result.data.changedRows) {
+                        this.updates.push("Profile picture updated!")
+                    }
                     // this.imageAsBase64 = result.data
-                    this.$router.go(0)
+                    // this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -212,6 +241,7 @@ export default {
             this.email = user.data.email
             this.last_name = user.data.last_name
             this.first_name = user.data.first_name
+            this.pro_pic = user.data.pro_pic
             localStorage.setItem('user', this.username)
         }
     },
@@ -222,7 +252,8 @@ export default {
 
 function test_stuff() {
     var x = document.getElementById("test")
-    console.log(x.src)
+    // x.src = "../../../server/public/uploads/goku008/avatar.jpg"
+    console.log(x.src, 'hello')
 }
 </script>
 

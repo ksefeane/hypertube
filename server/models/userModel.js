@@ -70,7 +70,7 @@ export async function signinOauth(token) {
     return ({'error': 'not authorized'})
 }
 export async function getuserDetails(username) {
-    let par = ['username', 'first_name', 'last_name', 'email']
+    let par = ['username', 'first_name', 'last_name', 'email', 'pro_pic']
     let pro = await q.fetchone('users', par, 'username', username)
     return (pro ? pro[0] : {'error': 'user not found'})
 }
@@ -102,11 +102,13 @@ function base64_encode(file) {
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
 }
-export async function uploadImage(user) {
-    const tempPath = path.join(__dirname, '../public/uploads/temp/')
-    // console.log(tempPath)
-    var base64str = base64_encode(tempPath + user + '.jpg')
-    return (base64str)
+export async function uploadImage(user, base64image) {
+    // console.log(base64image)
+    // const tempPath = path.join(__dirname, '../public/uploads/temp/')
+    // var base64str = base64_encode(tempPath + user + '.jpg')
+    // return (base64str)
+    var data = await q.update('users', ['pro_pic'], [base64image],'username', user)
+    return data
 }
 export async function sendEmailLink(username) {
     // var token = await hash(Math.random.toString(36).substring(8), 10)

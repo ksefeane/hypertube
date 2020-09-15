@@ -9,7 +9,7 @@ var tables = {
 		" `last_name` varchar(25) NOT NULL," + 
 		" `email` varchar(60) NOT NULL," +
 		" `password` varchar(100) NOT NULL," +
-		" `pro_pic` varchar(250)," +
+		" `pro_pic` longtext," +
 		" `verified` int(2) NOT NULL DEFAULT 0," +
 		" `admin` int (1) NOT NULL DEFAULT 0," +
 		" PRIMARY KEY (`id`)" +
@@ -29,7 +29,6 @@ var tables = {
 		" `id` int(11) NOT NULL AUTO_INCREMENT," +
 		" `title` varchar(100) NOT NULL," +
 		" `name` varchar(100) NOT NULL," +
-		" `title` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
         " `hash` varchar(100)," +
         " `status` varchar(100)," +

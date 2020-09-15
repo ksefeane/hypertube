@@ -2,7 +2,6 @@
     <div>
         <app-header></app-header>
         <div>
-            <router-link to="/library">Library</router-link>
             <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
             <div v-for="update in updates" :key="update">
@@ -12,7 +11,7 @@
                 <img :src="url">
             </div>
             <div id="preview2" v-else>
-                <img src='' alt="error" @error="image_check" id="test">
+                <img src='' alt="error" id="test">
             </div>
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">
@@ -26,10 +25,10 @@
                 <input type="text" v-model="last_name"> <br>
             </form>
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <!-- <form>
-                <input type="text" v-model="username"> <br>
+            <form>
+                <input type="text" v-model="new_username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br> -->
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
@@ -52,7 +51,7 @@
 // import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { secure_password } from "../functions/functions";
+import { secure_password, axios_post } from "../functions/functions";
 import axios from 'axios'
 import jwt from 'njwt'
 export default {
@@ -62,9 +61,8 @@ export default {
     },
     data() {
         return {
-            id: this.$route.params.id,
-            uid: '',
             username: '',
+            new_username: '',
             first_name: '',
             email: '',
             last_name: '',
@@ -77,7 +75,6 @@ export default {
             errors: [],
             url: null,
             pro_pic: '',
-            imageAsBase64: ''
         }
     },
     // computed: {
@@ -129,9 +126,9 @@ export default {
             if (nn[0] === 'image') {
                 axios.post(path, data, config).then((result) => {
                     this.message = result
-                    console.log(result)
+                    // console.log(result)
                     // this.imageAsBase64 = result.data
-                    // this.$router.go(0)
+                    this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -139,23 +136,31 @@ export default {
                 console.log("We've got a VIDEO!");
             }
         },
-        update_details(data, url) {
+        async update_details(data, url, field) {
             this.updates = []
-            const path = 'http://localhost:5000/api/users/update-' + url
-            axios.post(path, data).then((response) => {
-                console.log(response)
-            }).catch((err) => {
-                console.log(err)
-            })
+            let response = await axios_post('/api/users/update-' + url, data)
+            console.log(response)
+            if (response.data.changedRows) {
+                this.updates.push(field + ' updated!')
+            } else if (response.data.data.changedRows) {
+                this.updates.push(field + ' updated!')
+                this.username = response.data.username
+            }
+            // const path = '/api/users/update-' + url
+            // axios.post(path, data).then((response) => {
+            //     console.log(response)
+            // }).catch((err) => {
+            //     console.log(err)
+            // })
         },
         update_username() {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'username': this.username
+                'username': this.new_username
             }
-            this.update_details(data, 'username/')
-            this.updates.push("Username updated")
+            this.update_details(data, 'username/', 'Username')
+            localStorage.setItem('user', this.new_username)
         },
         update_first() {
             this.updates = []
@@ -163,8 +168,7 @@ export default {
                 'email': this.email, 
                 'first_name': this.first_name
             }
-            this.update_details(data, 'first/')
-            this.updates.push("First name updated")
+            this.update_details(data, 'first/', 'First name')
         },
         update_last() {
             this.updates = []
@@ -172,8 +176,7 @@ export default {
                 'email': this.email, 
                 'last_name': this.last_name
             }
-            this.update_details(data, 'last/')
-            this.updates.push("Last name updated")
+            this.update_details(data, 'last/', 'Last name')
         },
         update_email() {
             this.updates = []
@@ -181,8 +184,7 @@ export default {
                 'email': this.email, 
                 'username': this.username
             }
-            this.update_details(data, 'email/')
-            this.updates.push("Email updated")
+            this.update_details(data, 'email/', 'Email')
         },
         update_password() {
             this.updates = []
@@ -192,7 +194,7 @@ export default {
                 'new_pass': this.new_pass,
                 'confirm_pass': this.confirm_pass
             }
-            this.update_details(data, 'password/')
+            this.update_details(data, 'password/', 'Passsword')
             this.current_pass = ''
             this.new_pass = ''
             this.confirm_pass = ''

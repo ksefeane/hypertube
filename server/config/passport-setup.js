@@ -11,7 +11,8 @@ let ftClient = new Oauth2Strategy ({
   callbackURL: '/api/users/auth/redirect',
   scope: 'profile'
   }, async (token, refreshToken, profile, callback) => {
-    callback(null, await findOrCreate(profile))
+    let acc = await findOrCreate(profile)
+    callback(null, acc)
 })
 
 let gitClient = new Oauth2Strategy({
@@ -22,7 +23,8 @@ let gitClient = new Oauth2Strategy({
   callbackURL: '/api/users/auth/redirect2'
 }, async (token, refreshToken, profile, callback) => {
     profile.first_name = profile.name
-    callback(null, await findOrCreate(profile))
+    let acc = await findOrCreate(profile)
+    callback(null, acc)
 })
 
 ftClient.userProfile = function (accesstoken, done) {

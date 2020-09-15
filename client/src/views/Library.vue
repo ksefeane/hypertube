@@ -2,7 +2,6 @@
     <div>
         <app-header></app-header>
         
-        <router-link to="/search">Search</router-link><br>
         <h2>Today Movies</h2>
         <!-- <router-link to="/">Home</router-link>  -->
         <div v-if="movies">
@@ -11,7 +10,7 @@
             <button @click="sort_by_rating_asc">Sort by rating (asc)</button>
             <button @click="sort_by_rating_desc">Sort by rating (desc)</button>
             <br>
-            <div class="col" v-for="film in paginated_movies" :key="film" @click="send_info(film)">
+            <div class="col" v-for="(film, index) in paginated_movies" :key="index" @click="send_info(film)">
                 <router-link v-bind:to="'/info/' + film.title">
                     <div class="card" style="width: 18rem;"  >
                         <img class="card-img-top" :src="film.img" alt="Card image cap">
@@ -59,7 +58,7 @@ export default {
         getTodayMovieList: async function() {
             let res = await axios.get('http://localhost:5000/api/library/topmovies')
             .catch((e) => {console.log(e)})
-                console.log(res.data)
+                // console.log(res.data)
                 this.movies = res.data
                 this.no_of_movies = this.movies.length
                // console.log(this.movies)
@@ -77,7 +76,7 @@ export default {
             if (this.page_number >= (this.no_of_movies/this.no_per_page)) {
                 this.page_number = (this.no_of_movies/this.no_per_page) -1
             }
-            console.log(this.page_number)
+            // console.log(this.page_number)
         },
         prev_page() {
             this.page_number--;

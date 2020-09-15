@@ -47,6 +47,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import { secure_password, axios_post } from "../functions/functions";
+import sweet from 'sweetalert'
 
 export default {
     components: {
@@ -103,6 +104,8 @@ export default {
                 } else if (results.data.success) {
                     this.success.push("Registration successful! You can now log in")
                     this.clean_input()
+                    sweet("","registration successful","success")
+                    this.$router.push('/login')
                 }
             } else {
                 this.errors.push("An unexpected error happened")

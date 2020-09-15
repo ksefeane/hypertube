@@ -1,5 +1,5 @@
 import { 
-    User, getuserDetails, fetchUsers, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
+    User, getuserDetails, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
 } from '../models/userModel'
 import { verify } from 'jsonwebtoken'
 
@@ -27,11 +27,6 @@ export function jwtauth(req, res, next) {
     }
 }
 
-export async function listUsers(req, res) {
-    var f = await fetchUsers()
-    res.send(req.user)
-}
-
 export async function registerUser(req, res, next) {
     var user = new User(req.body)
     req.user = user.username
@@ -45,9 +40,16 @@ export async function loginUser(req, res, next) {
     res.status(201).json(stat)
 }
 export async function authLogin(req, res, next) {
-    let token = await oauthToken(req.user.username)
-    res.set('token', token)
-    res.redirect(301, 'http://localhost.localdomain:8080?t='+token)
+    try {
+        let token = await oauthToken(req.user.username)
+        res.redirect('http://localhost.localdomain:8080/?t='+token)
+    } catch (e) {
+        console.log(e)
+    }
+}
+export async function failLogin(req, res, next) {
+    let token = 'un'
+    res.redirect('http://localhost.localdomain:8080?t='+token)
 }
 export async function loginoauth(req, res, next) {
     try {
@@ -81,18 +83,13 @@ export async function changePassword(req, res) {
 }
 
 export async function uploadPhoto(req, res) {
-    console.log('iyo')
     if (!req.file) {
         // res.send('error please upload a valid picture')
-        console.log('infile')
-        console.log(req)
         var stat = await uploadImage(req.body.username, req.body.base64image)
     } else {
-        // console.log(req.body)
         // console.log('image uploaded')
         var stat = await uploadImage(req.body.username, req.body.base64image)
         // console.log(stat)
-        console.log('image cont')
         res.send(stat)
     }
 }

@@ -7,15 +7,11 @@
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
-            <div id="preview">
-                <img :src="base64">
-            </div>
-            <hr>
             <div id="preview" v-if="image">
                 <img :src="image" alt="" >
             </div>
             <div id="preview2" v-else>
-                <img :src="pro_pic" alt="error" id="test" @error="image_check">
+                <img :src="pro_pic" alt="error" id="test">
             </div>
             
             <form>
@@ -87,11 +83,6 @@ export default {
             base: ''
         }
     },
-    // computed: {
-    //     initialise: function() {
-    //         this.uid = localStorage.getItem('user')
-    //     }
-    // },
     methods: {
         image_check(event) {
             console.log(event)
@@ -99,24 +90,16 @@ export default {
         },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
-            const selected_image = event.target.files[0]
-            // console.log(event)
             this.url = URL.createObjectURL(this.selectedFile)
-            this.createBase64Image(selected_image)
-            
-        },
-        createBase64Image(fileObject) {
-            this.updates = []
             const reader = new FileReader()
-            reader.readAsDataURL(fileObject)
             reader.onload = (e) => {
                 this.image = e.target.result
                 this.base64 = reader.result
-                // var bite = window.btoa(this.image)
-                // this.base = "data:image/jpg;base64," + bite;
-                // console.log(window.btoa(this.base64))
+                var bite = window.btoa(this.image)
+                this.base = "data:image/jpg;base64," + bite;
+                console.log(this.base)
             };
-            
+            reader.readAsDataURL(this.selectedFile)
         },
         validate() {
             let check = secure_password(this.new_pass)
@@ -144,12 +127,13 @@ export default {
             data.append('base64image', this.base64)
             let config = {
                 header: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             }
-            const path = 'http://localhost:5000/api/users/upload?username=' + this.username
+            const path = 'http://localhost:5000/api/users/upload?username='+this.username
             let nn = type.split('/')
             if (nn[0] === 'image') {
+                console.log("image")
                 axios.post(path, data, config).then((result) => {
                     this.message = result
                     console.log(result)

@@ -12,6 +12,7 @@ var tables = {
 		" `pro_pic` longtext," +
 		" `verified` int(2) NOT NULL DEFAULT 0," +
 		" `admin` int (1) NOT NULL DEFAULT 0," +
+		" `type` varchar(20) NOT NULL," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
 	),
@@ -36,13 +37,11 @@ var tables = {
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
 	),
-	comments : (
-		"CREATE TABLE `comments` (" +
+	watchlist : (
+		"CREATE TABLE `watchlist` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT,"+
 		" `username` varchar(20) NOT NULL,"+
-		" `movie_id` int(11) NOT NULL,"+
-		" `content` longtext NOT NULL,"+
-		" `created_at` datetime NOT NULL,"+
+		" `title` int(11) NOT NULL,"+
 		" PRIMARY KEY (`id`)" +
 	  ") ENGINE=InnoDB"
 	)

@@ -1,8 +1,12 @@
 <template>
   <div>
     <app-header></app-header>
+    <!-- <br />
+    <br /> -->
     <h1>Today Movies</h1>
     <!-- <router-link to="/">Home</router-link>  -->
+    <!-- <br />
+    <br /> -->
     <section>
       <div v-if="movies">
         <button class="sort-buttons" @click="sort_by_year_asc">Sort by year (asc)</button>

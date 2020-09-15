@@ -61,7 +61,7 @@ export default {
       movies: [],
       movie: "",
       page_number: 0,
-      no_per_page: 5,
+      no_per_page: 6,
       no_of_movies: 0,
     };
   },
@@ -136,8 +136,7 @@ h1 {
   text-align: center;
 }
 .card-deck{
-    padding: 10px;
-    
+    padding: 10px; 
 }
 .sort-buttons
 {

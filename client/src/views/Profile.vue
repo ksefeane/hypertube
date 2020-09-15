@@ -76,11 +76,9 @@ export default {
             errors: [],
             url: null,
             pro_pic: '',
-            test_pic: localStorage.getItem('pic'),
             image: '',
             remoteUrl: '',
             base64: '',
-            base: ''
         }
     },
     methods: {
@@ -95,9 +93,6 @@ export default {
             reader.onload = (e) => {
                 this.image = e.target.result
                 this.base64 = reader.result
-                var bite = window.btoa(this.image)
-                this.base = "data:image/jpg;base64," + bite;
-                console.log(this.base)
             };
             reader.readAsDataURL(this.selectedFile)
         },

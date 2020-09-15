@@ -9,7 +9,7 @@ var tables = {
 		" `last_name` varchar(25) NOT NULL," + 
 		" `email` varchar(60) NOT NULL," +
 		" `password` varchar(100) NOT NULL," +
-		" `pro_pic` varchar(250)," +
+		" `pro_pic` longtext," +
 		" `verified` int(2) NOT NULL DEFAULT 0," +
 		" `admin` int (1) NOT NULL DEFAULT 0," +
 		" `type` varchar(20) NOT NULL," +

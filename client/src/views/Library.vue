@@ -14,25 +14,25 @@
         <br />
         <div class="card-deck">
           <div
-            class="col-md-4 p-3"
+            class="row my-4"
             v-for="(film, index) in paginated_movies"
             :key="index"
             @click="send_info(film)"
           >
             <router-link v-bind:to="'/info/' + film.title">
-            <!-- <div class="col-md-3"> -->
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" :src="film.img" alt="Card image cap" />
-                <div class="card-body">
-                  <h3 class="card-title">{{ film.title }}</h3>
-                  <p>
-                    <small>Score: {{ film.score }}</small>
-                  </p>
-                  <p>Year: {{ film.year }}</p>
-                  <p>Runtime: {{ film.runtime }} minutes</p>
+              <div class="col-md-3">
+                <div class="card" style="width: 18rem;">
+                  <img class="card-img-top" :src="film.img" alt="Card image cap" />
+                  <div class="card-body">
+                    <h3 class="card-title">{{ film.title }}</h3>
+                    <p>
+                      <small>Score: {{ film.score }}</small>
+                    </p>
+                    <p>Year: {{ film.year }}</p>
+                    <p>Runtime: {{ film.runtime }} minutes</p>
+                  </div>
                 </div>
               </div>
-            <!-- </div> -->
             </router-link>
           </div>
         </div>
@@ -135,11 +135,17 @@ export default {
 h1 {
   text-align: center;
 }
-.card-deck{
-    padding: 10px; 
+.card-deck {
+  padding: 10px;
 }
-.sort-buttons
-{
-    margin:5px
+.sort-buttons {
+  margin: 5px;
+}
+
+.card-img-top {
+  height: 350px;
+}
+.card-body {
+  height: 250px;
 }
 </style>>

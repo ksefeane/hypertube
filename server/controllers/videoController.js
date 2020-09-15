@@ -3,14 +3,18 @@ import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
 import { newComment, getComments, sleep } from '../models/videoModel'
+import { launchTorrent } from '../models/torrent2'
 
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
     var title = req.params.title
     var magnet = await magnetUrl(req.query)
-    var torrent = await downloadTorrent(magnet, title)
-    res.send(torrent)
+    //console.log(magnet)
+    //console.log(req.query)
+    //var torrent = await downloadTorrent(magnet, title)
+    var t2 = await launchTorrent(magnet, title)
+    res.send(t2)
 }
 
 export async function downloadAnime(req, res) {

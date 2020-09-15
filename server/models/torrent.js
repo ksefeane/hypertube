@@ -30,7 +30,8 @@ export async function magnetUrl(param) {
   param.tr = param.tr.join(',')
   var con = Object.values(param)
   var magnet = con.join(',')
-  return ('magnet:?xt='+magnet.replace(',',''))
+  var mag = magnet.replace(',', '')
+  return ('magnet:?xt='+mag)
 }
 
 export async function createMagnet(hash, name) {

@@ -6,7 +6,7 @@ import { sendEmail } from './emailModel'
 import fs from 'fs'
 import path from 'path'
 
-const params = ['username', 'first_name', 'last_name', 'email', 'password']
+const params = ['username', 'first_name', 'last_name', 'email', 'password', 'type']
 
 export class User {
     constructor(user) {
@@ -31,7 +31,7 @@ export async function signupUser(user) {
         if (Object.keys(v)[0] === 'error')
             err.error.push(v.error)
     }
-    return (err.error.length > 0 ? err : await insertUser(user) ?
+    return (err.error.length > 0 ? err : await insertUser(user, 'local') ?
         {'success': 'signup successful'} : {'error': 'server offline'})
 }
 async function findUser(username, email) {
@@ -42,15 +42,12 @@ async function findUser(username, email) {
         found[1] ? {'error': 'email is unavailable'} : 
         {'success': 'username & email available'})
 }
-export async function insertUser(user) {
+export async function insertUser(user, type) {
     var newpass = await hash(user.password, 10)
-    var vals = [user.username, user.first_name, user.last_name, user.email, newpass]
+    var vals = [user.username, user.first_name, user.last_name, user.email, newpass, type]
     return (await q.insert('users', params, vals))
 }
-export async function fetchUsers() {
-    var f = await q.getall('users')
-    return (f)
-}
+
 export async function oauthToken(username) {
     let user = await q.fetchone('users', 'username', 'username', username)
     if (user) {
@@ -67,7 +64,7 @@ export async function signinOauth(token) {
         q.delone('tokens', 'username', pro[0].username)
         return ({'success': {'username': pro[0].username, 'token': token}})
     }
-    return ({'error': 'not authorized'})
+    return (token == 'un' ? {'error': 'username unavailable'} : {'error': 'not authorized'})
 }
 export async function getuserDetails(username) {
     let par = ['username', 'first_name', 'last_name', 'email']
@@ -81,16 +78,16 @@ export async function signinUser(user) {
     return (pass ? {'success': {'username': pro[0].username, 'token': token}} : {'error': 'username or password incorrect'})
 }
 export async function findOrCreate(profile) {
-    var user = await q.fetchone('users', ['id', 'username', 'email'], 'username', profile.login)
+    var user = await q.fetchone('users', ['id', 'username', 'email', 'type'], 'username', profile.login)
     if (!user) {
         var newuser = new User(profile)
         newuser.username = profile.login
         newuser.password = await hash(Math.random.toString(36).substring(8), 10)
-        var id = await insertUser(newuser)
+        var id = await insertUser(newuser, 'oauth')
         newuser.id = id.insertId
         return (newuser)
     }
-    return (new User(user[0]))
+    return (user[0].type == 'oauth' ? new User(user[0]) : null)
 }
 export async function fetchUser(uid) {
     var user = await q.fetchone('users', ['id', 'username'], 'id', uid)

@@ -11,7 +11,7 @@
                 <img :src="url">
             </div>
             <div id="preview2" v-else>
-                <img src='../../../server/public/uploads/temp/goku008.jpg' alt="error" id="test">
+                <img src='' alt="error" id="test">
             </div>
             <form>
                 <input type="file" name="photo" id="" @change="onFileSelected">

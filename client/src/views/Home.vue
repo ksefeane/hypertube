@@ -46,7 +46,10 @@ export default {
           if (res.data.success) {
               localStorage.setItem("jwt", res.data.success.token)
               sweet(res.data.success.username, "welcome to hypertube", "success")
-              this.$router.push(`/profile/${res.data.success.username}`)
+              this.$router.push(`/library`)
+          } else if (res.data.error == 'username unavailable') {
+              sweet("", `${res.data.error}`, "error")
+              this.$router.push('/register')
           }
       }
   },

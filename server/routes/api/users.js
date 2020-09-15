@@ -1,7 +1,9 @@
 import { Router } from 'express'
 const router = Router()
 import { 
-    authRedirect, listUsers, registerUser, loginUser, authLogin, logoutUser, uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, changeLast, changeUsername, jwtauth
+    authRedirect, registerUser, loginUser, authLogin, logoutUser, 
+    uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, 
+    changeLast, changeUsername, jwtauth, failLogin
 } from '../../controllers/userController'
 import { changePasswordProfile } from '../../controllers/userController'
 import upload from '../../models/imageModel'
@@ -11,13 +13,15 @@ export default router
 
 //get oauth
 .get('/auth/42', passport.authenticate('42', {scope: 'public'}))
-.get('/auth/redirect', passport.authenticate('42', {failureRedirect: '/api/users/signup'}), authLogin)
+.get('/auth/redirect', passport.authenticate('42', {failureRedirect: '/api/users/ofail'}), authLogin)
 .get('/auth/github', passport.authenticate('github', {scope: 'user'}))
-.get('/auth/redirect2', passport.authenticate('github', {failureRedirect: '/api/users/signup'}), authLogin)
+.get('/auth/redirect2', passport.authenticate('github', {
+    failureRedirect: '/api/users/ofail'
+}), authLogin)
 .get('/redirect/:token', authRedirect, loginoauth)
 //get
+.get('/ofail', failLogin)
 .get('/logout', logoutUser)
-.get('/', listUsers)
 .get('/me/:user', jwtauth, getUser)
 //post
 .post('/signup', registerUser)

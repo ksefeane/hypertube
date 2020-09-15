@@ -15,12 +15,11 @@ export default router
 .get('/auth/42', passport.authenticate('42', {scope: 'public'}))
 .get('/auth/redirect', passport.authenticate('42', {failureRedirect: '/api/users/ofail'}), authLogin)
 .get('/auth/github', passport.authenticate('github', {scope: 'user'}))
-.get('/auth/redirect2', passport.authenticate('github', {
-    failureRedirect: '/api/users/ofail'
-}), authLogin)
+.get('/auth/redirect2', passport.authenticate('github', {failureRedirect: '/api/users/ofail'}), authLogin)
 .get('/redirect/:token', authRedirect, loginoauth)
-//get
 .get('/ofail', failLogin)
+
+//get
 .get('/logout', logoutUser)
 .get('/me/:user', jwtauth, getUser)
 //post

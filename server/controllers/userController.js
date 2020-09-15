@@ -41,7 +41,6 @@ export async function loginUser(req, res, next) {
 }
 export async function authLogin(req, res, next) {
     try {
-        console.log(req.user.username)
         let token = await oauthToken(req.user.username)
         res.redirect('http://localhost.localdomain:8080/?t='+token)
     } catch (e) {

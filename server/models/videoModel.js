@@ -75,9 +75,11 @@ export async function insertVideo(video) {
     let params = ['title', 'name', 'ext', 'size', 'hash', 'status', 'created']
     let created = new Date().getDate()
     let payload = [video.title, video.name, video.ext, video.size, video.hash, 'downloading', created]
-    let res = await q.fetchone('videos', 'name', 'name', video.name) == null ? 
-        await q.insert('videos', params, payload) : 1
-    return (res == 1 ? null : 1)
+    let res = await q.fetchone('videos', 'name', 'name', video.name)
+    if (res)
+        return (res[0].name)
+    await q.insert('videos', params, payload)
+    return (1)
 }
 export async function searchvideoName(name) {
     let res = await q.fetchone('videos', 'name', 'name', name)

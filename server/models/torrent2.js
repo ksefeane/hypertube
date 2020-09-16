@@ -26,26 +26,29 @@ let progress = 0
 async function magnetBoy(magnet) {
     if (!mag) {
         mag = magnet
+        engine = tor(mag)
     } else {
-        if (mag !== magnet)
+        if (mag !== magnet) {
             await killEngine()
-        mag = magnet
+            mag = magnet
+            engine = tor(mag)
+        }
     }
 }
 
 async function killEngine() {
-    if (engine) {
-        engine.remove(() => {})
-        engine.destroy(() => {status = 'destroyed'})
-    }
+    console.log(`killed torrent ${file_name}`)
+    engine.remove(() => {})
+    engine.destroy(() => {status = 'destroyed'})
     engine = null
-    return engine
+    mag = null
+    status = 'initialized'
+    file_name = 'torrent'
+    sleep(5000)
 }
 
 async function engineBoy(magnet, title) {
     await magnetBoy(magnet)
-    if (!engine)
-        engine = tor(mag)
     engine.on('ready', () => {
         status = 'queued'
         progress = `queued ${title}`
@@ -54,10 +57,10 @@ async function engineBoy(magnet, title) {
             let ext = getExt(file.name)
             let payload = {'title': title,'name':file.name,'ext':ext,'size':file.length,'hash':engine.infoHash}
             if (ext === '.mkv' || ext === '.mp4' || ext === '.avi') {
-                let enter = await insertVideo(payload)
-                if (enter) {
+                let entry = await insertVideo(payload)
+                file_name = file.name
+                if (entry == 1) {
                     status = 'downloading'
-                    file_name = file.name
                     let stream = file.createReadStream()
                     let save = fs.createWriteStream(dest+file.name)
                     stream.pipe(save)

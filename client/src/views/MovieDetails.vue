@@ -100,7 +100,7 @@ export default {
       username: '',
       comments: [],
       comment_content: "",
-      size: '0'
+      size: '0kb'
     };
   },
   methods: {

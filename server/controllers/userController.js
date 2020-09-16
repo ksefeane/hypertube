@@ -85,10 +85,10 @@ export async function changePassword(req, res) {
 export async function uploadPhoto(req, res) {
     if (!req.file) {
         // res.send('error please upload a valid picture')
-        var stat = await uploadImage(req.user)
+        var stat = await uploadImage(req.body.username, req.body.base64image)
     } else {
         // console.log('image uploaded')
-        var stat = await uploadImage(req.body.username)
+        var stat = await uploadImage(req.body.username, req.body.base64image)
         // console.log(stat)
         res.send(stat)
     }

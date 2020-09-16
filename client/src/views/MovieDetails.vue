@@ -8,6 +8,7 @@
         <div v-if="show">
           <video controls :src="stream" height="500" width="900">No video support</video>
         </div>
+        <small>downloading {{file_name}}{{size}}</small>
         <h1>{{ id }}</h1>
         <!-- <p>{{ film }}</p> -->
         <img v-if="pic" :src="film.img" alt />
@@ -97,6 +98,7 @@ export default {
       username: localStorage.getItem("user"),
       comments: [],
       comment_content: "",
+      size: 0
     };
   },
   methods: {
@@ -141,9 +143,10 @@ export default {
           .catch((e) => {
             console.log(e);
           });
-        if (mov.data.downloading) {
-          status = mov.data.downloading;
-          this.file_name = mov.data.downloading;
+          status = 1
+        if (mov.data.status == 'downloading' || mov.data.status == 'exists') {
+          status = mov.data.status;
+          this.file_name = mov.data.file_name;
           sweet("downloading", `${this.file_name}`);
           this.stream_movie();
         }
@@ -158,6 +161,7 @@ export default {
             console.log(e);
           });
         console.log(vid.data);
+        this.size = vid.data.size
         if (vid.data.status == "ready") this.ready = true;
       }
       if (this.ready) {

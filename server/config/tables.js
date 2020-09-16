@@ -31,11 +31,22 @@ var tables = {
 		" `title` varchar(100) NOT NULL," +
 		" `name` varchar(100) NOT NULL," +
         " `ext` varchar(20)," +
+        " `size` varchar(20)," +
         " `hash` varchar(100)," +
         " `status` varchar(100)," +
         " `created` varchar(20)," +
 		" PRIMARY KEY (`id`)" +
 		") ENGINE=InnoDB"
+    ),
+    comments : (
+		"CREATE TABLE `comments` (" +
+		" `id` int(11) NOT NULL AUTO_INCREMENT,"+
+		" `username` varchar(20) NOT NULL,"+
+		" `movie_id` varchar(200) NOT NULL,"+
+		" `content` longtext NOT NULL,"+
+		" `created_at` datetime NOT NULL,"+
+		" PRIMARY KEY (`id`)" +
+	  ") ENGINE=InnoDB"
 	),
 	watchlist : (
 		"CREATE TABLE `watchlist` (" +

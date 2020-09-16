@@ -4,13 +4,6 @@ const dest = 'server/public/videos/'
 const tpath = '/tmp/torrent-stream/'
 import { sleep, insertVideo, getExt, infoHash, searchvideoName } from '../models/videoModel'
 
-var config = {
-    tmp: '/tmp',
-    path: '/blueshac',
-    verify: true,
-    tracker: true,
-}
-
 //create magnet
 export async function createMagnet(param) {
     param.tr = param.tr.join(',')
@@ -22,18 +15,37 @@ export async function createMagnet(param) {
 
 //delete torrent
 
-//infotorrent
-
 //streamable
 
 let engine = null
+let mag = null
 let status = 'initialized'
 let file_name = 'torrent'
 let progress = 0
 
+async function magnetBoy(magnet) {
+    if (!mag) {
+        mag = magnet
+    } else {
+        if (mag !== magnet)
+            await killEngine()
+        mag = magnet
+    }
+}
+
+async function killEngine() {
+    if (engine) {
+        engine.remove(() => {})
+        engine.destroy(() => {status = 'destroyed'})
+    }
+    engine = null
+    return engine
+}
+
 async function engineBoy(magnet, title) {
+    await magnetBoy(magnet)
     if (!engine)
-        engine = tor(magnet)
+        engine = tor(mag)
     engine.on('ready', () => {
         status = 'queued'
         progress = `queued ${title}`

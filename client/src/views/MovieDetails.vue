@@ -8,11 +8,12 @@
         <div v-if="show">
           <video controls :src="stream" height="500" width="900">No video support</video>
         </div>
-        <small>downloading {{file_name}}{{size}}</small>
         <h1>{{ id }}</h1>
         <!-- <p>{{ film }}</p> -->
         <img v-if="pic" :src="film.img" alt />
         <br />
+        <small v-if="loading">downloading {{file_name}} {{size}}</small><br>
+
         <small v-for="(torrent, index) in torrents" :key="index">
           <button
             @click="download_film(torrent.magnet)"
@@ -30,7 +31,7 @@
         <p>{{ film.summary }}</p>
         <!-- <button @click="download_film" v-if="!show">Download {{ id }}</button> -->
       </div>
-      <div v-if="show">
+      <div>
         <form>
           <div id="err" v-for="error in errors" v-bind:key="error">
             <span>{{ error }}</span>
@@ -72,6 +73,7 @@ import { axios_post } from "../functions/functions";
 import moment from "moment";
 import axios from "axios";
 import sweet from "sweetalert";
+import jwt from 'njwt'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventBus from "../event_bus/event_bus";
@@ -95,10 +97,10 @@ export default {
       torrents: [],
       errors: [],
       success: [],
-      username: localStorage.getItem("user"),
+      username: '',
       comments: [],
       comment_content: "",
-      size: 0
+      size: '0'
     };
   },
   methods: {
@@ -147,6 +149,7 @@ export default {
         if (mov.data.status == 'downloading' || mov.data.status == 'exists') {
           status = mov.data.status;
           this.file_name = mov.data.file_name;
+            this.loading = true
           sweet("downloading", `${this.file_name}`);
           this.stream_movie();
         }
@@ -162,13 +165,13 @@ export default {
           });
         console.log(vid.data);
         this.size = vid.data.size
+
         if (vid.data.status == "ready") this.ready = true;
       }
       if (this.ready) {
         this.show = true;
         this.pic = false;
         this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`;
-        this.fetchComments();
       }
     },
     validate: function () {
@@ -186,6 +189,7 @@ export default {
       }
     },
     addComment: async function () {
+        
       this.success = [];
       const data = {
         username: this.username,
@@ -193,12 +197,12 @@ export default {
         comment: this.comment_content,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
-      // console.log(data)
+      //console.log(data)
       var results = await axios_post("/api/video/addcomment", data);
       if (results !== "Oops!") {
         if (results.data.error) {
           this.errors.push(results.data.error);
-        } else if (results.data.affectedRows) {
+        } else if (results.data.success) {
           this.success.push("Comment Added!!!");
           this.fetchComments();
           this.clean_input();
@@ -207,11 +211,17 @@ export default {
         this.errors.push("An unexpected error happened");
       }
     },
+    async getUser() {
+        let token = localStorage.getItem("jwt")
+        let decode = await jwt.verify(token, 'secret')
+        this.username = decode.body.name
+    },
     async fetchComments() {
       const data = {
         movie: this.id,
       };
       var results = await axios_post("/api/video/fetch-comments", data);
+      console.log(results.data)
       if (results.data.error) {
         this.errors.push(results.data.error);
       } else {
@@ -232,6 +242,8 @@ export default {
   },
   created() {
     this.movieinfo();
+    this.getUser()
+    this.fetchComments();
   },
 };
 </script>

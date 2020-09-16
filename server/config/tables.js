@@ -42,7 +42,8 @@ var tables = {
 		"CREATE TABLE `comments` (" +
 		" `id` int(11) NOT NULL AUTO_INCREMENT,"+
 		" `username` varchar(20) NOT NULL,"+
-		" `movie_id` varchar(200) NOT NULL,"+
+		" `movie_id` varchar(200),"+
+		" `movie_title` varchar(200) NOT NULL,"+
 		" `content` longtext NOT NULL,"+
 		" `created_at` datetime NOT NULL,"+
 		" PRIMARY KEY (`id`)" +

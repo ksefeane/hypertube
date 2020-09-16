@@ -2,7 +2,7 @@ import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../model
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
-import { newComment, getComments, sleep } from '../models/videoModel'
+import { newComment2, getComments2, sleep } from '../models/videoModel'
 import { createMagnet, torrent } from '../models/torrent2'
 
 const destination = 'server/public/videos/'
@@ -10,7 +10,6 @@ const destination = 'server/public/videos/'
 export async function downloadMagnet(req, res, next) {
     var title = req.params.title
     var magnet = await createMagnet(req.query)
-  
     let client = await torrent(magnet, title)
     let tor = await client.info()
     console.log(tor.file_name+' '+tor.status)
@@ -137,12 +136,12 @@ export async function addNewComment(req, res) {
     var movie = req.body.movie
     var comment = req.body.comment
     var date_time = req.body.created_at
-    var stat = await newComment(username, movie, comment, date_time)
+    var stat = await newComment2(username, movie, comment, date_time)
     res.send(stat)
 }
 
 export async function fetchComments(req, res) {
     var movie = req.body.movie
-    var stat = await getComments(movie)
+    var stat = await getComments2(movie)
     res.send(stat)
 }

@@ -104,10 +104,21 @@ export async function newComment(username, movie, comment, date_time) {
     return ({'error': "No movie"})
 }
 
+export async function newComment2(username, movie, comment, date_time) {
+    const params = ['username', 'movie_title', 'content', 'created_at']
+    const vals = [username, movie, comment, date_time]
+    await q.insert('comments', params, vals)
+    return {'success':'comment added'}
+}
+
 export async function getComments(movie) {
     var movie_details = await q.fetchone('videos', 'id', 'title', movie)
     if (movie_details) {
         return (await q.fetchone('comments', '*', 'movie_id', movie_details[0].id))
     }
     return ({'error': "No movie"})
+}
+
+export async function getComments2(movie) {
+    return (await q.fetchone('comments', '*', 'movie_title', movie))
 }

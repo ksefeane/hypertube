@@ -1,13 +1,14 @@
 <template>
   <div>
     <app-header></app-header>
+    <!--<router-link to="/library">Library</router-link>-->
+    <div class="search-input">
     <br />
-    <router-link to="/library">Library</router-link>
-    <div>
-      <input type="text" name id placeholder="search for..." v-model="movie" />
-      <button class="search-btn" @click="search_movie">Search</button>
+    <br />
+    <h1>Search</h1>
+      <input type="text" name id placeholder="search for..." v-model="movie" /><br>
+      <button class="search-btn buttons" @click="search_movie">Search</button>
       <br />
-      Query: {{ movie }}
     </div>
     <section>
       <div class="card-deck" >
@@ -104,8 +105,21 @@ export default {
 }
 .card-body {
   height: 250px;
+  background: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
 }
 .card-border{
   border:yellow;
+}
+.buttons{
+    background: #ee4c7c;
+    color: white;
+    padding: 10px;
+    border: 1px solid #ee4c7c;
+}
+.search-input{
+  text-align: center;
+  margin: auto 0;
 }
 </style>

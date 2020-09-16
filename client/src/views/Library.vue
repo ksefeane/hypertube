@@ -3,16 +3,18 @@
     <app-header></app-header>
     <!-- <br />
     <br /> -->
+    <br />
+    <br />
     <h1>Today Movies</h1>
     <!-- <router-link to="/">Home</router-link>  -->
     <!-- <br />
     <br /> -->
-    <section>
+    <section class="layout">
       <div v-if="movies">
-        <button class="sort-buttons" @click="sort_by_year_asc">Sort by year (asc)</button>
-        <button class="sort-buttons" @click="sort_by_year_desc">Sort by year (desc)</button>
-        <button class="sort-buttons" @click="sort_by_rating_asc">Sort by rating (asc)</button>
-        <button class="sort-buttons" @click="sort_by_rating_desc">Sort by rating (desc)</button>
+        <button class="sort-buttons buttons" @click="sort_by_year_asc">Sort by year (asc)</button>
+        <button class="sort-buttons buttons" @click="sort_by_year_desc">Sort by year (desc)</button>
+        <button class="sort-buttons buttons" @click="sort_by_rating_asc">Sort by rating (asc)</button>
+        <button class="sort-buttons buttons" @click="sort_by_rating_desc">Sort by rating (desc)</button>
         <br />
         <br />
         <br />
@@ -24,7 +26,7 @@
             @click="send_info(film)"
           >
             <router-link v-bind:to="'/info/' + film.title">
-              <div class="col-md-3">
+              <div class="col-md-3 layout">
                 <div class="card" style="width: 18rem;">
                   <img class="card-img-top" :src="film.img" alt="Card image cap" />
                   <div class="card-body">
@@ -40,8 +42,8 @@
             </router-link>
           </div>
         </div>
-        <button class="sort-buttons" @click="prev_page">Previous</button>
-        <button class="sort-buttons" @click="next_page">Next</button>
+        <button class="sort-buttons buttons" @click="prev_page">Previous</button>
+        <button class="sort-buttons buttons" @click="next_page">Next</button>
       </div>
     </section>
     <app-footer></app-footer>
@@ -136,11 +138,18 @@ export default {
 };
 </script>
 <style scoped>
+.layout {
+   text-align: center;
+}
+
 h1 {
   text-align: center;
 }
 .card-deck {
-  padding: 10px;
+    margin: auto 0;
+    text-align: center;
+    /* float: left; */
+    margin-left: 16px;
 }
 .sort-buttons {
   margin: 5px;
@@ -151,5 +160,13 @@ h1 {
 }
 .card-body {
   height: 250px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
 }
-</style>>
+.buttons{
+    background: #ee4c7c;
+    color: white;
+    padding: 10px;
+    border: 1px solid #ee4c7c;
+}
+</style>

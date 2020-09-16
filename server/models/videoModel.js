@@ -72,14 +72,17 @@ export async function maintainVideos(path) {
 }
 
 export async function insertVideo(video) {
-    let params = ['title', 'name', 'ext', 'hash', 'created']
+    let params = ['title', 'name', 'ext', 'size', 'hash', 'status', 'created']
     let created = new Date().getDate()
-    let payload = [video.title, video.name, video.ext, video.hash, created]
+    let payload = [video.title, video.name, video.ext, video.size, video.hash, 'downloading', created]
     let res = await q.fetchone('videos', 'name', 'name', video.name) == null ? 
         await q.insert('videos', params, payload) : 1
     return (res == 1 ? null : 1)
 }
-
+export async function searchvideoName(name) {
+    let res = await q.fetchone('videos', 'name', 'name', name)
+    return (res)
+}
 export async function findVideo(name) {
     let find = await q.fetchregex('videos', 'name', 'name', name)
     return (find)

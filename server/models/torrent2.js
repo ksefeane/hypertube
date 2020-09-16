@@ -2,7 +2,7 @@ import tor from 'torrent-stream'
 import fs from 'fs'
 const dest = 'server/public/videos/'
 const tpath = '/tmp/torrent-stream/'
-import { sleep, insertVideo, getExt, infoHash } from '../models/videoModel'
+import { sleep, insertVideo, getExt, infoHash, searchvideoName } from '../models/videoModel'
 
 var config = {
     tmp: '/tmp',
@@ -26,48 +26,54 @@ export async function createMagnet(param) {
 
 //streamable
 
+let engine = null
+let status = 'initialized'
+let file_name = 'torrent'
+let progress = 0
+
+async function engineBoy(magnet, title) {
+    if (!engine)
+        engine = tor(magnet)
+    engine.on('ready', () => {
+        status = 'queued'
+        progress = `queued ${title}`
+        let len = engine.files.length
+        Promise.all(engine.files.map(async (file) => {
+            let ext = getExt(file.name)
+            let payload = {'title': title,'name':file.name,'ext':ext,'size':file.length,'hash':engine.infoHash}
+            if (ext === '.mkv' || ext === '.mp4' || ext === '.avi') {
+                let enter = await insertVideo(payload)
+                if (enter) {
+                    status = 'downloading'
+                    file_name = file.name
+                    let stream = file.createReadStream()
+                    let save = fs.createWriteStream(dest+file.name)
+                    stream.pipe(save)
+                    stream.on('end', async () => {
+                        console.log(`download finished (${file.name})`)
+                        len--
+                        if (!len) {
+                            engine.on('idle', () => {status = 'finished'})
+                            process.exit
+                        }
+                    })
+                } else {
+                    status = 'exists'
+                }
+            }
+        }))
+    })
+    return ({'engine':engine,'status':status,'file_name':file_name})
+}
+
 export async function torrent(magnet, name) {
-    let engine = tor(magnet)
-    let title = name
+    let engine = await engineBoy(magnet, name)
     let methods = {
-        download: async () => {
-            engine.on('ready', () => {
-                let len = engine.files.length
-                engine.files.forEach(async (file) => {
-                    let ext = getExt(file.name)
-                    let payload = {'title': title,'name':file.name,'ext':ext,'hash':engine.infoHash}
-                    if (ext === '.mkv' || ext === '.mp4' || ext === '.avi') {
-                        let enter = await insertVideo(payload)
-                        if (enter) {
-                            console.log(file.length)
-                            let stream = file.createReadStream()
-                            let save = fs.createWriteStream(dest+file.name)
-                            stream.pipe(save)
-                            stream.on('end', async () => {
-                                console.log(`download finished (${file.name})`)
-                                l--
-                                if (!len) {
-                                    engine.on('idle', () => {
-                                        engine.remove(() => {console.log(`${title} torrent files deleted`)})
-                                        engine.destroy(() => {console.log(`torrent ${engine.infoHash} (${title}) destroyed`)})
-                                    })
-                                    process.exit
-                                }
-                            })
-                        } else {
-                            console.log('movie already downloaded')
-                            //deletemovie already downloaded
-                        } 
-                    }                    
-                })
-               
-            })
-            
-        },
         info: async () => {
-            engine.on('torrent', () => {
-                let info = engine.infoHash
-                console.log(info)
+            return ({
+                'name': name,
+                'status': engine.status,
+                'file_name': engine.file_name
             })
         }
     }

@@ -12,8 +12,9 @@ export async function downloadMagnet(req, res, next) {
     var magnet = await createMagnet(req.query)
   
     let client = await torrent(magnet, title)
-    client.download()
-    res.send(client)
+    let tor = await client.info()
+    console.log(tor.file_name+' '+tor.status)
+    res.send(tor)
 }
 
 export async function downloadAnime(req, res) {

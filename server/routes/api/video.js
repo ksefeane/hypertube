@@ -8,13 +8,13 @@ const router = Router()
 
 export default router
 .delete('/delete/:magnet', deleteVideo)
-.get('/info', getInfo)
 
 .get('/status/:movie', streamState)
 .get('/stream/:movie', streamVideo)
 
 //download torrent
 .get('/downloadMagnet/:title/:magnet', downloadMagnet)
+.get('/info', getInfo)
 
 .post('/addcomment', addNewComment)
 .post('/fetch-comments', fetchComments)

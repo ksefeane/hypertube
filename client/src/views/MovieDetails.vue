@@ -141,6 +141,7 @@ export default {
           .catch((e) => {
             console.log(e);
           });
+          status = 1
         if (mov.data.downloading) {
           status = mov.data.downloading;
           this.file_name = mov.data.downloading;

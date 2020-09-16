@@ -71,12 +71,13 @@ export async function maintainVideos(path) {
     return (find[0])
 }
 
-export async function insertVideo(title, name, ext, hash) {
+export async function insertVideo(video) {
     let params = ['title', 'name', 'ext', 'hash', 'created']
     let created = new Date().getDate()
-    let res = await q.fetchone('videos', 'name', 'name', name)
-    res ? 1 : q.insert('videos', params, [title, name, ext, hash, created]) 
-    return (res ? 1 : 0)
+    let payload = [video.title, video.name, video.ext, video.hash, created]
+    let res = await q.fetchone('videos', 'name', 'name', video.name) == null ? 
+        await q.insert('videos', params, payload) : 1
+    return (res == 1 ? null : 1)
 }
 
 export async function findVideo(name) {

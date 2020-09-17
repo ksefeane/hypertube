@@ -27,6 +27,10 @@
             </form>
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
             <form>
+                <input type="text" v-model="new_username"> <br>
+            </form>
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
+            <form>
                 <input type="email" v-model="email"> <br>
             </form>
             <input type="submit" value="Update Email" @click="update_email"><br>

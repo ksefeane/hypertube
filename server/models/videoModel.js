@@ -1,6 +1,7 @@
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 import q from './query'
+import _ from 'lodash'
 
 export function getExt(string) {
     let extension = string.match(/.*(\..+?)$/);
@@ -33,14 +34,14 @@ export async function sleep(ms) {
 async function checkExpiry(file, path) {
     let today = new Date().getDate()
     let loc = await q.fetchone('videos', 'created', 'name', file)
-    let range = loc ? loc[0].created - today : 0
-    if (range == 1 || range > 28 || range < -28 || !loc || range < 0) {
+    let exp = loc[0].created + 28 > 30 ? loc[0].created - 2 : 
+        loc[0].created + 28
+    if (exp == today || !loc ) {
         fs.unlink(path+file, () => {
             console.log('schedule delete: '+file)
             return ('schedule delete'+file)
          })
     } else {
-   //     console.log(file)
         return (file)
     }
 }
@@ -86,8 +87,24 @@ export async function searchvideoName(name) {
     return (res)
 }
 export async function findVideo(name) {
-    let find = await q.fetchregex('videos', 'name', 'name', name)
-    return (find)
+    let find = await q.fetchregex('videos', 'title', 'name', name)
+    let uni = []
+    for (let i in find) {
+        if (!uni.find(el => el === find[i].title))
+            uni = [...uni, find[i].title]
+    }
+    return (uni)
+}
+
+export async function latestVideos() {
+    let date = new Date().getDate()
+    let res = await q.fetchone('videos', 'title', 'created', date)
+    let uni = []
+    for (let i in res) {
+        if (!uni.find(el => el === res[i].title))
+            uni.push(res[i].title)
+    }
+    return (uni)
 }
 
 export async function infoHash(hash) {

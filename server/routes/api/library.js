@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const router = Router()
 import {
-    sweep, movieLibrary, movieDetails, animeDetails, animeTorrents 
+    sweep, movieLibrary, movieDetails, animeDetails, animeTorrents, localSearch 
 } from '../../controllers/libraryController'
 import { jwtauth } from '../../controllers/userController'
 
@@ -12,6 +12,7 @@ export default router
 .get('/animeinfo/:search', sweep, animeDetails)
 .get('/animetorrents/:search', animeTorrents)
 
+.get('/local/:search', localSearch)
 //.get('/search', movieSearchLibrary)
 //.get('/topvideos', topVideos)
 //.get('/topanime', animeLibrary)

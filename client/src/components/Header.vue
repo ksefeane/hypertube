@@ -1,38 +1,25 @@
 <template>
-  <header>
-    <div class="container">
-      <nav>
-        <div class="row">
-          <div class="menu">
-            <div class="logo">
-              <router-link to="/">
-                <span class="icon">H</span>Hypertube
-              </router-link>
-            </div>
-            <ul v-if="!is_logged_in">
-              <!-- <router-link to="/register">Log in</router-link> -->
-              <li>
-                <router-link to="/login">Log In</router-link>
-              </li>
-              <!-- <button @click="logout">Log out</button>  -->
-            </ul>
-            <ul v-else>
-              <li class="btn sec">
-                <router-link to="/profile">Profile</router-link>
-              </li>
-              <li class="btn sec">
-                <router-link to="/library">Library</router-link>
-              </li>
-              <li class="btn sec">
-                <router-link to="/search">Search</router-link>
-              </li>
-              <li class="btn sec">
-                <button class="btn sec" @click="logout">Log out</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <header>
+            <div class="container">
+                <nav>
+                     <div class="row">
+                        <div class="menu">
+                                <div class="logo" v-if="!is_logged_in"> <router-link to="/"><span class="icon">H</span>Hypertube</router-link></div>
+                                <div class="logo" v-if="is_logged_in"> <router-link to="/library"><span class="icon">H</span>Hypertube</router-link></div>
+                                <ul v-if="!is_logged_in">
+                                    <!-- <router-link to="/register">Log in</router-link> -->
+                                   <li><router-link to="/login">Log In</router-link></li>
+                                    <!-- <button @click="logout">Log out</button>  -->
+                                </ul>
+                                <ul v-else>
+                                        <li class="btn sec"><router-link to="/profile">Profile</router-link></li>
+                                        <li class="btn sec"><router-link to="/library">Library</router-link></li>
+                                        <li class="btn sec"><router-link to="/search">Search</router-link></li>
+                                        <li class="btn sec"><button class="btn sec" @click="logout">Log out</button></li>
+                                </ul>
+                        </div>
+                     </div>
+                </nav>
     </div>
   </header>
 </template>

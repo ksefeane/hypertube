@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       movies: [],
+      localmovies: [],
       movie: "",
       page_number: 0,
       no_per_page: 6,
@@ -75,6 +76,13 @@ export default {
     // async getVideos() {
     //     let res = await axios.get('http://localhost:5000/api/')
     // },
+    async getLocal() {
+        let res = await axios
+            .get("http://localhost:5000/api/library/local/*")
+            .catch((e) => {console.log(e)})
+            if (res.data.local)
+                this.localmovies = res.data.local
+    },
     getTodayMovieList: async function () {
       let res = await axios
         .get("http://localhost:5000/api/library/topmovies")
@@ -114,15 +122,15 @@ export default {
       this.movies.sort((a, b) => (a.year > b.year ? -1 : 1));
     },
     sort_by_rating_desc() {
-      this.movies.sort((a, b) => (a.rating > b.rating ? -1 : 1));
+      this.movies.sort((a, b) => (a.score > b.score ? -1 : 1));
     },
     sort_by_rating_asc() {
-      this.movies.sort((a, b) => (a.rating > b.rating ? 1 : -1));
+      this.movies.sort((a, b) => (a.score > b.score ? 1 : -1));
     },
   },
   computed: {
     page_count() {
-      let num = this.movies.length;
+      let num = this.movies.length + this.local;
       let size = this.no_per_page;
       return Math.ceil(num / size);
     },
@@ -133,6 +141,7 @@ export default {
     },
   },
   created: function () {
+    this.getLocal()
     this.getTodayMovieList();
   },
 };

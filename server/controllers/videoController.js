@@ -75,13 +75,9 @@ export async function streamState(req, res) {
         if (err && err.code === 'ENOENT') {
             res.send({'error': err.code})
         } else {
-       //           getExt(movie) === '.mkv' ? streamMkv(stream, res, chunk) : 0
-
-            stat.size > 10000000 ? res.send({'status': 'ready'}) : 
-                res.send({
-                    'status': 'downloading', 
-                    'size': Number(stat.size/1000).toFixed(0)+'kb'
-                })   
+            let size = Number(stat.size/1000).toFixed(0)+'kb'
+            let status = stat.size > 10000000 ? 'ready' : 'downloading' 
+            res.send({'status':status,'size':size})   
         }
     }) 
 }
@@ -96,6 +92,7 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
+                console.log(range)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)

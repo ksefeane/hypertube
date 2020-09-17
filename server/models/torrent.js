@@ -23,6 +23,7 @@ async function magnetBoy(magnet) {
             await killEngine()
             mag = magnet
             engine = tor(mag)
+            infohash = engine.infoHash
         }
     }
 }
@@ -41,8 +42,6 @@ async function killEngine() {
 async function engineBoy(magnet, title) {
     await magnetBoy(magnet)
     engine.on('ready', () => {
-        infohash = engine.infoHash
-        console.log(infohash)
         status = 'queued'
         progress = `queued ${title}`
         let len = engine.files.length
@@ -58,6 +57,7 @@ async function engineBoy(magnet, title) {
                     let save = fs.createWriteStream(dest+file.name)
                     stream.pipe(save)
                     stream.on('end', async () => {
+                        status = 'complete'
                         console.log(`download finished (${file.name})`)
                         len--
                         if (!len) {
@@ -71,7 +71,7 @@ async function engineBoy(magnet, title) {
             }
         }))
     })
-    return ({'engine':engine,'status':status,'file_name':file_name})
+    return ({'engine':engine,'status':status,'file_name':file_name, 'infohash':infohash})
 }
 
 export async function torrent(magnet, name) {
@@ -81,7 +81,8 @@ export async function torrent(magnet, name) {
             return ({
                 'name': name,
                 'status': engine.status,
-                'file_name': engine.file_name
+                'file_name': engine.file_name,
+                'infohash': engine.infohash
             })
         }
     }

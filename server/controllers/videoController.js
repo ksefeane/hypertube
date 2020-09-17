@@ -1,15 +1,14 @@
-import { downloadTorrent, deleteTorrent, infoTorrent, magnetUrl } from '../models/torrent'
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
 import { newComment2, getComments2, sleep } from '../models/videoModel'
-import { createMagnet, torrent } from '../models/torrent2'
+import { magnetUrl, torrent} from '../models/torrent'
 
 const destination = 'server/public/videos/'
 
 export async function downloadMagnet(req, res, next) {
     var title = req.params.title
-    var magnet = await createMagnet(req.query)
+    var magnet = await magnetUrl(req.query)
     let client = await torrent(magnet, title)
     let tor = await client.info()
     console.log(tor.file_name+' '+tor.status)

@@ -28,9 +28,9 @@
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
             <form>
                 <input type="text" v-model="new_username"> <br>
-            </form>
+            <!-- </form>
             <input type="submit" value="Update Username" @click="update_username"><br><br>
-            <form>
+            <form> -->
                 <input type="email" v-model="email"> <br>
             </form>
             <input type="submit" value="Update Email" @click="update_email"><br>
@@ -212,10 +212,10 @@ export default {
             let decode = await jwt.verify(token, 'secret')
             let options = {
                 method: 'get',
-                headers: {'Authorization': localStorage.getItem("jwt")},
+                headers: {'Authorization': token},
                 url: 'http://localhost:5000/api/users/me/'+decode.body.name
             }
-            let user = await axios(options).catch(e => {console.log(e)})
+            let user = await axios(options).catch(() => {console.log('error')})
             this.username = user.data.username
             this.email = user.data.email
             this.last_name = user.data.last_name

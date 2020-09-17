@@ -82,9 +82,9 @@ export async function insertVideo(video) {
     await q.insert('videos', params, payload)
     return (1)
 }
-export async function searchvideoName(name) {
-    let res = await q.fetchone('videos', 'name', 'name', name)
-    return (res)
+export async function fetchTitle(name) {
+    let res = await q.fetchone('videos', 'name', 'title', name)
+    return (res ? res : null)
 }
 export async function findVideo(name) {
     let find = await q.fetchregex('videos', 'title', 'name', name)

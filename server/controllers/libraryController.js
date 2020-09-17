@@ -14,7 +14,38 @@ export async function sweep(req, res, next) {
 export async function localSearch(req, res) {
     let search = req.params.search
     let find = search === "*" ? await latestVideos(): await findVideo(search)
-    find = find ? {'local':find} : []
+    let loc = []
+    for (let i in find) {
+        let stat = await axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+find[i]+'&sort_by=seeds')
+        let res = stat.data.data.movies
+        if (res) {
+            let mov = res.find(el => el.title === find[i])
+            loc.push({
+                'title': find[i], 
+                'score': mov.rating,
+                'summary': mov.summary,
+                'year': mov.year,
+                'img': mov.medium_cover_image,
+                'runtime': mov.runtime,
+                "type": 'local'
+            })
+        } else {
+            let jikan = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${find[i]}`)
+            res = jikan.data.results
+            let ani = res.find(el => el.title === find[i])
+            let date = ani.start_date ? ani.start_date.substring(0, 10) : null
+            loc.push({
+                'title': find[i], 
+                'score': ani.score,
+                'summary': ani.synopsis,
+                'year': date,
+                'img': ani.image_url,
+                'runtime': 25,
+                "type": 'local'
+            })
+        }
+    }
+    find = loc ? {'local':loc} : []
     res.send(find)
 }
 
@@ -86,7 +117,7 @@ export async function animeDetails(req, res) {
                 "summary": jikan[i].synopsis,
                 "year": date ,
                 "img": jikan[i].image_url,
-                "runtime": 0,
+                "runtime": 25,
                 "type": 'anime'
             })
         }

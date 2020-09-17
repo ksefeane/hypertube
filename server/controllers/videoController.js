@@ -1,7 +1,7 @@
 import fs from 'fs'
 import ffmpeg from 'fluent-ffmpeg'
 import { si } from 'nyaapi'
-import { newComment2, getComments2, sleep } from '../models/videoModel'
+import { newComment2, getComments2, sleep, fetchTitle } from '../models/videoModel'
 import { magnetUrl, torrent} from '../models/torrent'
 
 const destination = 'server/public/videos/'
@@ -33,6 +33,12 @@ export async function downloadMovie(req, res) {
     let torrent = search ? await downloadTorrent(find.magnet) : 'no torrent to download'
     let stat = [find, torrent]
     res.send(stat)
+}
+
+export async function localMovie(req, res) {
+    let title = req.params.movie
+    let mov = await fetchTitle(title)
+    res.send({'locals':mov})
 }
 
 export async function deleteVideo(req, res) {
@@ -92,7 +98,7 @@ export async function streamVideo(req, res) {
             try {
                 const fileSize = stat.size
                 let range = req.headers.range
-                console.log(range)
+                //console.log(range)
                 if (range) {
                     let parts = range.replace(/bytes=/,'').split('-')
                     let start = parseInt(parts[0], 10)
@@ -121,7 +127,7 @@ export async function streamVideo(req, res) {
                     })
                }
             } catch (e) {
-                console.log(e)
+                console.log(`error: movie unavailable (${e.code})`)
             }  
         }
     })

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { 
     downloadMagnet, deleteVideo, 
-    getInfo, streamVideo, streamState 
+    getInfo, streamVideo, streamState, localMovie 
 } from '../../controllers/videoController'
 import { fetchComments, addNewComment } from "../../controllers/videoController";
 const router = Router()
@@ -9,6 +9,7 @@ const router = Router()
 export default router
 .delete('/delete/:magnet', deleteVideo)
 
+.get('/local/:movie', localMovie)
 .get('/status/:movie', streamState)
 .get('/stream/:movie', streamVideo)
 
@@ -18,6 +19,7 @@ export default router
 
 .post('/addcomment', addNewComment)
 .post('/fetch-comments', fetchComments)
+
 
 //.get('/downloadAnime/:search', downloadAnime)
 //.get('/downloadMovie/:search', downloadMovie)

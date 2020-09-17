@@ -18,6 +18,28 @@
         <br />
         <br />
         <br />
+        <div v-if="locals" class="card-deck">
+            
+            <div class="row my-4">
+                <div v-for="loc in localmovies" :key="loc">
+                    <router-link v-bind:to="'/info/' + loc.title">
+                        <div class="col-md-3 layout">
+                            <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" :src="loc.img" alt="Card image cap" />
+                            <div class="card-body">
+                                <h3 class="card-title">{{ loc.title }}</h3>
+                                <p>
+                                <small>Score: {{ loc.score }}</small>
+                                </p>
+                                <p>Year: {{ loc.year }}</p>
+                                <p>Runtime: {{ loc.runtime }} minutes</p>
+                            </div>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
+        </div>
         <div class="card-deck">
           <div
             class="row my-4"
@@ -66,6 +88,7 @@ export default {
     return {
       movies: [],
       localmovies: [],
+      locals: false,
       movie: "",
       page_number: 0,
       no_per_page: 6,
@@ -80,8 +103,10 @@ export default {
         let res = await axios
             .get("http://localhost:5000/api/library/local/*")
             .catch((e) => {console.log(e)})
-            if (res.data.local)
+            if (res.data.local) {
                 this.localmovies = res.data.local
+                this.locals = true
+            }
     },
     getTodayMovieList: async function () {
       let res = await axios

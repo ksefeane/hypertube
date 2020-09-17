@@ -12,12 +12,17 @@
         <!-- <p>{{ film }}</p> -->
         <img v-if="pic" :src="film.img" alt />
         <br />
+        <small v-for="loc in locals" :key="loc">
+          <button @click="play_local(loc.name)">play {{loc.name}}</button>
+          <br />
+        </small>
+
         <small v-if="loading">downloading {{file_name}} {{size}}</small><br>
 
         <small v-for="(torrent, index) in torrents" :key="index">
           <button
             @click="download_film(torrent.magnet)"
-          >{{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button>
+          >download {{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button>
           <br />
         </small>
         <br />
@@ -95,6 +100,7 @@ export default {
       magnet: "",
       type: "",
       torrents: [],
+      locals: [],
       errors: [],
       success: [],
       username: '',
@@ -123,6 +129,14 @@ export default {
         this.film = ani.data.find((e) => e.title == this.id);
         this.animeTorrents();
       }
+    },
+    async getLocals() {
+        let loc = await axios
+            .get('http://localhost:5000/api/video/local/'+this.id)
+            .catch(e => {console.log(e)})
+        if (loc.data.locals) {
+            this.locals = loc.data.locals
+        }
     },
     async animeTorrents() {
       let ani = await axios
@@ -154,6 +168,12 @@ export default {
           this.stream_movie();
         }
       }
+    },
+    async play_local(name) {
+        this.file_name = name
+        this.show = true
+        this.pic = false
+        this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
     },
     async stream_movie() {
         let load = true
@@ -240,6 +260,7 @@ export default {
   created() {
     this.movieinfo();
     this.getUser()
+    this.getLocals()
     this.fetchComments();
   },
 };

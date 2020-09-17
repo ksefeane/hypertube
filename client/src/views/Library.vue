@@ -114,10 +114,10 @@ export default {
       this.movies.sort((a, b) => (a.year > b.year ? -1 : 1));
     },
     sort_by_rating_desc() {
-      this.movies.sort((a, b) => (a.rating > b.rating ? -1 : 1));
+      this.movies.sort((a, b) => (a.score > b.score ? -1 : 1));
     },
     sort_by_rating_asc() {
-      this.movies.sort((a, b) => (a.rating > b.rating ? 1 : -1));
+      this.movies.sort((a, b) => (a.score > b.score ? 1 : -1));
     },
   },
   computed: {

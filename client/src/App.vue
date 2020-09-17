@@ -68,17 +68,4 @@ section {
   clear: both;
   display: table;
 }
-
-.bg {
-  
-  /* The image used */
-  background-image: url("https://nhsportpress.com/wp-content/uploads/2018/12/movie-collage.png");
-
-  /* Half height */
-  height: 500px;
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 </style>

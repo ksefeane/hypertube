@@ -11,7 +11,7 @@
                 <img :src="image" alt="" >
             </div>
             <div id="preview2" v-else>
-                <img :src="pro_pic" alt="error" id="test">
+                <img :src="pro_pic" alt="No Pic available" id="test">
             </div>
             
             <form>
@@ -82,10 +82,6 @@ export default {
         }
     },
     methods: {
-        image_check(event) {
-            console.log(event)
-            test_stuff()
-        },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             this.url = URL.createObjectURL(this.selectedFile)
@@ -227,12 +223,6 @@ export default {
     created() {
         this.getUserData()
     }
-}
-
-function test_stuff() {
-    var x = document.getElementById("test")
-    // x.src = "../../../server/public/uploads/goku008/avatar.jpg"
-    console.log(x.src, 'hello')
 }
 </script>
 

@@ -56,8 +56,8 @@
         <div id="comm">
           <div v-for="comment in comments" v-bind:key="comment.id">
             <p>
-              <i>{{ comment.created_at }}</i>
-              <strong>{{ comment.username }}</strong>
+              <i>{{ comment.created_at.substr(0, 10) }}, {{ comment.created_at.substr(11, 5) }} </i>
+              <strong> {{ comment.username }} </strong>
               : {{ comment.content }}
             </p>
           </div>
@@ -118,7 +118,7 @@ export default {
       if (mov.data.length) {
         this.film = mov.data[0];
         this.torrents = mov.data[0].torrents;
-        console.log(this.film);
+        // console.log(this.film);
       } else {
         this.film = ani.data.find((e) => e.title == this.id);
         this.animeTorrents();
@@ -221,7 +221,7 @@ export default {
         movie: this.id,
       };
       var results = await axios_post("/api/video/fetch-comments", data);
-      console.log(results.data)
+      // console.log(results.data)
       if (results.data.error) {
         this.errors.push(results.data.error);
       } else {

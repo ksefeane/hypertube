@@ -224,12 +224,6 @@ export default {
         this.getUserData()
     }
 }
-
-function test_stuff() {
-    var x = document.getElementById("test")
-    // x.src = "../../../server/public/uploads/goku008/avatar.jpg"
-    console.log(x.src, 'hello')
-}
 </script>
 
 <style scoped>

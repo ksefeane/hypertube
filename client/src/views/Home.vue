@@ -2,9 +2,9 @@
   <div>
      <!-- <div class="bg"></div> -->
     <app-header></app-header>
-    {{ msg }}
-    <router-link to="/register">Register</router-link> | 
-    <router-link to="/login">Log in</router-link> |
+    <img src="../assets/test.jpg" alt="" srcset="" class="test">
+    <!-- <router-link to="/register" class="sort-buttons buttons" >Register</router-link> | 
+    <router-link to="/login">Log in</router-link> | -->
     <!-- <router-link to="/profile">Profile</router-link>  -->
     <app-footer></app-footer>
    
@@ -67,9 +67,14 @@ export default {
 
   /* Half height */
   height: 500px;
+
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+.test {
+  width: 100%;
+  height: auto;
 }
 </style>

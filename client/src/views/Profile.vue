@@ -11,7 +11,7 @@
                 <img :src="image" alt="" >
             </div>
             <div id="preview2" v-else>
-                <img :src="pro_pic" alt="error" id="test">
+                <img :src="pro_pic" alt="No Pic available" id="test">
             </div>
             
             <form>

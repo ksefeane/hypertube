@@ -156,16 +156,13 @@ export default {
       }
     },
     async stream_movie() {
-      while (!this.ready) {
-        console.log(this.file_name);
+        let load = true
+        while (load) {
         let vid = await axios
-          .get("http://localhost:5000/api/video/status/" + this.file_name)
-          .catch((e) => {
-            console.log(e);
-          });
+            .get("http://localhost:5000/api/video/status/" + this.file_name)
+            .catch((e) => {console.log(e)})
         console.log(vid.data);
         this.size = vid.data.size
-
         if (vid.data.status == "ready") this.ready = true;
       }
       if (this.ready) {

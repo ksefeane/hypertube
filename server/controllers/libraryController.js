@@ -1,6 +1,6 @@
 import { si, pantsu } from 'nyaapi'
 import axios from 'axios'
-import { maintainVideos, findVideo } from '../models/videoModel'
+import { maintainVideos, findVideo, latestVideos } from '../models/videoModel'
 import { createMagnet, filterName } from '../models/torrent'
 import keys from '../config/keys'
 
@@ -11,88 +11,11 @@ export async function sweep(req, res, next) {
     maintainVideos(destination)
     next()
 }
-
 export async function localSearch(req, res) {
-    let find = await findVideo(req.params.search)
-    find = find ? find : 'no videos found'
+    let search = req.params.search
+    let find = search === "*" ? await latestVideos(): await findVideo(search)
+    find = find ? {'local':find} : []
     res.send(find)
-}
-export async function topVideos(req, res) {
-    try {
-        let name = 'batman'
-        let loc = findVideo(name)
-        let ani = si.search('*', 5, {sort: 'seeders'})
-        let mov = axios.get('https://yts.mx/api/v2/list_movies.json')
-        let vid = await Promise.all([loc, ani, mov])
-        vid[2] = vid[2].data.data.movies
-        let find = []
-        // for (let i in vid[0]) {
-        //     find.push(vid[0][i])
-        // }
-        for (let i in ani) {
-            let name = await filterName(ani[i].name)
-            let jikan = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${name}`)
-            jikan = jikan.data.results
-            //console.log(jikan[0].start_date).substring(0, 4)
-            find.push({
-                'title': name,
-                'img': jikan[0].image_url,
-                'score': jikan[0].score,
-                'year': jikan[0].start_date
-            })
-        }
-        for (let i in vid[2]) {
-            find.push({
-                'title': vid[2][i].title,
-                'img': vid[2][i].medium_cover_image,
-                'score': vid[2][i].rating,
-                'year': vid[2][i].year,
-                'runtime': vid[2][i].runtime
-            })
-        }
-        res.send(find)
-    } catch (e) {
-        res.send({'error': e.code})
-    }
-}
-export async function allSearch(req, res) {
-    try {
-        let name = req.params.search
-        let loc = findVideo(name)
-        let ani = si.search(name, 10, {sort: 'seeders'})
-        let mov = axios.get('https://yts.mx/api/v2/list_movies.json?query_term='+name+'&sort_by=seeds')
-        let vid = await Promise.all([loc, ani, mov])
-        vid[2] = vid[2].data.data.movies
-        let find = []
-        let torrents = []
-        for (let i in vid[0]) {
-            find.push(vid[0][i])
-        }
-        for (let i in vid[1]) {
-            if (vid[1][i].seeders > 10) {
-                find.push({
-                    'name': vid[1][i].name, 
-                    'size': vid[1][i].filesize, 
-                    'seeders': vid[1][i].seeders, 
-                    'magnet': vid[1][i].magnet})
-            }
-        }
-        for (let i in vid[2]) {
-            let title = vid[2][i].title_long
-            for (let j in vid[2][i].torrents) {
-                let magnet = await createMagnet(vid[2][i].torrents[j].hash, title)
-                let seeders = vid[2][i].torrents[j].seeds
-                let size = vid[2][i].torrents[j].size
-                torrents.push({'magnet': magnet, 'seeders': seeders, 'size': size})
-            }
-            find.push({'name': title, 'torrents' : torrents})
-        }
-        find = find.length > 0 ? find : 'no videos found'
-        res.send(find)
-    } catch (e) {
-        e.code ? res.send({'movie error': e.code}) : 
-        res.send({'anime error':e.response})
-    }
 }
 
 export async function movieLibrary(req, res) {

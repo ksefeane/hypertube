@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       movies: [],
+      localmovies: [],
       movie: "",
       page_number: 0,
       no_per_page: 6,
@@ -75,6 +76,13 @@ export default {
     // async getVideos() {
     //     let res = await axios.get('http://localhost:5000/api/')
     // },
+    async getLocal() {
+        let res = await axios
+            .get("http://localhost:5000/api/library/local/*")
+            .catch((e) => {console.log(e)})
+            if (res.data.local)
+                this.localmovies = res.data.local
+    },
     getTodayMovieList: async function () {
       let res = await axios
         .get("http://localhost:5000/api/library/topmovies")
@@ -122,7 +130,7 @@ export default {
   },
   computed: {
     page_count() {
-      let num = this.movies.length;
+      let num = this.movies.length + this.local;
       let size = this.no_per_page;
       return Math.ceil(num / size);
     },
@@ -133,6 +141,7 @@ export default {
     },
   },
   created: function () {
+    this.getLocal()
     this.getTodayMovieList();
   },
 };

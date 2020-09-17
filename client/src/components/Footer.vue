@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <footer>
-      <h6>{{ title }}</h6>
+      {{ title }}
     </footer>
   </div>
 </template>
@@ -17,14 +17,22 @@ export default {
 
 <style scoped>
 .footer {
+  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  color: #0275d8;
+  color: white;
+  text-align: center;
+  size: 12px;
+  background-color: #5dbcd2;
+  font-size: 17px ;
+}
+  /* left: 0;
+  bottom: 0;
+  width: 100%;
+  color: 
   text-align: right;
   background-color: #b5afbc;
-}
-.h6 {
-  font-size: 0.5em;
-}
+} */
+
 </style>

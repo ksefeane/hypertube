@@ -88,6 +88,7 @@ export async function torrent(magnet, name) {
             })
         }
     }
+    await sleep(5000)
     return methods
 }
 

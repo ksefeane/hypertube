@@ -173,7 +173,7 @@ export default {
         this.file_name = name
         this.show = true
         this.pic = false
-        this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`
+        this.stream = `http://localhost:5000/api/video/stream/${this.file_name}`;
     },
     async stream_movie() {
         let load = true
@@ -183,7 +183,10 @@ export default {
             .catch((e) => {console.log(e)})
         console.log(vid.data);
         this.size = vid.data.size
-        if (vid.data.status == "ready") this.ready = true;
+        if (vid.data.status === "ready") {
+            this.ready = true;
+            load = false
+        }
       }
       if (this.ready) {
         this.show = true;
@@ -260,7 +263,7 @@ export default {
   created() {
     this.movieinfo();
     this.getUser()
-    this.getLocals()
+    //this.getLocals()
     this.fetchComments();
   },
 };

@@ -82,10 +82,6 @@ export default {
         }
     },
     methods: {
-        image_check(event) {
-            console.log(event)
-            test_stuff()
-        },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             this.url = URL.createObjectURL(this.selectedFile)

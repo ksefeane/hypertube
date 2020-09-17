@@ -3,6 +3,7 @@
         <app-header></app-header>
         <div>
             <h1>profile {{ username }}</h1>
+            <!-- <canvas id="profile_pic"></canvas> -->
             <div v-for="update in updates" :key="update">
                 <small>{{ update }}</small>
             </div>
@@ -10,7 +11,7 @@
                 <img :src="image" alt="" >
             </div>
             <div id="preview2" v-else>
-                <img :src="pro_pic" alt="No pic available" id="test">
+                <img :src="pro_pic" alt="error" id="test">
             </div>
             
             <form>
@@ -25,15 +26,16 @@
                 <input type="text" v-model="last_name"> <br>
             </form>
             <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <!-- <form>
+            <form>
                 <input type="text" v-model="new_username"> <br>
             </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br> -->
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
             <form>
                 <input type="email" v-model="email"> <br>
             </form>
             <input type="submit" value="Update Email" @click="update_email"><br>
             <br>
+            <!-- <router-link to="/update_password">Update Password</router-link><br> -->
             <form>
                 <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
                 <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
@@ -47,6 +49,7 @@
 </template>
 
 <script>
+// import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { secure_password, axios_post } from "../functions/functions";
@@ -79,6 +82,10 @@ export default {
         }
     },
     methods: {
+        image_check(event) {
+            console.log(event)
+            test_stuff()
+        },
         onFileSelected(event){
             this.selectedFile = event.target.files[0]
             this.url = URL.createObjectURL(this.selectedFile)
@@ -121,11 +128,15 @@ export default {
             const path = 'http://localhost:5000/api/users/upload?username='+this.username
             let nn = type.split('/')
             if (nn[0] === 'image') {
+                console.log("image")
                 axios.post(path, data, config).then((result) => {
                     this.message = result
+                    console.log(result)
                     if (result.data.changedRows) {
                         this.updates.push("Profile picture updated!")
                     }
+                    // this.imageAsBase64 = result.data
+                    // this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -136,13 +147,19 @@ export default {
         async update_details(data, url, field) {
             this.updates = []
             let response = await axios_post('/api/users/update-' + url, data)
-            // console.log(response)
+            console.log(response)
             if (response.data.changedRows) {
                 this.updates.push(field + ' updated!')
             } else if (response.data.data.changedRows) {
                 this.updates.push(field + ' updated!')
                 this.username = response.data.username
             }
+            // const path = '/api/users/update-' + url
+            // axios.post(path, data).then((response) => {
+            //     console.log(response)
+            // }).catch((err) => {
+            //     console.log(err)
+            // })
         },
         update_username() {
             this.updates = []
@@ -210,6 +227,12 @@ export default {
     created() {
         this.getUserData()
     }
+}
+
+function test_stuff() {
+    var x = document.getElementById("test")
+    // x.src = "../../../server/public/uploads/goku008/avatar.jpg"
+    console.log(x.src, 'hello')
 }
 </script>
 

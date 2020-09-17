@@ -1,5 +1,6 @@
 import tor from 'torrent-stream'
 import fs from 'fs'
+import q from './query'
 import { 
     sleep, insertVideo, getExt, infoHash, 
 } from './videoModel'
@@ -61,6 +62,7 @@ async function engineBoy(magnet, title) {
                         console.log(`download finished (${file.name})`)
                         len--
                         if (!len) {
+                            q.update('videos',['status'], ['complete'], 'name', file.name)
                             engine.on('idle', () => {status = 'finished'})
                             process.exit
                         }

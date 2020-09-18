@@ -263,7 +263,7 @@ export default {
   created() {
     this.movieinfo();
     this.getUser()
-    //this.getLocals()
+    this.getLocals()
     this.fetchComments();
   },
 };

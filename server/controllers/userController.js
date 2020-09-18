@@ -41,14 +41,14 @@ export async function loginUser(req, res, next) {
 export async function authLogin(req, res, next) {
     try {
         let token = await oauthToken(req.user.username)
-        res.redirect('http://localhost:8080/?t='+token)
+        res.redirect('http://localhost.localdomain:8080/?t='+token)
     } catch (e) {
         console.log(e)
     }
 }
 export async function failLogin(req, res, next) {
     let token = 'un'
-    res.redirect('http://localhost:8080?t='+token)
+    res.redirect('http://localhost.localdomain:8080?t='+token)
 }
 export async function loginoauth(req, res, next) {
     try {

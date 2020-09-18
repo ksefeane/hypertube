@@ -111,7 +111,6 @@ export async function sendEmailLink(username) {
     // var token = await hash(Math.random.toString(36).substring(8), 10)
     var token = crypto.randomBytes(20).toString('hex')
     var email = await q.fetchone('users', ['email'], 'username', username)
-    console.log(email)
     var link = `<p>hello ${username}</p><br>
     <a href='http://localhost:8080/reset/${token}' target='_blank>click here to reset password</a>`
     var stat = email ? await sendEmail({from: 'hypertube@hypertube.com', to: email[0].email, 

@@ -1,34 +1,40 @@
 <template>
     <div>
         <app-header></app-header>
-        <div class="form-field">
-            <form>
-                <br>
-                <label for="username">Username </label><br>
-                <input type="text" name="username" v-model="username"> <br> <br>
-                <label for="first_name">First Name </label><br>
-                <input type="text" name="first_name" v-model="first_name"> <br> <br>
-                <label for="username">Last Name </label><br>
-                <input type="text" name="last_name" v-model="last_name"> <br> <br>
-                <label for="email">Email </label><br>
-                <input type="email" name="email" v-model="email"> <br> <br>
-                <label for="password">Password </label><br>
-                <input type="password" name="password" v-model="password"> <br><br>
-                <label for="confirm_password">Confirm Password </label><br>
-                <input type="password" name="confirm_password" v-model="confirm_password"> <br><br>
-            </form>
-            <button v-on:click="validate">Submit</button><br><br>
-            <div id="err" v-for="error in errors" v-bind:key="error">
-                <p>{{ error }}</p>
-            </div>
-            <div id="succ" v-for="succ in success" v-bind:key="succ">
-                <p>{{ succ }}</p>
-            </div>
-            <hr>
-            <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
-            <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
-            <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
-        </div>
+        <br/><br/>
+
+        <section class="layout">
+                <h1 class="center">Registration</h1>
+                <div class="form-field">
+                    <form>
+                        <br>
+                        <label for="username">Username </label><br>
+                        <input type="text" name="username" v-model="username"> <br> <br>
+                        <label for="first_name">First Name </label><br>
+                        <input type="text" name="first_name" v-model="first_name"> <br> <br>
+                        <label for="username">Last Name </label><br>
+                        <input type="text" name="last_name" v-model="last_name"> <br> <br>
+                        <label for="email">Email </label><br>
+                        <input type="email" name="email" v-model="email"> <br> <br>
+                        <label for="password">Password </label><br>
+                        <input type="password" name="password" v-model="password"> <br><br>
+                        <label for="confirm_password">Confirm Password </label><br>
+                        <input type="password" name="confirm_password" v-model="confirm_password"> <br><br>
+                    </form>
+                    <button class="buttons" v-on:click="validate">Submit</button><br><br>
+                    <div id="err" v-for="error in errors" v-bind:key="error">
+                        <p>{{ error }}</p>
+                    </div>
+                    <div id="succ" v-for="succ in success" v-bind:key="succ">
+                        <p>{{ succ }}</p>
+                    </div>
+                    <hr>
+                    <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
+                    <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
+                    <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
+                </div>
+            </section>
+
         <!-- <div v-if="submit">
             First Name: {{ first_name }} <br>
             Last Name: {{ last_name }} <br>

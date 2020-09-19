@@ -2,25 +2,25 @@
   <div>
     <app-header></app-header>
     <br />
-    <section>
+    <section class="movie-section">
       <br />
       <div>
         <div v-if="show">
-          <video controls :src="stream" height="500" width="900">No video support</video>
+          <video id="video-player" controls :src="stream" >No video support</video>
         </div>
         <h1>{{ id }}</h1>
         <!-- <p>{{ film }}</p> -->
         <img v-if="pic" :src="film.img" alt />
         <br />
         <small v-for="loc in locals" :key="loc">
-          <button @click="play_local(loc.name)">play {{loc.name}}</button>
+          <button class="buttons" @click="play_local(loc.name)">play {{loc.name}}</button>
           <br />
         </small>
 
         <small v-if="loading">downloading {{file_name}} {{size}}</small><br>
 
         <small v-for="(torrent, index) in torrents" :key="index">
-          <button
+          <button class="buttons"
             @click="download_film(torrent.magnet)"
           >download {{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button>
           <br />
@@ -54,7 +54,7 @@
             cols="50"
           />
         </form>
-        <button v-on:click="validate">Submit</button>
+        <button class="buttons" v-on:click="validate">Submit</button>
         <br />
         <br />
 
@@ -62,7 +62,7 @@
           <div v-for="comment in comments" v-bind:key="comment.id">
             <p>
               <i>{{ comment.created_at.substr(0, 10) }}, {{ comment.created_at.substr(11, 5) }} </i>
-              <strong> {{ comment.username }} </strong>
+              <strong><span class="up"> {{ comment.username }}</span> </strong>
               : {{ comment.content }}
             </p>
           </div>
@@ -271,5 +271,28 @@ export default {
 <style scoped>
 button {
   margin-top: 10px;
+}
+#video-player {
+  /*position: absolute;*/
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 999;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.up{
+    text-transform:capitalize;
+}
+.movie-section{
+  margin: auto;
+  width:80%
 }
 </style>

@@ -1,6 +1,10 @@
 <template>
     <div>
         <app-header></app-header>
+        <br/><br/>
+
+        <section class="layout">
+
         <div id="err" v-for="error in errors" v-bind:key="error">
             <small>{{ error }}</small>
         </div>
@@ -11,10 +15,11 @@
             <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
             <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
         </form>
-        <button @click="validate">Update Password</button>
+        <button class="buttons" @click="validate">Update Password</button>
         <hr>
         <br>
         <hr>
+        </section>
         <app-footer></app-footer>
     </div>
 </template>

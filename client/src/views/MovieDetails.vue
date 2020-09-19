@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { axios_post } from "../functions/functions";
+import { axios_post, validComment, htmlEntities } from "../functions/functions";
 import moment from "moment";
 import axios from "axios";
 import sweet from "sweetalert";
@@ -181,7 +181,7 @@ export default {
         let vid = await axios
             .get("http://localhost:5000/api/video/status/" + this.file_name)
             .catch((e) => {console.log(e)})
-        console.log(vid.data);
+        // console.log(vid.data);
         this.size = vid.data.size
         if (vid.data.status === "ready") {
             this.ready = true;
@@ -195,26 +195,21 @@ export default {
       }
     },
     validate: function () {
+      var checkComment = validComment(this.comment_content)
       this.errors = [];
-      if (this.comment_content.length < 1) {
-        this.errors.push("Comments must have at least 1 characters");
-        return;
-      }
-      if (this.comment_content.length > 140) {
-        this.errors.push("Comments must have at most 140 characters");
-        return;
-      }
-      if (this.errors.length == 0) {
+      this.success = []
+      if (checkComment !== "good") {
+        this.errors.push(checkComment);
+      } else {
         this.addComment();
       }
     },
-    addComment: async function () {
-        
+    addComment: async function () {  
       this.success = [];
       const data = {
         username: this.username,
         movie: this.id,
-        comment: this.comment_content,
+        comment: htmlEntities(this.comment_content),
         created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
       //console.log(data)

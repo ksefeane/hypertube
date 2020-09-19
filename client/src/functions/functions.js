@@ -39,3 +39,32 @@ export async function post_comment(url, data) {
         return "Error!";
     }
 }
+
+export function htmlEntities(str) {
+    return String(str).replace(/&/g, ' &amp ').replace(/</g, ' &lt ').replace(/>/g, ' &gt ').replace(/"/g, ' &quot ').replace(/'/g, ' &sqt ').replace(/;/g, ' semicolon ').replace(/-/g, ' minus ');
+}
+
+export function validUsername(str) {
+    if (str.length < 2) return `Username too short`
+    else if (!str.match(/^[a-zA-Z0-9_]+$/)) return `Username may only contain alphabets, numbers & an underscore`
+    else return 'good' 
+}
+
+export function validName(field, str) {
+    if (str.length < 2) return `${field} too short`
+    else if (!str.match(/^[a-zA-Z]+$/)) return `${field} may only contain alphabets`
+    else return 'good' 
+}
+
+export function validComment(comment) {
+    var format = /[`^+\-={}*[\];%:"\\|<>/~]/
+    if (comment.length < 1 ) {
+        return "Comments must have at least 1 characters"
+    } else if (comment.length > 140) {
+        return "Comments must have at most 140 characters"
+    } else if (format.test(comment) == true) {
+        return "Comment has strange characters. Please ony use letters, numbers and these characters (,_'.?!()#$&)"
+    } else {
+        return "good"
+    }
+}

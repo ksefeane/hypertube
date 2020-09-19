@@ -46,7 +46,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { secure_password, axios_post } from "../functions/functions";
+import { secure_password, axios_post, validUsername, validName } from "../functions/functions";
 import sweet from 'sweetalert'
 
 export default {
@@ -70,10 +70,20 @@ export default {
     methods: {
         validate: function() {
             this.errors = []
-            if (this.username.length < 4) {
-                this.errors.push('Username must have at least 4 characters')
+            var checkUsername = validUsername(this.username)
+            var checkFirst = validName('First name', this.first_name)
+            var checkLast = validName('Last name', this.last_name)
+            if (checkUsername !== 'good') {
+                this.errors.push(checkUsername)
+                return
+            } else if (checkFirst!== 'good') {
+                this.errors.push(checkFirst)
+                return
+            } else if (checkLast !== 'good') {
+                this.errors.push(checkUsername)
                 return
             }
+            
             let check = secure_password(this.password)
             if (check !== 'good') {
                 this.errors.push(check)
@@ -88,12 +98,12 @@ export default {
             }
         },
         register: async function() {
-            // this.errors = []
+            this.errors = []
             const data = {
-                'first_name': this.first_name,
-                'last_name': this.last_name,
-                'username': this.username,
-                'email': this.email,
+                'first_name': escape(this.first_name),
+                'last_name': escape(this.last_name),
+                'username': escape(this.username),
+                'email': escape(this.email),
                 'password': this.password,
                 'password_repeat': this.password_repeat
             }

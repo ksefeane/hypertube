@@ -1,25 +1,21 @@
 <template>
     <div>
         <app-header></app-header>
-        <br/><br/>
-
-        <section class="layout">
-
-        <div id="err" v-for="error in errors" v-bind:key="error">
-            <small>{{ error }}</small>
+        <h1>{{ title }}</h1>
+        <div class="form-field">
+            <div id="err" v-for="error in errors" v-bind:key="error">
+                <small>{{ error }}</small>
+            </div>
+            <div id="succ" v-for="suc in succ" v-bind:key="suc">
+                <small>{{ suc }}</small>
+            </div>
+            <form>
+                <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+            </form>
+            <button @click="validate">Update Password</button>
         </div>
-        <div id="succ" v-for="suc in succ" v-bind:key="suc">
-            <small>{{ suc }}</small>
-        </div>
-        <form>
-            <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
-            <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
-        </form>
-        <button class="buttons" @click="validate">Update Password</button>
-        <hr>
         <br>
-        <hr>
-        </section>
         <app-footer></app-footer>
     </div>
 </template>
@@ -28,6 +24,7 @@
 import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { secure_password } from "../functions/functions";
 
 export default {
     components: {
@@ -36,6 +33,7 @@ export default {
     },
     data() {
         return {
+            title: "Reset Password",
             new_pass: '',
             confirm_pass: '',
             errors: [],
@@ -46,11 +44,14 @@ export default {
     methods: {
         validate: function() {
             this.errors = []
-            if (this.new_pass.length < 5) {
-                this.errors.push('Password short')
-            }
-            if (this.new_pass != this.confirm_pass) {
+            this.success = []
+            let check = secure_password(this.new_pass)
+            if (check !== 'good') {
+                this.errors.push(check)
+                return
+            } else if (this.new_pass!= this.confirm_pass) {
                 this.errors.push('Passwords do not match')
+                return
             }
             if (this.errors.length == 0) {
                 this.reset()
@@ -61,7 +62,7 @@ export default {
             axios.post(path, {
                 'password': this.new_pass
             }).then((result) => {
-                console.log(result)
+                // console.log(result)
                 if (result.data.error) {
                     this.errors.push("Invalid token")
                 } else if (result.data.success) {
@@ -75,3 +76,14 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.form-field {
+    /* border-style: double; */
+    margin: auto;
+    width: 50%;
+}
+h1{
+    text-align: center;
+}
+</style>

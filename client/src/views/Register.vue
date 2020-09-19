@@ -1,40 +1,34 @@
 <template>
     <div>
         <app-header></app-header>
-        <br/><br/>
-
-        <section class="layout">
-                <h1 class="center">Registration</h1>
-                <div class="form-field">
-                    <form>
-                        <br>
-                        <label for="username">Username </label><br>
-                        <input type="text" name="username" v-model="username"> <br> <br>
-                        <label for="first_name">First Name </label><br>
-                        <input type="text" name="first_name" v-model="first_name"> <br> <br>
-                        <label for="username">Last Name </label><br>
-                        <input type="text" name="last_name" v-model="last_name"> <br> <br>
-                        <label for="email">Email </label><br>
-                        <input type="email" name="email" v-model="email"> <br> <br>
-                        <label for="password">Password </label><br>
-                        <input type="password" name="password" v-model="password"> <br><br>
-                        <label for="confirm_password">Confirm Password </label><br>
-                        <input type="password" name="confirm_password" v-model="confirm_password"> <br><br>
-                    </form>
-                    <button class="buttons" v-on:click="validate">Submit</button><br><br>
-                    <div id="err" v-for="error in errors" v-bind:key="error">
-                        <p>{{ error }}</p>
-                    </div>
-                    <div id="succ" v-for="succ in success" v-bind:key="succ">
-                        <p>{{ succ }}</p>
-                    </div>
-                    <hr>
-                    <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
-                    <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
-                    <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
-                </div>
-            </section>
-
+        <div class="form-field">
+            <form>
+                <br>
+                <label for="username">Username </label><br>
+                <input type="text" name="username" v-model="username"> <br> <br>
+                <label for="first_name">First Name </label><br>
+                <input type="text" name="first_name" v-model="first_name"> <br> <br>
+                <label for="username">Last Name </label><br>
+                <input type="text" name="last_name" v-model="last_name"> <br> <br>
+                <label for="email">Email </label><br>
+                <input type="email" name="email" v-model="email"> <br> <br>
+                <label for="password">Password </label><br>
+                <input type="password" name="password" v-model="password"> <br><br>
+                <label for="confirm_password">Confirm Password </label><br>
+                <input type="password" name="confirm_password" v-model="confirm_password"> <br><br>
+            </form>
+            <button v-on:click="validate">Submit</button><br><br>
+            <div id="err" v-for="error in errors" v-bind:key="error">
+                <p>{{ error }}</p>
+            </div>
+            <div id="succ" v-for="succ in success" v-bind:key="succ">
+                <p>{{ succ }}</p>
+            </div>
+            <hr>
+            <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
+            <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
+            <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
+        </div>
         <!-- <div v-if="submit">
             First Name: {{ first_name }} <br>
             Last Name: {{ last_name }} <br>
@@ -52,7 +46,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { secure_password, axios_post } from "../functions/functions";
+import { secure_password, axios_post, validUsername, validName } from "../functions/functions";
 import sweet from 'sweetalert'
 
 export default {
@@ -76,10 +70,20 @@ export default {
     methods: {
         validate: function() {
             this.errors = []
-            if (this.username.length < 4) {
-                this.errors.push('Username must have at least 4 characters')
+            var checkUsername = validUsername(this.username)
+            var checkFirst = validName('First name', this.first_name)
+            var checkLast = validName('Last name', this.last_name)
+            if (checkUsername !== 'good') {
+                this.errors.push(checkUsername)
+                return
+            } else if (checkFirst!== 'good') {
+                this.errors.push(checkFirst)
+                return
+            } else if (checkLast !== 'good') {
+                this.errors.push(checkUsername)
                 return
             }
+            
             let check = secure_password(this.password)
             if (check !== 'good') {
                 this.errors.push(check)
@@ -94,12 +98,12 @@ export default {
             }
         },
         register: async function() {
-            // this.errors = []
+            this.errors = []
             const data = {
-                'first_name': this.first_name,
-                'last_name': this.last_name,
-                'username': this.username,
-                'email': this.email,
+                'first_name': escape(this.first_name),
+                'last_name': escape(this.last_name),
+                'username': escape(this.username),
+                'email': escape(this.email),
                 'password': this.password,
                 'password_repeat': this.password_repeat
             }

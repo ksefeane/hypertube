@@ -1,17 +1,16 @@
 <template>
     <div>
         <app-header></app-header>
-        <br/><br/>
         <h1>{{ msg }}</h1>
         <div class="form-field">
             <form>
                 <br>
                 <label for="username">Username: </label><br>
                 <input type="text" name="username" v-model="username"> <br><br>
-                <label for="assword">Password: </label><br>
+                <label for="password">password: </label><br>
                 <input type="password" name="password" v-model="password"> <br><br>
             </form>
-            <button class="buttons" @click="validate">Log in</button><br><br>
+            <button @click="validate">Log in</button><br><br>
             <div id="err" v-for="error in err" v-bind:key="error">
                     <small>{{ error }}</small>
             </div>
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-// import router from 'vue-router';
+import { secure_password, validUsername } from "../functions/functions";
 import axios from 'axios'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -49,18 +48,22 @@ export default {
     methods: {
         validate() {
             this.err = []
-            if (this.password.length < 8) {
-                this.err.push('Password too short')
-            } else if (this.username.length == 0) {
-                this.err.push('Enter username')
-            } else {
+            var checkUsername = validUsername(this.username)
+            let check = secure_password(this.password)
+            if (check !== 'good') {
+                this.err.push(check)
+                return
+            } else if (checkUsername !== 'good') {
+                this.err.push(checkUsername)
+                return
+            }else {
                 this.login()
             }
         },
         async login() {
             let path = 'http://localhost:5000/api/users/signin/'
             let res = await axios.post(path, {
-                'username': this.username,
+                'username': escape(this.username),
                 'password': this.password
             }).catch(e => {e})
             if (res.data.error) {
@@ -104,13 +107,5 @@ export default {
 }
 h1{
     text-align: center;
-}
-
-@media screen and (max-width: 300px) {
-  .form-field {
-     display: block;
-     float: none;
-  }
-
 }
 </style>

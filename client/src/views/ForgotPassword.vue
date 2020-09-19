@@ -1,9 +1,7 @@
 <template>
     <div>
         <app-header></app-header>
-        <section class="center">
-        <br>
-        <h1 class="center">{{ title }}</h1>
+        <h1>{{ title }}</h1>
         <p>{{ text }}</p>
         <form>
             <div id="err" v-for="error in errors" v-bind:key="error">
@@ -14,10 +12,9 @@
             </div>
             <input type="text" placeholder="Enter your username" v-model="username">
         </form>
-        <button class="buttons" @click="validate">Submit Username</button>
+        <button @click="validate">Submit Username</button>
         <br />
         <router-link to="/login">Back to login</router-link>
-        </section>
         <app-footer></app-footer>
     </div>
 </template>
@@ -27,7 +24,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { axios_post } from "../functions/functions";
+import { axios_post, validUsername } from "../functions/functions";
 
 export default {
     components: {
@@ -46,8 +43,11 @@ export default {
     methods: {
         validate() {
             this.err = []
-            if (this.username.length < 4) {
-                this.errors.push('Username must have at least 4 characters')
+            this.succ = null
+            var checkUsername = validUsername(this.username)
+            if (checkUsername !== 'good') {
+                this.errors.push(checkUsername)
+                return
             } else {
                 this.forgot_pass()
             }

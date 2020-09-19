@@ -2,63 +2,46 @@
     <div>
         <app-header></app-header>
         <div>
-            <br/><br/>
-
-             <div class="container">
-                    <div class="row">
-                         <div class="col-container">
-                            <div class="col">
-                                <h1><span class="up">{{ username }}</span>'s Profile</h1>
-                                 <div v-for="update in updates" :key="update">
-                                    <small>{{ update }}</small>
-                                </div>
-                                <div id="preview" v-if="image">
-                                    <img :src="image" alt="" >
-                                </div>
-                                <div id="preview2" v-else>
-                                    <img :src="pro_pic" alt="No Pic available" id="test">
-                                </div>
-                                <br/>
-                                 <form>
-                                     <input type="file" name="photo" id="" @change="onFileSelected">
-                                </form>
-                                    <button class="buttons" @click="uploadImage">Upload</button>
-                            
-                                <form>
-                                    <input type="text" v-model="first_name"> <br>
-                                </form>
-                                <input class="buttons" type="submit" value="Update First Name" @click="update_first"><br><br>
-                                <form>
-                                    <input type="text" v-model="last_name"> <br>
-                                </form>
-                                <input class="buttons" type="submit" value="Update Last Name" @click="update_last"><br><br>
-                                <form>
-                                    <input type="text" v-model="new_username"> <br>
-                                <!-- </form>
-                                <input type="submit" value="Update Username" @click="update_username"><br><br>
-                                <form> -->
-                                    <input type="email" v-model="email"> <br>
-                                </form>
-                                <input class="buttons" type="submit" value="Update Email" @click="update_email"><br>
-                                <br>
-                                <!-- <router-link to="/update_password">Update Password</router-link><br> -->
-                                <form>
-                                    <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
-                                    <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
-                                    <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
-                                </form>
-                                <input class="buttons" type="submit" value="Update Password" @click="validate"><br><br>
-                            </div>
-                         </div>
-                    </div>
-             </div>
-            
+            <h1>profile {{ username }}</h1>
             <!-- <canvas id="profile_pic"></canvas> -->
-           
+            <div v-for="update in updates" :key="update">
+                <small>{{ update }}</small>
+            </div>
+            <div id="preview" v-if="image">
+                <img :src="image" alt="" >
+            </div>
+            <div id="preview2" v-else>
+                <img :src="pro_pic" alt="No Pic available" id="test">
+            </div>
             
-            
-           
-            
+            <form>
+                <input type="file" name="photo" id="" @change="onFileSelected">
+            </form>
+            <button @click="uploadImage">Upload</button>
+            <form>
+                <input type="text" v-model="first_name"> <br>
+            </form>
+            <input type="submit" value="Update First Name" @click="update_first"><br><br>
+            <form>
+                <input type="text" v-model="last_name"> <br>
+            </form>
+            <input type="submit" value="Update Last Name" @click="update_last"><br><br>
+            <form>
+                <input type="text" v-model="new_username"> <br>
+            <!-- </form>
+            <input type="submit" value="Update Username" @click="update_username"><br><br>
+            <form> -->
+                <input type="email" v-model="email"> <br>
+            </form>
+            <input type="submit" value="Update Email" @click="update_email"><br>
+            <br>
+            <!-- <router-link to="/update_password">Update Password</router-link><br> -->
+            <form>
+                <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
+                <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+            </form>
+            <input type="submit" value="Update Password" @click="validate"><br><br>
         </div>
         
         <app-footer></app-footer>
@@ -141,26 +124,22 @@ export default {
             const path = 'http://localhost:5000/api/users/upload?username='+this.username
             let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("image")
+                // console.log("image")
                 axios.post(path, data, config).then((result) => {
                     this.message = result
-                    console.log(result)
+                    // console.log(result)
                     if (result.data.changedRows) {
                         this.updates.push("Profile picture updated!")
                     }
-                    // this.imageAsBase64 = result.data
-                    // this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
-            } else if (nn[0] === 'video') {
-                console.log("We've got a VIDEO!");
             }
         },
         async update_details(data, url, field) {
             this.updates = []
             let response = await axios_post('/api/users/update-' + url, data)
-            console.log(response)
+            // console.log(response)
             if (response.data.changedRows) {
                 this.updates.push(field + ' updated!')
             } else if (response.data.data.changedRows) {
@@ -178,7 +157,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'username': this.new_username
+                'username': escape(this.new_username)
             }
             this.update_details(data, 'username/', 'Username')
             localStorage.setItem('user', this.new_username)
@@ -187,7 +166,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'first_name': this.first_name
+                'first_name': escape(this.first_name)
             }
             this.update_details(data, 'first/', 'First name')
         },
@@ -195,7 +174,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'last_name': this.last_name
+                'last_name': escape(this.last_name)
             }
             this.update_details(data, 'last/', 'Last name')
         },
@@ -203,7 +182,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'username': this.username
+                'username': escape(this.username)
             }
             this.update_details(data, 'email/', 'Email')
         },
@@ -245,6 +224,7 @@ export default {
 
 <style scoped>
 #preview {
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -253,24 +233,12 @@ export default {
   height: 200px;
 }
 #preview2 {
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 #preview2 img {
   width: 200px;
   height: 200px;
-}
-
-.col-container {
-    display: table; 
-    width: 100%; 
-}
-
-.col {
-    display: table-cell; 
-}
-
-.up{
-    text-transform:capitalize;
 }
 </style>

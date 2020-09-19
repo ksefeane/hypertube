@@ -2,25 +2,25 @@
   <div>
     <app-header></app-header>
     <br />
-    <section class="movie-section">
+    <section>
       <br />
       <div>
         <div v-if="show">
-          <video id="video-player" controls :src="stream" >No video support</video>
+          <video controls :src="stream" height="500" width="900">No video support</video>
         </div>
         <h1>{{ id }}</h1>
         <!-- <p>{{ film }}</p> -->
         <img v-if="pic" :src="film.img" alt />
         <br />
         <small v-for="loc in locals" :key="loc">
-          <button class="buttons" @click="play_local(loc.name)">play {{loc.name}}</button>
+          <button @click="play_local(loc.name)">play {{loc.name}}</button>
           <br />
         </small>
 
         <small v-if="loading">downloading {{file_name}} {{size}}</small><br>
 
         <small v-for="(torrent, index) in torrents" :key="index">
-          <button class="buttons"
+          <button
             @click="download_film(torrent.magnet)"
           >download {{torrent.quality}} {{torrent.name}} {{torrent.size}} {{torrent.seeders}} seeders</button>
           <br />
@@ -54,7 +54,7 @@
             cols="50"
           />
         </form>
-        <button class="buttons" v-on:click="validate">Submit</button>
+        <button v-on:click="validate">Submit</button>
         <br />
         <br />
 
@@ -62,7 +62,7 @@
           <div v-for="comment in comments" v-bind:key="comment.id">
             <p>
               <i>{{ comment.created_at.substr(0, 10) }}, {{ comment.created_at.substr(11, 5) }} </i>
-              <strong><span class="up"> {{ comment.username }}</span> </strong>
+              <strong> {{ comment.username }} </strong>
               : {{ comment.content }}
             </p>
           </div>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { axios_post } from "../functions/functions";
+import { axios_post, validComment, htmlEntities } from "../functions/functions";
 import moment from "moment";
 import axios from "axios";
 import sweet from "sweetalert";
@@ -181,7 +181,7 @@ export default {
         let vid = await axios
             .get("http://localhost:5000/api/video/status/" + this.file_name)
             .catch((e) => {console.log(e)})
-        console.log(vid.data);
+        // console.log(vid.data);
         this.size = vid.data.size
         if (vid.data.status === "ready") {
             this.ready = true;
@@ -195,26 +195,21 @@ export default {
       }
     },
     validate: function () {
+      var checkComment = validComment(this.comment_content)
       this.errors = [];
-      if (this.comment_content.length < 1) {
-        this.errors.push("Comments must have at least 1 characters");
-        return;
-      }
-      if (this.comment_content.length > 140) {
-        this.errors.push("Comments must have at most 140 characters");
-        return;
-      }
-      if (this.errors.length == 0) {
+      this.success = []
+      if (checkComment !== "good") {
+        this.errors.push(checkComment);
+      } else {
         this.addComment();
       }
     },
-    addComment: async function () {
-        
+    addComment: async function () {  
       this.success = [];
       const data = {
         username: this.username,
         movie: this.id,
-        comment: this.comment_content,
+        comment: htmlEntities(this.comment_content),
         created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
       //console.log(data)
@@ -271,28 +266,5 @@ export default {
 <style scoped>
 button {
   margin-top: 10px;
-}
-#video-player {
-  /*position: absolute;*/
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  z-index: 999;
-}
-
-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.up{
-    text-transform:capitalize;
-}
-.movie-section{
-  margin: auto;
-  width:80%
 }
 </style>

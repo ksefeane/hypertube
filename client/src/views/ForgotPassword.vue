@@ -24,7 +24,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { axios_post } from "../functions/functions";
+import { axios_post, validUsername } from "../functions/functions";
 
 export default {
     components: {
@@ -43,8 +43,11 @@ export default {
     methods: {
         validate() {
             this.err = []
-            if (this.username.length < 4) {
-                this.errors.push('Username must have at least 4 characters')
+            this.succ = null
+            var checkUsername = validUsername(this.username)
+            if (checkUsername !== 'good') {
+                this.errors.push(checkUsername)
+                return
             } else {
                 this.forgot_pass()
             }

@@ -1,7 +1,9 @@
 <template>
     <div>
         <app-header></app-header>
-        <h1>{{ title }}</h1>
+        <section class="center">
+        <br>
+        <h1 class="center">{{ title }}</h1>
         <p>{{ text }}</p>
         <form>
             <div id="err" v-for="error in errors" v-bind:key="error">
@@ -12,9 +14,10 @@
             </div>
             <input type="text" placeholder="Enter your username" v-model="username">
         </form>
-        <button @click="validate">Submit Username</button>
+        <button class="buttons" @click="validate">Submit Username</button>
         <br />
         <router-link to="/login">Back to login</router-link>
+        </section>
         <app-footer></app-footer>
     </div>
 </template>

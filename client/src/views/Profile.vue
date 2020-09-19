@@ -2,46 +2,55 @@
     <div>
         <app-header></app-header>
         <div>
-            <h1>profile {{ username }}</h1>
-            <!-- <canvas id="profile_pic"></canvas> -->
-            <div v-for="update in updates" :key="update">
-                <small>{{ update }}</small>
-            </div>
-            <div id="preview" v-if="image">
-                <img :src="image" alt="" >
-            </div>
-            <div id="preview2" v-else>
-                <img :src="pro_pic" alt="No Pic available" id="test">
-            </div>
-            
-            <form>
-                <input type="file" name="photo" id="" @change="onFileSelected">
-            </form>
-            <button @click="uploadImage">Upload</button>
-            <form>
-                <input type="text" v-model="first_name"> <br>
-            </form>
-            <input type="submit" value="Update First Name" @click="update_first"><br><br>
-            <form>
-                <input type="text" v-model="last_name"> <br>
-            </form>
-            <input type="submit" value="Update Last Name" @click="update_last"><br><br>
-            <form>
-                <input type="text" v-model="new_username"> <br>
-            <!-- </form>
-            <input type="submit" value="Update Username" @click="update_username"><br><br>
-            <form> -->
-                <input type="email" v-model="email"> <br>
-            </form>
-            <input type="submit" value="Update Email" @click="update_email"><br>
-            <br>
-            <!-- <router-link to="/update_password">Update Password</router-link><br> -->
-            <form>
-                <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
-                <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
-                <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
-            </form>
-            <input type="submit" value="Update Password" @click="validate"><br><br>
+          <br/><br/>
+           <div class="container">
+                    <div class="row">
+                         <div class="col-container">
+                            <div class="col">
+                                   <h1><span class="up">{{ username }}</span>'s Profile</h1>
+                                    <!-- <canvas id="profile_pic"></canvas> -->
+                                    <div v-for="update in updates" :key="update">
+                                    <small>{{ update }}</small>
+                                    </div>
+                                    <div id="preview" v-if="image">
+                                    <img :src="image" alt="" >
+                                    </div>
+                                    <div id="preview2" v-else>
+                                    <img :src="pro_pic" alt="No Pic available" id="test">
+                                    </div>
+                                    <br/>
+                                    <form>
+                                    <input type="file" name="photo" id="" @change="onFileSelected">
+                                    </form>
+                                    <button class="buttons" @click="uploadImage">Upload</button>
+                                    <form>
+                                    <input type="text" v-model="first_name"> <br>
+                                    </form>
+                                    <input class="buttons" type="submit" value="Update First Name" @click="update_first"><br><br>
+                                    <form>
+                                    <input type="text" v-model="last_name"> <br>
+                                    </form>
+                                    <input class="buttons" type="submit" value="Update Last Name" @click="update_last"><br><br>
+                                    <form>
+                                    <input type="text" v-model="new_username"> <br>
+                                    <!-- </form>
+                                    <input type="submit" value="Update Username" @click="update_username"><br><br>
+                                    <form> -->
+                                    <input type="email" v-model="email"> <br>
+                                    </form>
+                                    <input class="buttons" type="submit" value="Update Email" @click="update_email"><br>
+                                    <br>
+                                    <!-- <router-link to="/update_password">Update Password</router-link><br> -->
+                                    <form>
+                                    <input type="password" v-model="current_pass" placeholder="Enter current password"> <br>
+                                    <input type="password" v-model="new_pass" placeholder="Enter new password"> <br>
+                                    <input type="password" v-model="confirm_pass" placeholder="Confirm new password"> <br>
+                                    </form>
+                                    <input class="buttons" type="submit" value="Update Password" @click="validate"><br><br>
+                            </div>
+                         </div>
+                    </div>
+           </div>
         </div>
         
         <app-footer></app-footer>
@@ -224,7 +233,6 @@ export default {
 
 <style scoped>
 #preview {
-  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -233,12 +241,24 @@ export default {
   height: 200px;
 }
 #preview2 {
-  display: flex;
   justify-content: center;
   align-items: center;
 }
 #preview2 img {
   width: 200px;
   height: 200px;
+}
+
+.col-container {
+    display: table; 
+    width: 100%; 
+}
+
+.col {
+    display: table-cell; 
+}
+
+.up{
+    text-transform:capitalize;
 }
 </style>

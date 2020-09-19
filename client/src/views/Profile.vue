@@ -124,26 +124,22 @@ export default {
             const path = 'http://localhost:5000/api/users/upload?username='+this.username
             let nn = type.split('/')
             if (nn[0] === 'image') {
-                console.log("image")
+                // console.log("image")
                 axios.post(path, data, config).then((result) => {
                     this.message = result
-                    console.log(result)
+                    // console.log(result)
                     if (result.data.changedRows) {
                         this.updates.push("Profile picture updated!")
                     }
-                    // this.imageAsBase64 = result.data
-                    // this.$router.go(0)
                 }).catch((error) => {
                     console.log(error)
                 })
-            } else if (nn[0] === 'video') {
-                console.log("We've got a VIDEO!");
             }
         },
         async update_details(data, url, field) {
             this.updates = []
             let response = await axios_post('/api/users/update-' + url, data)
-            console.log(response)
+            // console.log(response)
             if (response.data.changedRows) {
                 this.updates.push(field + ' updated!')
             } else if (response.data.data.changedRows) {
@@ -161,7 +157,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'username': this.new_username
+                'username': escape(this.new_username)
             }
             this.update_details(data, 'username/', 'Username')
             localStorage.setItem('user', this.new_username)
@@ -170,7 +166,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'first_name': this.first_name
+                'first_name': escape(this.first_name)
             }
             this.update_details(data, 'first/', 'First name')
         },
@@ -178,7 +174,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'last_name': this.last_name
+                'last_name': escape(this.last_name)
             }
             this.update_details(data, 'last/', 'Last name')
         },
@@ -186,7 +182,7 @@ export default {
             this.updates = []
             let data = {
                 'email': this.email, 
-                'username': this.username
+                'username': escape(this.username)
             }
             this.update_details(data, 'email/', 'Email')
         },

@@ -56,7 +56,7 @@ export default {
             }
         },
         async forgot_pass() {
-            const data = {'username': this.username}
+            const data = {'username': escape(this.username)}
             var results = await axios_post('/api/forgotpassword/', data)
             if (results !== "Oops!") {
                 if (results.data.error) {

@@ -1,16 +1,17 @@
 <template>
     <div>
         <app-header></app-header>
+        <br/><br/>
         <h1>{{ msg }}</h1>
         <div class="form-field">
             <form>
                 <br>
                 <label for="username">Username: </label><br>
                 <input type="text" name="username" v-model="username"> <br><br>
-                <label for="password">password: </label><br>
+                <label for="password">Password: </label><br>
                 <input type="password" name="password" v-model="password"> <br><br>
             </form>
-            <button @click="validate">Log in</button><br><br>
+            <button class="buttons" @click="validate">Log in</button><br><br>
             <div id="err" v-for="error in err" v-bind:key="error">
                     <small>{{ error }}</small>
             </div>

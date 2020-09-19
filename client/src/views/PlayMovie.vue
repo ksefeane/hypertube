@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <video controls src="">
+            <video id="player-overlay" controls src="">
             No video support
             
             </video>
@@ -121,5 +121,21 @@ export default {
     position: relative;
     max-height: 250px;
     background-color: aqua;
+}
+
+#player-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 999;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>

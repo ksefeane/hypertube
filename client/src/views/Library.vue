@@ -20,10 +20,10 @@
         <br />
         <div v-if="locals" class="card-deck">
             
-            <div class="row my-4">
+            <div class="my-4">
                 <div v-for="loc in localmovies" :key="loc">
                     <router-link v-bind:to="'/info/' + loc.title">
-                        <div class="col-md-3 layout">
+                        <div class="md-3 layout">
                             <div class="card" style="width: 18rem;">
                             <img class="card-img-top" :src="loc.img" alt="Card image cap" />
                             <div class="card-body">
@@ -42,13 +42,13 @@
         </div>
         <div class="card-deck">
           <div
-            class="row my-4"
+            class="my-4"
             v-for="(film, index) in paginated_movies"
             :key="index"
             @click="send_info(film)"
           >
             <router-link v-bind:to="'/info/' + film.title">
-              <div class="col-md-3 layout">
+              <div class="md-3 layout">
                 <div class="card" style="width: 18rem;">
                   <img class="card-img-top" :src="film.img" alt="Card image cap" />
                   <div class="card-body">
@@ -174,6 +174,11 @@ export default {
 <style scoped>
 .layout {
    text-align: center;
+   width:80%;
+   padding-right: -15px;
+    padding-left: -15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 h1 {
@@ -197,10 +202,10 @@ h1 {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   text-align: center;
 }
-.buttons{
-    background: #ee4c7c;
-    color: white;
-    padding: 10px;
-    border: 1px solid #ee4c7c;
+@media screen and (min-width: 768px) {
+  .card-body {
+  width: 100%;
+}
+
 }
 </style>

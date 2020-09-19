@@ -20,9 +20,13 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 20%;
   color: #0275d8;
-  text-align: right;
-  background-color: #b5afbc;
+  text-align: center;
+  background-color: #fff;
+  margin-top: 10px;
+  padding: 10px;
+  text-transform: uppercase;
 }
 .h6 {
   font-size: 0.5em;

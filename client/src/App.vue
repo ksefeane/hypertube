@@ -29,11 +29,15 @@ export default {
 body {
   margin: 0;
   padding: 0;
-  background-color: #b5afbc;
+  background-color: #fff;
   font-size: 100%;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+.center{
+  text-align: center;
 }
 #app {
-  font-family:courier,arial,helvetica;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #7c5295;
@@ -68,4 +72,54 @@ section {
   clear: both;
   display: table;
 }
+.btn {
+    margin: .375rem;
+    color: inherit;
+    text-transform: uppercase;
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+    -webkit-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    padding: 0.5em;
+    font-size: .81rem;
+}
+
+.buttons{
+    background: #ee4c7c;
+    color: white;
+    padding: 10px;
+    border: 1px solid #ee4c7c;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+input[type=text], input[type=password], input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    padding-right: -15px;
+    padding-left: -15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    margin: 0 auto;
+    width: 80%;
+}
+
 </style>

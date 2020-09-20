@@ -1,5 +1,21 @@
 import DB from './db'
 
+export async function given(val) {
+    console.log(val)
+    let clean = val.replace(/\'|;|-/g, '')
+    console.log(clean)
+    return (clean)
+}
+
+export async function givenchy(vals) {
+    let nvals = []
+    for (let i in vals) {
+        if (vals[i])
+            nvals.push(await given(vals[i]))
+    }
+    return nvals
+}
+
 class query {
 	constructor() {}
 	static async insert(t_name, params, values) {

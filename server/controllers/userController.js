@@ -20,8 +20,8 @@ export function jwtauth(req, res, next) {
     try {
         const token = req.headers.authorization.replace("Bearer ", "")
         const decode = verify(token, "secret")
-        console.log(decode)
-        req.user = decode
+        //console.log(decode)
+        req.user = decode.body.name
         next()
     } catch (e) {
         return res.status(401).json({
@@ -30,11 +30,8 @@ export function jwtauth(req, res, next) {
     }
 }
 export async function getUrl(req, res) {
-    let url = req.body.url
-    if (url.length < 35) {
-        global.url = url
-    }
-    console.log(`client: ${global.url}\n`)
+    global.url = req.body.url
+    console.log(`client: ${global.url}`)
     res.send({'success':'url received'})
 }
 export async function registerUser(req, res, next) {

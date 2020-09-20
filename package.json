@@ -6,8 +6,7 @@
   "scripts": {
     "server": "nodemon -r esm server/index.js",
     "client": "cd ./client && npm run serve",
-    "dev": "concurrently --kill-others \"npm run client\" \"npm run server\"",
-    "install": "concurrently --kill-others \"npm install\" \"cd client && npm install && cd ..\""
+    "dev": "concurrently --kill-others \"npm run client\" \"npm run server\""
   },
   "repository": {
     "type": "git",
@@ -42,7 +41,7 @@
     "path": "^0.12.7",
     "sass-loader": "^10.0.2",
     "torrent-stream": "^1.2.0",
-    "util": "^0.12.3",
+    "util": "^0.12.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

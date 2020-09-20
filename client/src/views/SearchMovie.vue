@@ -90,6 +90,12 @@ export default {
 .search-btn {
   margin: 5px;
 }
+
+.card-deck {
+    margin: auto 0;
+    text-align: center;
+    margin-left: 16px;
+}
 .card {
   /* border: solid; */
   background-color:#b5afbc ;
@@ -120,6 +126,7 @@ export default {
 }
 .search-input{
   text-align: center;
-  margin: auto 0;
+  margin: auto;
+  width:30%
 }
 </style>

@@ -1,6 +1,9 @@
 <template>
     <div>
         <app-header></app-header>
+        <br/><br/>
+     <section class="layout">
+            <h1 class="center">Registration</h1>
         <div class="form-field">
             <form>
                 <br>
@@ -17,7 +20,7 @@
                 <label for="confirm_password">Confirm Password </label><br>
                 <input type="password" name="confirm_password" v-model="confirm_password"> <br><br>
             </form>
-            <button v-on:click="validate">Submit</button><br><br>
+            <button class="buttons" v-on:click="validate">Submit</button><br><br>
             <div id="err" v-for="error in errors" v-bind:key="error">
                 <p>{{ error }}</p>
             </div>
@@ -25,10 +28,12 @@
                 <p>{{ succ }}</p>
             </div>
             <hr>
-            <small>register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
+            <small>Register using <a href='http://localhost:5000/api/users/auth/42'>42</a> </small> | 
             <small><a href='http://localhost:5000/api/users/auth/github'>github</a> </small> <br>
             <small>Already have an account? <router-link to="/login">Log in!</router-link> </small>
         </div>
+     </section>
+
         <!-- <div v-if="submit">
             First Name: {{ first_name }} <br>
             Last Name: {{ last_name }} <br>

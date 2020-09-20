@@ -112,7 +112,7 @@ export async function sendEmailLink(username) {
     var token = crypto.randomBytes(20).toString('hex')
     var email = await q.fetchone('users', ['email'], 'username', username)
     var link = `<p>hello ${username}</p><br>
-    <a href='http://localhost:8080/reset/${token}'>click here to reset password</a>`
+    <a href='http://localhost:8080/reset/${token}' target='_blank>click here to reset password</a>`
     var stat = email ? await sendEmail({from: 'hypertube@hypertube.com', to: email[0].email, 
         subject: 'reset password', text: link}) : {'error': 'email not found'}
     email ? q.insert('tokens', ['username', 'token', 'type'], [username, token, 'resetpassword']) : 0

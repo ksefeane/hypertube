@@ -1,7 +1,6 @@
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 import q from './query'
-import _ from 'lodash'
 
 export function getExt(string) {
     let extension = string.match(/.*(\..+?)$/);
@@ -47,12 +46,15 @@ async function checkExpiry(file, path) {
     }
 }
 
+export async function createFolder(path) {
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path)
+        return ({'success':'videos folder created'})
+    }
+}
+
 export async function maintainVideos(path) {
     let find = []
-    await sleep(100)
- //   process.stdout.write('\nscanning library...\r')
- //   console.log()
-    await sleep(100)
     let len = 0
     fs.readdir(path, (err, files) => {
         if (err) throw err

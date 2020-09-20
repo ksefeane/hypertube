@@ -1,7 +1,7 @@
 import { 
     User, getuserDetails, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
 } from '../models/userModel'
-import { verify } from 'jsonwebtoken'
+import { verify } from 'njwt'
 
 export function authRedirect(req, res, next) {
     if (req.isAuthenticated) {
@@ -17,6 +17,7 @@ export function jwtauth(req, res, next) {
     try {
         const token = req.headers.authorization.replace("Bearer ", "")
         const decode = verify(token, "secret")
+        console.log(decode)
         req.user = decode
         next()
     } catch (e) {

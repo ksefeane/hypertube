@@ -19,8 +19,10 @@ import db from './models/db'
 db.init()
 
 //maintain video library
-import { maintainVideos } from './models/videoModel'
-maintainVideos('server/public/videos/')
+let dir = 'server/public/videos'
+import { maintainVideos, createFolder } from './models/videoModel'
+createFolder(dir)
+maintainVideos(dir)
 
 //setup cookies
 import session from 'express-session'

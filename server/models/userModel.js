@@ -4,7 +4,6 @@ import crypto from 'crypto'
 import { validString, securePassword, validEmail, createToken } from './securityModel'
 import { sendEmail } from './emailModel'
 import fs from 'fs'
-import path from 'path'
 
 const params = ['username', 'first_name', 'last_name', 'email', 'password', 'type']
 

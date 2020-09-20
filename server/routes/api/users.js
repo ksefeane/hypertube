@@ -3,7 +3,7 @@ const router = Router()
 import { 
     authRedirect, registerUser, loginUser, authLogin, logoutUser, 
     uploadPhoto, loginoauth, getUser, changeEmail, changeFirst, 
-    changeLast, changeUsername, jwtauth, failLogin
+    changeLast, changeUsername, jwtauth, failLogin, getUrl
 } from '../../controllers/userController'
 import { changePasswordProfile } from '../../controllers/userController'
 import upload from '../../models/imageModel'
@@ -31,5 +31,5 @@ export default router
 .post('/update-last', changeLast)
 .post('/update-first', changeFirst)
 .post('/update-password', changePasswordProfile)
-
+.post('/url', getUrl)
 //delete

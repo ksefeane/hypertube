@@ -1,5 +1,8 @@
 import { 
-    User, getuserDetails, signupUser, signinUser, uploadImage, sendEmailLink, checkEmailLink, setPassword, signinOauth, oauthToken, updateEmail, updateFirst, updateLast, updateUsername, updatePassword
+    User, getuserDetails, signupUser, signinUser, uploadImage, 
+    sendEmailLink, checkEmailLink, setPassword, signinOauth, 
+    oauthToken, updateEmail, updateFirst, updateLast, updateUsername, 
+    updatePassword
 } from '../models/userModel'
 import { verify } from 'njwt'
 
@@ -26,7 +29,14 @@ export function jwtauth(req, res, next) {
         })
     }
 }
-
+export async function getUrl(req, res) {
+    let url = req.body.url
+    if (url.length < 35) {
+        global.url = url
+    }
+    console.log(`client: ${global.url}\n`)
+    res.send({'success':'url received'})
+}
 export async function registerUser(req, res, next) {
     var user = new User(req.body)
     req.user = user.username
@@ -41,18 +51,27 @@ export async function loginUser(req, res, next) {
 }
 export async function authLogin(req, res, next) {
     try {
-        let token = await oauthToken(req.user.username)
-        res.redirect('http://localhost.localdomain:8080/?t='+token)
+        if (global.url) {
+            let token = await oauthToken(req.user.username)
+            res.redirect(`${global.url}?t=${token}`)
+        }
     } catch (e) {
         console.log(e)
     }
 }
 export async function failLogin(req, res, next) {
-    let token = 'un'
-    res.redirect('http://localhost.localdomain:8080?t='+token)
+    try {
+        if (global.url) {
+            let token = 'un'
+            res.redirect(`${global.url}?t=${token}`)
+        }
+    } catch (e) {console.log(e)}
+    
 }
 export async function loginoauth(req, res, next) {
     try {
+       // console.log(global.url)
+
         var stat = await signinOauth(req.params.token)
         res.status(201).json(stat)
     } catch (e) {console.log(e)}

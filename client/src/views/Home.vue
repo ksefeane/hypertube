@@ -36,6 +36,13 @@ export default {
     }
   },
   methods: {
+      async sendUrl() {
+          let data = {'url':document.URL}
+          let path = 'http://localhost:5000/api/users/url'
+          await axios.post(path, data)
+            .catch(e => {console.log(e)})
+      //  console.log(res.data)
+      },
       async oauthRedirect() {
           let options = {
               method: 'get',
@@ -54,6 +61,7 @@ export default {
       }
   },
   created() {
+      this.sendUrl()
       this.oauthRedirect()
   }
 }
